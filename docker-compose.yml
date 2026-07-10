@@ -1,0 +1,73 @@
+# 在线网络安全学习平台 · 容器编排
+# 使用方式：docker compose up -d --build
+services:
+  # PostgreSQL 数据库
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: netlearn
+      POSTGRES_PASSWORD: netlearn
+      POSTGRES_DB: netlearn
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U netlearn -d netlearn"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - netlearn-net
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - netlearn-net
+
+  # 后端服务
+  backend:
+    build: ./backend
+    # 启动命令与 Dockerfile CMD 保持一致，显式声明便于部署验收
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      # 开发时挂载源码，修改即时生效
+      - ./backend:/app
+      # 挂载 Docker socket，用于靶机容器调度
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8000:8000"
+    networks:
+      - netlearn-net
+
+  # 前端服务
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    networks:
+      - netlearn-net
+
+networks:
+  netlearn-net:
+    driver: bridge
+
+volumes:
+  pgdata:
