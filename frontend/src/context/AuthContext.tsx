@@ -6,17 +6,18 @@ import {
   type ReactNode,
 } from 'react'
 import { authApi, type UserInfo } from '../api/services'
+import { isBackendOnline } from '../api/client'
 
 // 认证上下文值
 interface AuthContextValue {
   user: UserInfo | null
   token: string | null
   loading: boolean
+  backendOnline: boolean
   login: (email: string, password: string) => Promise<void>
   register: (email: string, password: string) => Promise<void>
   logout: () => void
 }
-
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 // 认证 Provider：从 localStorage 恢复 token，调用 /auth/me 获取用户信息
@@ -26,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => localStorage.getItem('token'),
   )
   const [loading, setLoading] = useState(true)
+  const [backendOnline, setBackendOnline] = useState(true)
 
   // 挂载时若有 token，则拉取用户信息；失败则清除 token
   useEffect(() => {
@@ -43,6 +45,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null)
       })
       .finally(() => setLoading(false))
+  }, [])
+
+  // 定期检查后端可用性
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setBackendOnline(isBackendOnline())
+    }, 2000)
+    return () => clearInterval(timer)
   }, [])
 
   // 登录：拿到 token 存 localStorage，再拉取用户信息
@@ -71,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, backendOnline, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )

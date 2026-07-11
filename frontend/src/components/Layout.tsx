@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 
 // 带顶部导航的布局：根据登录状态显示导航项
 export default function Layout() {
-  const { user, logout } = useAuth()
+  const { user, logout, backendOnline } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -13,7 +13,6 @@ export default function Layout() {
     navigate('/login')
   }
 
-  // 关闭移动端菜单
   const closeMenu = () => setMenuOpen(false)
 
   return (
@@ -79,6 +78,16 @@ export default function Layout() {
           )}
         </nav>
       </header>
+
+      {!backendOnline && (
+        <div className="alert alert-warning banner-offline">
+          后端服务未连接 — 登录、课程等功能暂不可用。如需完整体验，请参考
+          <a href="https://github.com/fsywed/net_learn" target="_blank" rel="noreferrer">
+            项目文档
+          </a>
+          在本地启动后端。
+        </div>
+      )}
 
       <main className="layout-main">
         <Outlet />
