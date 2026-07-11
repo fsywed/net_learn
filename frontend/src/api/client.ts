@@ -1,15 +1,15 @@
 import axios from 'axios'
 
-// axios 实例：统一 baseURL 指向 /api，超时 15s
+const apiBase = import.meta.env.VITE_API_BASE || '/api'
+
 const client = axios.create({
-  baseURL: '/api',
+  baseURL: apiBase,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// 请求拦截器：从 localStorage 读取 token 并附加 Bearer 头
 client.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token')
@@ -21,7 +21,6 @@ client.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-// 响应拦截器：401 时清除 token 并跳转登录页（排除登录/注册页自身，避免循环跳转）
 client.interceptors.response.use(
   (response) => response,
   (error) => {
