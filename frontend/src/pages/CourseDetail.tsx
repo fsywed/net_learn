@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Markdown from '@uiw/react-md-preview'
+import Markdown from '@uiw/react-markdown-preview'
 import {
   courseApi,
   getErrorMessage,
