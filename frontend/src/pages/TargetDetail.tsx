@@ -22,6 +22,8 @@ export default function TargetDetail() {
   const [submitState, setSubmitState] = useState<
     { kind: 'idle' | 'ok' | 'bad' | 'err'; msg?: string }
   >({ kind: 'idle' })
+  const [showSolution, setShowSolution] = useState(false)
+  const [confirmShow, setConfirmShow] = useState(false)
 
   if (!target) {
     return (
