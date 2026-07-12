@@ -1,52 +1,57 @@
-"""应用配置模块。
+"""应用配置：环境变量驱动的 Pydantic Settings。
 
-使用 pydantic-settings 从环境变量加载配置，所有可配置项集中在此处。
+Fly.io / Docker 部署下用环境变量注入；本地开发用 .env 文件。
 """
+from __future__ import annotations
 
-from functools import lru_cache
+import secrets
+from typing import List
 
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """全局配置项，字段与对应的环境变量同名。"""
+    """全局配置：DATABASE_URL/DOCKER_* 来自环境变量，缺省走本地 SQLite + 本机 Docker。"""
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        case_sensitive=False,
-        extra="ignore",
-    )
+    # 服务
+    APP_NAME: str = "netlearn-backend"
+    APP_ENV: str = "development"
+    PUBLIC_BASE_URL: str = "http://localhost:8001"  # 对外暴露的访问入口，代理用
+    CORS_ORIGINS: List[str] = [
+        "http://localhost:5173",
+        "https://fsywed.github.io",
+    ]
 
-    # 数据库与缓存
-    DATABASE_URL: str = "postgresql+asyncpg://netlearn:netlearn@db:5432/netlearn"
-    REDIS_URL: str = "redis://redis:6379/0"
+    # 数据库：默认本地 SQLite；Fly.io 部署用 postgres
+    DATABASE_URL: str = "sqlite+aiosqlite:///./netlearn.db"
 
-    # JWT 鉴权
-    JWT_SECRET: str = "change-me-in-production"
-    JWT_ALG: str = "HS256"
-    JWT_EXP_MINUTES: int = 1440
+    # Docker
+    DOCKER_HOST: str = ""  # 空 = 默认本地 socket；Fly 部署用 unix:///var/run/docker.sock
+    TARGET_IMAGE_PREFIX: str = "netlearn/"  # 靶机镜像前缀
+    TARGET_PORT_RANGE_START: int = 30000
+    TARGET_PORT_RANGE_END: int = 40000
+    TARGET_DEFAULT_TTL_SECONDS: int = 1800  # 默认 30 分钟
+    TARGET_MAX_PER_IP: int = 2  # 每 IP 同时运行上限
 
-    # 靶机调度（Docker）
-    DOCKER_HOST: str | None = None
+    # Flag
+    FLAG_PREFIX: str = "flag{"
+    FLAG_SUFFIX: str = "}"
 
-    # 实例配额与生命周期
-    INSTANCE_MAX_PER_USER: int = 1
-    INSTANCE_TTL_MINUTES: int = 60
+    # 调度：reaper 检查间隔
+    REAPER_INTERVAL_SECONDS: int = 30
 
-    # 主机端口分配范围（靶机端口映射）
-    HOST_PORT_RANGE_START: int = 30000
-    HOST_PORT_RANGE_END: int = 30100
+    # 安全
+    SECRET_KEY: str = Field(default_factory=lambda: secrets.token_urlsafe(32))
 
-    # 管理员引导账号
-    ADMIN_BOOTSTRAP_EMAIL: str = "admin@netlearn.local"
-    ADMIN_BOOTSTRAP_PASSWORD: str = "admin123456"
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-
-@lru_cache
-def get_settings() -> Settings:
-    """返回单例 Settings，避免重复解析环境变量。"""
-    return Settings()
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def _split_csv(cls, v):
+        if isinstance(v, str):
+            return [s.strip() for s in v.split(",") if s.strip()]
+        return v
 
 
-settings = get_settings()
+settings = Settings()

@@ -1,9 +1,8 @@
-"""数据库会话与引擎初始化。
+"""异步数据库引擎与会话工厂。"""
+from __future__ import annotations
 
-基于 SQLAlchemy 2.0 异步引擎 + asyncpg 驱动，提供 AsyncSession 工厂与 FastAPI 依赖。
-"""
-
-from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -13,23 +12,39 @@ from sqlalchemy.ext.asyncio import (
 
 from app.config import settings
 
-# 异步引擎，pool_pre_ping 避免使用已断开的连接
+# 兼容 SQLite：禁用 pool
+_connect_args = {}
+if settings.DATABASE_URL.startswith("sqlite"):
+    _connect_args = {"check_same_thread": False}
+
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=False,
-    pool_pre_ping=True,
+    future=True,
+    connect_args=_connect_args,
 )
 
-# 会话工厂
-async_session_factory = async_sessionmaker(
+AsyncSessionLocal = async_sessionmaker(
     engine,
     class_=AsyncSession,
     expire_on_commit=False,
-    autoflush=False,
 )
 
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    """FastAPI 依赖：提供数据库会话并在请求结束后关闭。"""
-    async with async_session_factory() as session:
-        yield session
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    """FastAPI 依赖：每次请求拿一个新 session。"""
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
+
+
+@asynccontextmanager
+async def session_scope() -> AsyncGenerator[AsyncSession, None]:
+    """供后台任务使用的 session 上下文。"""
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()

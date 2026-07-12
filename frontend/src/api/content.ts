@@ -18,9 +18,12 @@ export interface Course {
   chapters: Chapter[]
 }
 
-// 靶机模板（静态展示用，含解题步骤与本地启动命令）
+// 靶机模板（静态展示用）
+// template_id: 若存在且后端可用，则支持「在线启动实例」动态靶机
+//               若不存在，则只能用页面里的 docker_run 命令本地启动
 export interface TargetTemplate {
   id: number
+  template_id?: number
   name: string
   description: string
   difficulty: string

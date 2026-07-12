@@ -1,24 +1,28 @@
-# 后端镜像：基于 python:3.11-slim，安装依赖并运行 uvicorn
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-# 设置工作目录与时区
 WORKDIR /app
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    TZ=Asia/Shanghai
 
-# 安装系统依赖（asyncpg 编译所需）
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libpq-dev \
+# 仅装 curl 用于 healthcheck；不装 docker CLI（Python docker SDK 走 unix socket 即可）
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# 先拷贝依赖文件以利用 Docker 层缓存
+# 先装依赖以便利用 Docker 缓存
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --only-binary=:all: -r requirements.txt
 
-# 拷贝项目代码
-COPY . .
+# 再拷代码
+COPY app/ ./app/
 
-# 暴露端口并启动服务
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PORT=8000
+
 EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -fsS http://127.0.0.1:8000/api/health || exit 1
+
+# Fly.io 启动命令：监听 0.0.0.0:8000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

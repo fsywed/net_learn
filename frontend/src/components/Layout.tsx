@@ -1,13 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import { onBackendStatusChange, probeBackend } from '../api/client'
 
-// 带顶部导航的布局：纯静态展示型，移除所有账号相关入口
+// 带顶部导航的布局：纯静态展示型 + 后端状态横幅
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [backendUp, setBackendUp] = useState(true)
   const closeMenu = () => setMenuOpen(false)
+
+  useEffect(() => {
+    probeBackend()
+    return onBackendStatusChange(setBackendUp)
+  }, [])
 
   return (
     <div className="layout">
+      {!backendUp && (
+        <div className="backend-banner" role="alert">
+          ⚠ 后端服务暂不可用 — 「在线靶机」与「Flag 提交」功能当前不可使用，其余课程内容仍可正常浏览。
+        </div>
+      )}
+
       <header className="layout-header">
         <div className="layout-brand">
           <Link to="/" onClick={closeMenu}>
@@ -54,7 +67,7 @@ export default function Layout() {
 
       <footer className="layout-footer">
         <p>
-          NetLearn · 纯静态网络安全学习平台 ·{' '}
+          NetLearn · 网络安全在线学习与靶场 ·{' '}
           <a href="https://github.com/fsywed/net_learn" target="_blank" rel="noreferrer">
             源代码
           </a>
