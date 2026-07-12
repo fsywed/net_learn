@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Markdown from '@uiw/react-markdown-preview'
 import {
@@ -7,22 +7,6 @@ import {
   difficultyLabel,
   type TargetTemplate,
 } from '../api/content'
-import {
-  destroyInstance,
-  isBackendOnline,
-  spawnInstance,
-  submitFlag,
-  type Instance,
-} from '../api/client'
-
-// 倒计时格式化 mm:ss
-function fmt(s: number) {
-  const m = Math.floor(s / 60)
-    .toString()
-    .padStart(2, '0')
-  const ss = (s % 60).toString().padStart(2, '0')
-  return `${m}:${ss}`
-}
 
 export default function TargetDetail() {
   const { templateId } = useParams<{ templateId: string }>()
@@ -30,26 +14,14 @@ export default function TargetDetail() {
   const target = targets.find((t: TargetTemplate) => t.id === tid)
 
   const [copied, setCopied] = useState(false)
-
-  // ---- 动态实例状态 ----
-  const [instance, setInstance] = useState<Instance | null>(null)
-  const [remaining, setRemaining] = useState(0)
-  const [spawning, setSpawning] = useState(false)
-  const [spawnErr, setSpawnErr] = useState<string | null>(null)
+  const [targetUrl, setTargetUrl] = useState('')
+  const [connected, setConnected] = useState(false)
+  const [connectErr, setConnectErr] = useState<string | null>(null)
+  const [checking, setChecking] = useState(false)
   const [flagInput, setFlagInput] = useState('')
   const [submitState, setSubmitState] = useState<
     { kind: 'idle' | 'ok' | 'bad' | 'err'; msg?: string }
   >({ kind: 'idle' })
-  const tickRef = useRef<number | null>(null)
-
-  const supportsDynamic = !!target && typeof target.template_id === 'number'
-  const backendTplId = target?.template_id
-
-  useEffect(() => {
-    return () => {
-      if (tickRef.current) window.clearInterval(tickRef.current)
-    }
-  }, [])
 
   if (!target) {
     return (
@@ -62,67 +34,70 @@ export default function TargetDetail() {
     )
   }
 
-  const startTick = (inst: Instance) => {
-    if (tickRef.current) window.clearInterval(tickRef.current)
-    const endAt = new Date(inst.expires_at).getTime()
-    setRemaining(Math.max(0, Math.floor((endAt - Date.now()) / 1000)))
-    tickRef.current = window.setInterval(() => {
-      setRemaining((r) => {
-        const next = r - 1
-        if (next <= 0) {
-          if (tickRef.current) window.clearInterval(tickRef.current)
-          tickRef.current = null
-          setInstance(null)
-        }
-        return Math.max(0, next)
-      })
-    }, 1000)
-  }
+  // 默认地址
+  const defaultUrl = `http://localhost:${target.default_port}`
 
-  const startInstance = async () => {
-    if (!supportsDynamic || backendTplId === undefined) return
-    setSpawning(true)
-    setSpawnErr(null)
-    setSubmitState({ kind: 'idle' })
+  // 检查靶机是否在线（调用 /api/health）
+  const checkHealth = async (url: string): Promise<boolean> => {
     try {
-      const inst = await spawnInstance(backendTplId)
-      setInstance(inst)
-      startTick(inst)
-    } catch (e: any) {
-      const detail = e?.response?.data?.detail
-      setSpawnErr(typeof detail === 'string' ? detail : e?.message || '启动失败，请稍后重试')
-    } finally {
-      setSpawning(false)
-    }
-  }
-
-  const stopInstance = async () => {
-    if (!instance) return
-    if (tickRef.current) window.clearInterval(tickRef.current)
-    tickRef.current = null
-    try {
-      await destroyInstance(instance.id)
+      const resp = await fetch(`${url}/api/health`, { mode: 'cors' })
+      return resp.ok
     } catch {
-      /* 即便后端失败也清本地状态 */
+      return false
     }
-    setInstance(null)
   }
 
+  // 连接靶机
+  const connectTarget = async () => {
+    const url = (targetUrl || defaultUrl).trim().replace(/\/+$/, '')
+    setConnectErr(null)
+    setChecking(true)
+    try {
+      const ok = await checkHealth(url)
+      if (!ok) {
+        setConnectErr(
+          `无法连接到 ${url}。请确认：1) Docker 容器已启动  2) 地址正确  3) 浏览器未拦截 CORS 请求`
+        )
+        setConnected(false)
+        return
+      }
+      setTargetUrl(url)
+      setConnected(true)
+    } catch {
+      setConnectErr(`连接失败，请检查地址 ${url} 是否正确`)
+      setConnected(false)
+    } finally {
+      setChecking(false)
+    }
+  }
+
+  // 断开连接
+  const disconnect = () => {
+    setConnected(false)
+    setConnectErr(null)
+    setSubmitState({ kind: 'idle' })
+  }
+
+  // 提交 Flag（调用靶机本地的 /api/verify）
   const submit = async () => {
-    if (!instance || !flagInput.trim()) return
+    if (!flagInput.trim() || !connected) return
     setSubmitState({ kind: 'idle' })
     try {
-      const r = await submitFlag(instance.id, flagInput.trim())
+      const resp = await fetch(`${targetUrl}/api/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ flag: flagInput.trim() }),
+      })
+      const data = await resp.json()
       setSubmitState(
-        r.correct
-          ? { kind: 'ok', msg: r.message }
-          : { kind: 'bad', msg: r.message }
+        data.correct
+          ? { kind: 'ok', msg: data.message || 'Flag 正确！' }
+          : { kind: 'bad', msg: data.message || 'Flag 错误，再找找看。' }
       )
-    } catch (e: any) {
-      const detail = e?.response?.data?.detail
+    } catch {
       setSubmitState({
         kind: 'err',
-        msg: typeof detail === 'string' ? detail : '提交失败',
+        msg: `无法连接到 ${targetUrl}/api/verify，请确认靶机仍在运行`,
       })
     }
   }
@@ -150,107 +125,108 @@ export default function TargetDetail() {
             {difficultyLabel(target.difficulty)}
           </span>
           <span className="badge">{target.category}</span>
-          {supportsDynamic && (
-            <span className="badge badge-status-published">在线启动</span>
-          )}
         </div>
         <p className="page-desc">{target.description}</p>
       </header>
 
-      {supportsDynamic ? (
-        <section className="card dynamic-card">
-          <h3>在线靶机</h3>
-          {!instance && (
-            <>
-              <p className="docker-hint">
-                点击启动一个 <strong>临时容器</strong>（30 分钟后自动销毁）。
-                通过反向代理访问，无需暴露公网端口；Flag 每次启动唯一。
-              </p>
-              <div className="action-row">
-                <button
-                  className="btn btn-primary"
-                  onClick={startInstance}
-                  disabled={spawning || !isBackendOnline()}
-                >
-                  {spawning ? '启动中…' : '启动实例'}
-                </button>
-                {!isBackendOnline() && (
-                  <span className="docker-hint inline-warn">
-                    后端服务暂不可用，试试稍后再来。
-                  </span>
-                )}
-              </div>
-              {spawnErr && (
-                <div className="alert alert-error">启动失败：{spawnErr}</div>
-              )}
-            </>
-          )}
+      {/* 步骤 1：下载并启动容器 */}
+      <section className="card docker-card">
+        <h3>第 1 步：启动靶机容器</h3>
+        <p className="docker-hint">
+          需要本机已安装{' '}
+          <a href="https://docs.docker.com/get-docker/" target="_blank" rel="noreferrer">
+            Docker
+          </a>
+          。复制以下命令到终端执行：
+        </p>
+        <pre className="code-block">
+          <code>{target.docker_run}</code>
+        </pre>
+        <button className="btn btn-primary btn-sm" onClick={copyDocker}>
+          {copied ? '已复制 ✓' : '复制命令'}
+        </button>
+        <p className="docker-info">
+          启动后访问 <code>http://localhost:{target.default_port}</code> 即可看到靶机页面。
+        </p>
+      </section>
 
-          {instance && (
-            <>
-              <div className="instance-meta">
-                <span className="badge badge-status-running">运行中</span>
-                <span className="badge">剩余 {fmt(remaining)}</span>
-                <span className="badge">容器 :{instance.host_port}</span>
-                <button className="btn btn-sm btn-ghost" onClick={stopInstance}>
-                  立即销毁
-                </button>
-              </div>
-              <p className="docker-hint">
-                访问链接：
-                <a href={instance.proxy_url} target="_blank" rel="noreferrer">
-                  {instance.proxy_url}
-                </a>
-                （新窗口打开，Flag 就在容器里）
-              </p>
-
-              <div className="flag-form">
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="粘贴你找到的 flag，格式 flag{...}"
-                  value={flagInput}
-                  onChange={(e) => setFlagInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') submit()
-                  }}
-                />
-                <button
-                  className="btn btn-primary"
-                  onClick={submit}
-                  disabled={!flagInput.trim()}
-                >
-                  提交 Flag
-                </button>
-              </div>
-              {submitState.kind === 'ok' && (
-                <div className="alert alert-ok">✓ {submitState.msg}</div>
-              )}
-              {submitState.kind === 'bad' && (
-                <div className="alert alert-warn">✗ {submitState.msg}</div>
-              )}
-              {submitState.kind === 'err' && (
-                <div className="alert alert-error">{submitState.msg}</div>
-              )}
-            </>
+      {/* 步骤 2：输入地址连接靶机 */}
+      <section className="card connect-card">
+        <h3>第 2 步：连接靶机</h3>
+        <p className="docker-hint">
+          输入靶机地址（默认 <code>{defaultUrl}</code>），点击「连接靶机」在下方嵌入靶机页面。
+        </p>
+        <div className="connect-row">
+          <input
+            type="text"
+            className="input"
+            placeholder={defaultUrl}
+            value={targetUrl}
+            onChange={(e) => setTargetUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') connectTarget()
+            }}
+            disabled={connected}
+          />
+          {!connected ? (
+            <button
+              className="btn btn-primary"
+              onClick={connectTarget}
+              disabled={checking}
+            >
+              {checking ? '检测中…' : '连接靶机'}
+            </button>
+          ) : (
+            <button className="btn btn-ghost" onClick={disconnect}>
+              断开
+            </button>
           )}
-        </section>
-      ) : (
-        <section className="card docker-card">
-          <h3>本地启动</h3>
-          <p className="docker-hint">
-            需要本机已安装 <a href="https://docs.docker.com/get-docker/" target="_blank" rel="noreferrer">Docker</a>。
-            复制以下命令到终端执行即可启动靶机。
-          </p>
-          <pre className="code-block">
-            <code>{target.docker_run}</code>
-          </pre>
-          <button className="btn btn-primary btn-sm" onClick={copyDocker}>
-            {copied ? '已复制 ✓' : '复制命令'}
-          </button>
-          <p className="docker-info">
-            镜像：<code>{target.image}</code> · 端口：<code>{target.ports}</code>
-          </p>
+        </div>
+        {connectErr && (
+          <div className="alert alert-warn">{connectErr}</div>
+        )}
+      </section>
+
+      {/* 步骤 3：靶机 iframe + Flag 提交 */}
+      {connected && (
+        <section className="card target-frame-card">
+          <h3>第 3 步：攻击靶机 & 提交 Flag</h3>
+          <div className="frame-wrapper">
+            <iframe
+              src={targetUrl}
+              title="靶机页面"
+              className="target-iframe"
+              sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
+            />
+          </div>
+          <div className="flag-form">
+            <input
+              type="text"
+              className="input"
+              placeholder="粘贴你找到的 flag，格式 flag{...}"
+              value={flagInput}
+              onChange={(e) => setFlagInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') submit()
+              }}
+            />
+            <button
+              className="btn btn-primary"
+              onClick={submit}
+              disabled={!flagInput.trim()}
+            >
+              提交 Flag
+            </button>
+          </div>
+          {submitState.kind === 'ok' && (
+            <div className="alert alert-ok">✓ {submitState.msg}</div>
+          )}
+          {submitState.kind === 'bad' && (
+            <div className="alert alert-warn">✗ {submitState.msg}</div>
+          )}
+          {submitState.kind === 'err' && (
+            <div className="alert alert-error">{submitState.msg}</div>
+          )}
         </section>
       )}
 

@@ -1,0 +1,9 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY base.py target3_sqli.py ./
+
+EXPOSE 8083
+
+CMD ["python", "target3_sqli.py", "8083"]

@@ -1,0 +1,46 @@
+# NetLearn 靶机 docker-compose
+#
+# 使用方法：
+#   1. 安装 Docker: https://www.docker.com/products/docker-desktop
+#   2. 进入此目录: cd targets/local
+#   3. 启动靶机:   docker-compose up -d
+#   4. 查看地址:
+#      - 靶机1 (Nginx Flag 隐藏):   http://localhost:8081
+#      - 靶机2 (SSH 弱口令):        http://localhost:8082
+#      - 靶机3 (SQL 注入):          http://localhost:8083
+#      - 靶机4 (XSS 反射型):        http://localhost:8084
+#   5. 把地址输入到网站即可开始挑战
+#   6. 停止: docker-compose down
+
+services:
+  target1-nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.target1
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+
+  target2-ssh:
+    build:
+      context: .
+      dockerfile: Dockerfile.target2
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+
+  target3-sqli:
+    build:
+      context: .
+      dockerfile: Dockerfile.target3
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+
+  target4-xss:
+    build:
+      context: .
+      dockerfile: Dockerfile.target4
+    ports:
+      - "8084:8084"
+    restart: unless-stopped

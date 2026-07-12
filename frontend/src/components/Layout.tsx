@@ -1,26 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import { onBackendStatusChange, probeBackend } from '../api/client'
 
-// 带顶部导航的布局：纯静态展示型 + 后端状态横幅
+// 带顶部导航的布局：纯静态前端，靶机在用户本地运行
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [backendUp, setBackendUp] = useState(true)
   const closeMenu = () => setMenuOpen(false)
-
-  useEffect(() => {
-    probeBackend()
-    return onBackendStatusChange(setBackendUp)
-  }, [])
 
   return (
     <div className="layout">
-      {!backendUp && (
-        <div className="backend-banner" role="alert">
-          ⚠ 后端服务暂不可用 — 「在线靶机」与「Flag 提交」功能当前不可使用，其余课程内容仍可正常浏览。
-        </div>
-      )}
-
       <header className="layout-header">
         <div className="layout-brand">
           <Link to="/" onClick={closeMenu}>

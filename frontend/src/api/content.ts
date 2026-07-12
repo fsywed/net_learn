@@ -19,18 +19,14 @@ export interface Course {
 }
 
 // 靶机模板（静态展示用）
-// template_id: 若存在且后端可用，则支持「在线启动实例」动态靶机
-//               若不存在，则只能用页面里的 docker_run 命令本地启动
+// 用户本地启动容器 → 输入地址 → 网站 iframe 嵌入 → 本地验证 Flag
 export interface TargetTemplate {
   id: number
-  template_id?: number
   name: string
   description: string
   difficulty: string
-  image: string
-  ports: string
-  status: string
   category: string
+  default_port: number
   skills: string[]
   docker_run: string
   solution_steps: string[]
