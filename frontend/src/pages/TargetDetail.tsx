@@ -112,6 +112,13 @@ export default function TargetDetail() {
     }
   }
 
+  // 在新标签页打开靶机地址
+  const openInNewTab = () => {
+    if (targetUrl) {
+      window.open(targetUrl, '_blank')
+    }
+  }
+
   return (
     <div className="page target-detail">
       <Link to="/targets" className="back-link">
@@ -191,12 +198,20 @@ export default function TargetDetail() {
       {connected && (
         <section className="card target-frame-card">
           <h3>第 3 步：攻击靶机 & 提交 Flag</h3>
+          {targetUrl && (
+            <button
+              className="btn btn-outline btn-sm open-tab-btn"
+              onClick={openInNewTab}
+            >
+              在新标签页打开 ↗
+            </button>
+          )}
           <div className="frame-wrapper">
             <iframe
               src={targetUrl}
               title="靶机页面"
               className="target-iframe"
-              sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
+              sandbox="allow-scripts allow-forms allow-popups"
             />
           </div>
           <div className="flag-form">

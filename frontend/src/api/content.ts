@@ -31,6 +31,9 @@ export interface TargetTemplate {
   docker_run: string
   solution_steps: string[]
   learn_points: string[]
+  points: number
+  estimated_time: string
+  solved_count: number
 }
 
 // 直接同步读取构建期内联的 JSON

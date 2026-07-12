@@ -666,37 +666,10 @@ h1, h2, h3, h4 {
   flex-wrap: wrap;
   margin-bottom: 4px;
 }
-.instance-card .instance-idle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.instance-running {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.instance-info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
-}
-.countdown {
-  color: var(--warning);
-  font-weight: 600;
-}
-.submit-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-.submit-form .input {
-  flex: 1;
-  font-family: 'SFMono-Regular', Consolas, Menlo, monospace;
+
+/* "在新标签页打开"按钮：与现有 btn 风格一致，仅补充间距 */
+.open-tab-btn {
+  margin-bottom: 8px;
 }
 
 /* ============================================================
@@ -1186,4 +1159,158 @@ h1, h2, h3, h4 {
   .connect-row {
     flex-direction: column;
   }
+}
+
+/* ============================================================
+ * 靶场列表：筛选工具栏与卡片元信息
+ * ============================================================ */
+
+.targets-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+
+.toolbar-select {
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.toolbar-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+}
+
+.toolbar-input {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.toolbar-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+}
+
+.toolbar-info {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* 靶机卡片元信息：积分 / 耗时 / 解出人数 */
+.target-card .target-meta {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+.meta-item:first-child {
+  color: var(--primary-dark);
+  background: #ecfeff;
+  border-color: #cffafe;
+}
+
+@media (max-width: 720px) {
+  .toolbar-input {
+    min-width: 100%;
+    order: 99;
+  }
+}
+
+/* ============================================================
+ * 比赛与认证页 —— Logo 容器与首字母占位符
+ * ============================================================ */
+
+.comp-header,
+.cert-header,
+.platform-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.platform-header {
+  margin-bottom: 8px;
+}
+
+.comp-header h3,
+.cert-header h3,
+.platform-header h3 {
+  flex: 1;
+  margin: 0;
+}
+
+.logo-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+}
+
+.logo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.logo-fallback {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
+.logo-ctf {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.logo-cert {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  border: none;
+}
+
+.logo-platform {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border: none;
 }

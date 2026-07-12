@@ -21,14 +21,17 @@
         "养成「打开页面先看源码」的习惯",
         "了解浏览器开发者工具的 Elements 面板"
       ],
-      "docker_run": "docker run -d -p 8081:8081 --name netlearn-target1 netlearn-target1"
+      "docker_run": "docker run -d -p 8081:8081 --name netlearn-target1 netlearn-target1",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1280
     },
     {
       "id": 2,
       "name": "SSH 弱口令爆破",
       "description": "模拟 SSH 登录页面，使用常见弱口令字典爆破登录获取 Flag。",
       "difficulty": "easy",
-      "category": "服务",
+      "category": "Misc",
       "default_port": 8082,
       "skills": ["爆破", "SSH"],
       "solution_steps": [
@@ -43,7 +46,10 @@
         "爆破工具：hydra、medusa",
         "防御：禁用密码登录（仅密钥）、fail2ban、改默认端口"
       ],
-      "docker_run": "docker run -d -p 8082:8082 --name netlearn-target2 netlearn-target2"
+      "docker_run": "docker run -d -p 8082:8082 --name netlearn-target2 netlearn-target2",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1450
     },
     {
       "id": 3,
@@ -66,7 +72,10 @@
         "掌握基础注入语法：' OR 1=1 -- 、UNION SELECT",
         "修复方案：使用参数化查询（PreparedStatement）"
       ],
-      "docker_run": "docker run -d -p 8083:8083 --name netlearn-target3 netlearn-target3"
+      "docker_run": "docker run -d -p 8083:8083 --name netlearn-target3 netlearn-target3",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 720
     },
     {
       "id": 4,
@@ -88,7 +97,10 @@
         "反射型 / 存储型 / DOM 型 XSS 的区别",
         "防御手段：HTML 转义、CSP、HttpOnly Cookie"
       ],
-      "docker_run": "docker run -d -p 8084:8084 --name netlearn-target4 netlearn-target4"
+      "docker_run": "docker run -d -p 8084:8084 --name netlearn-target4 netlearn-target4",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1320
     },
     {
       "id": 5,
@@ -111,7 +123,10 @@
         "常见分隔符：; | & ` $()",
         "防御：白名单验证、避免 shell 执行、使用 API 替代"
       ],
-      "docker_run": "docker run -d -p 8085:8085 --name netlearn-target5 netlearn-target5"
+      "docker_run": "docker run -d -p 8085:8085 --name netlearn-target5 netlearn-target5",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 680
     },
     {
       "id": 6,
@@ -134,7 +149,10 @@
         "路径遍历：../ 跳出目录",
         "防御：白名单验证、禁止 ../、限制访问目录"
       ],
-      "docker_run": "docker run -d -p 8086:8086 --name netlearn-target6 netlearn-target6"
+      "docker_run": "docker run -d -p 8086:8086 --name netlearn-target6 netlearn-target6",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 640
     },
     {
       "id": 7,
@@ -157,7 +175,10 @@
         "攻击场景：修改密码、转账、删除数据",
         "防御：CSRF Token、验证 Referer、SameSite Cookie"
       ],
-      "docker_run": "docker run -d -p 8087:8087 --name netlearn-target7 netlearn-target7"
+      "docker_run": "docker run -d -p 8087:8087 --name netlearn-target7 netlearn-target7",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 560
     },
     {
       "id": 8,
@@ -180,7 +201,10 @@
         "攻击：读取文件、SSRF、DoS",
         "防御：禁用 DTD、禁用外部实体、使用安全解析库"
       ],
-      "docker_run": "docker run -d -p 8088:8088 --name netlearn-target8 netlearn-target8"
+      "docker_run": "docker run -d -p 8088:8088 --name netlearn-target8 netlearn-target8",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 380
     },
     {
       "id": 9,
@@ -203,7 +227,10 @@
         "攻击：访问内网、云元数据、本地服务",
         "防御：白名单验证、禁止内网 IP、禁用危险协议"
       ],
-      "docker_run": "docker run -d -p 8089:8089 --name netlearn-target9 netlearn-target9"
+      "docker_run": "docker run -d -p 8089:8089 --name netlearn-target9 netlearn-target9",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 320
     },
     {
       "id": 10,
@@ -226,7 +253,10 @@
         "Webshell：可执行系统命令的恶意文件",
         "防御：白名单验证、检查文件头、禁止执行上传目录"
       ],
-      "docker_run": "docker run -d -p 8090:8090 --name netlearn-target10 netlearn-target10"
+      "docker_run": "docker run -d -p 8090:8090 --name netlearn-target10 netlearn-target10",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 750
     },
     {
       "id": 11,
@@ -249,14 +279,17 @@
         "水平越权 vs 垂直越权",
         "防御：从 Session 获取用户 ID、验证资源权限"
       ],
-      "docker_run": "docker run -d -p 8091:8091 --name netlearn-target11 netlearn-target11"
+      "docker_run": "docker run -d -p 8091:8091 --name netlearn-target11 netlearn-target11",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1180
     },
     {
       "id": 12,
       "name": "弱加密破解",
       "description": "系统使用 Base64/MD5 等弱加密存储密码，可被在线破解。",
       "difficulty": "easy",
-      "category": "加密",
+      "category": "Crypto",
       "default_port": 8092,
       "skills": ["密码学", "弱加密"],
       "solution_steps": [
@@ -272,14 +305,17 @@
         "MD5 已被证明不安全，可被碰撞/字典攻击",
         "防御：使用 bcrypt/scrypt/Argon2 加盐哈希"
       ],
-      "docker_run": "docker run -d -p 8092:8092 --name netlearn-target12 netlearn-target12"
+      "docker_run": "docker run -d -p 8092:8092 --name netlearn-target12 netlearn-target12",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1360
     },
     {
       "id": 13,
       "name": "DNS 欺骗攻击",
       "description": "DNS 服务配置错误，可通过 DNS 欺骗将用户重定向到钓鱼网站。",
       "difficulty": "hard",
-      "category": "网络",
+      "category": "Network",
       "default_port": 8093,
       "skills": ["DNS 安全", "中间人攻击"],
       "solution_steps": [
@@ -295,14 +331,17 @@
         "攻击场景：钓鱼、中间人攻击",
         "防御：DNSSEC、DNS over HTTPS、验证 DNS 响应"
       ],
-      "docker_run": "docker run -d -p 8093:8093 --name netlearn-target13 netlearn-target13"
+      "docker_run": "docker run -d -p 8093:8093 --name netlearn-target13 netlearn-target13",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 280
     },
     {
       "id": 14,
       "name": "ARP 欺骗中间人攻击",
       "description": "局域网内 ARP 协议无认证，可通过 ARP 欺骗劫持流量。",
       "difficulty": "hard",
-      "category": "网络",
+      "category": "Network",
       "default_port": 8094,
       "skills": ["ARP 欺骗", "流量劫持"],
       "solution_steps": [
@@ -318,14 +357,17 @@
         "攻击工具：arpspoof、Bettercap",
         "防御：静态 ARP 绑定、ARP 防火墙、802.1X"
       ],
-      "docker_run": "docker run -d -p 8094:8094 --name netlearn-target14 netlearn-target14"
+      "docker_run": "docker run -d -p 8094:8094 --name netlearn-target14 netlearn-target14",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 240
     },
     {
       "id": 15,
       "name": "TCP 端口扫描检测",
       "description": "分析网络流量日志，识别端口扫描行为并提取攻击者信息。",
       "difficulty": "medium",
-      "category": "网络",
+      "category": "Network",
       "default_port": 8095,
       "skills": ["流量分析", "入侵检测"],
       "solution_steps": [
@@ -341,14 +383,17 @@
         "检测特征：短时间内大量 SYN 包、异常标志位组合",
         "防御：防火墙规则、IDS/IPS、速率限制"
       ],
-      "docker_run": "docker run -d -p 8095:8095 --name netlearn-target15 netlearn-target15"
+      "docker_run": "docker run -d -p 8095:8095 --name netlearn-target15 netlearn-target15",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 520
     },
     {
       "id": 16,
       "name": "HTTP 代理 SSRF",
       "description": "HTTP 代理未限制目标地址，可访问内网服务获取敏感信息。",
       "difficulty": "hard",
-      "category": "网络",
+      "category": "Network",
       "default_port": 8096,
       "skills": ["SSRF", "代理安全"],
       "solution_steps": [
@@ -364,7 +409,10 @@
         "攻击目标：内网服务、云元数据、本地文件",
         "防御：白名单验证、禁止内网 IP、禁用危险协议"
       ],
-      "docker_run": "docker run -d -p 8096:8096 --name netlearn-target16 netlearn-target16"
+      "docker_run": "docker run -d -p 8096:8096 --name netlearn-target16 netlearn-target16",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 300
     },
     {
       "id": 17,
@@ -387,14 +435,17 @@
         "破解工具：aircrack-ng、hashcat、hcxpcaptool",
         "防御：强密码、WPA3、802.1X 企业认证"
       ],
-      "docker_run": "docker run -d -p 8097:8097 --name netlearn-target17 netlearn-target17"
+      "docker_run": "docker run -d -p 8097:8097 --name netlearn-target17 netlearn-target17",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 480
     },
     {
       "id": 18,
       "name": "防火墙规则绕过",
       "description": "分析防火墙规则，找到配置错误绕过访问控制。",
       "difficulty": "hard",
-      "category": "网络",
+      "category": "Network",
       "default_port": 8098,
       "skills": ["防火墙", "规则绕过"],
       "solution_steps": [
@@ -410,14 +461,17 @@
         "常见错误：通配符过宽、规则顺序错误、默认策略不当",
         "最佳实践：最小权限、默认拒绝、定期审计规则"
       ],
-      "docker_run": "docker run -d -p 8098:8098 --name netlearn-target18 netlearn-target18"
+      "docker_run": "docker run -d -p 8098:8098 --name netlearn-target18 netlearn-target18",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 220
     },
     {
       "id": 19,
       "name": "VPN 配置错误",
       "description": "VPN 服务配置不当，可绕过认证或获取内网访问权限。",
       "difficulty": "hard",
-      "category": "网络",
+      "category": "Network",
       "default_port": 8099,
       "skills": ["VPN 安全", "配置审计"],
       "solution_steps": [
@@ -433,14 +487,17 @@
         "攻击：中间人攻击、凭证窃取、内网穿透",
         "防御：强加密算法、证书固定、双因素认证"
       ],
-      "docker_run": "docker run -d -p 8099:8099 --name netlearn-target19 netlearn-target19"
+      "docker_run": "docker run -d -p 8099:8099 --name netlearn-target19 netlearn-target19",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 190
     },
     {
       "id": 20,
       "name": "网络流量分析",
       "description": "分析 pcap 流量包，提取隐藏的敏感信息和通信内容。",
       "difficulty": "medium",
-      "category": "网络",
+      "category": "Network",
       "default_port": 8100,
       "skills": ["流量分析", "协议分析"],
       "solution_steps": [
@@ -456,7 +513,10 @@
         "协议分析：识别异常请求、加密通信、数据泄露",
         "工具：tshark、tcpdump、NetworkMiner"
       ],
-      "docker_run": "docker run -d -p 8100:8100 --name netlearn-target20 netlearn-target20"
+      "docker_run": "docker run -d -p 8100:8100 --name netlearn-target20 netlearn-target20",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 590
     }
   ]
 }

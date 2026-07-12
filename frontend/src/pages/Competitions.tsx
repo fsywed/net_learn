@@ -2,6 +2,35 @@ import { useState } from 'react'
 import competitionsData from '../data/competitions.json'
 
 type TabType = 'ctf' | 'certifications' | 'platforms'
+type LogoType = 'ctf' | 'cert' | 'platform'
+
+/**
+ * Logo 容器：image 非空时渲染 <img>，加载失败或为空时渲染首字母占位符。
+ * 用 React state 管理 onError 触发的失败状态，避免反复触发。
+ */
+function Logo({ image, name, type }: { image: string; name: string; type: LogoType }) {
+  const [imgError, setImgError] = useState(false)
+  const gradientClass =
+    type === 'ctf' ? 'logo-ctf' : type === 'cert' ? 'logo-cert' : 'logo-platform'
+
+  if (image && !imgError) {
+    return (
+      <div className="logo-container">
+        <img
+          src={image}
+          alt={`${name} logo`}
+          onError={() => setImgError(true)}
+        />
+      </div>
+    )
+  }
+
+  return (
+    <div className={`logo-container logo-fallback ${gradientClass}`}>
+      {name.charAt(0)}
+    </div>
+  )
+}
 
 export default function Competitions() {
   const [activeTab, setActiveTab] = useState<TabType>('ctf')
@@ -50,13 +79,14 @@ export default function Competitions() {
             {ctf_competitions.map((comp) => (
               <div key={comp.id} className="competition-card">
                 <div className="comp-header">
+                  <Logo image={comp.image} name={comp.name} type="ctf" />
                   <h3>{comp.name}</h3>
                   <span className={`difficulty-badge ${comp.difficulty}`}>
                     {comp.difficulty === 'easy' ? '入门' : comp.difficulty === 'medium' ? '中级' : '高级'}
                   </span>
                 </div>
                 <p className="comp-description">{comp.description}</p>
-                
+
                 <div className="comp-info">
                   <div className="info-item">
                     <strong>级别：</strong>{comp.level}
@@ -126,13 +156,14 @@ export default function Competitions() {
             {certifications.map((cert) => (
               <div key={cert.id} className="certification-card">
                 <div className="cert-header">
+                  <Logo image={cert.image} name={cert.name} type="cert" />
                   <h3>{cert.name}</h3>
                   <span className={`level-badge ${cert.level}`}>
                     {cert.level}
                   </span>
                 </div>
                 <p className="cert-description">{cert.description}</p>
-                
+
                 <div className="cert-info">
                   <div className="info-item">
                     <strong>颁发机构：</strong>{cert.issuer}
@@ -200,9 +231,12 @@ export default function Competitions() {
           <div className="platform-grid">
             {training_platforms.map((platform) => (
               <div key={platform.id} className="platform-card">
-                <h3>{platform.name}</h3>
+                <div className="platform-header">
+                  <Logo image={platform.image} name={platform.name} type="platform" />
+                  <h3>{platform.name}</h3>
+                </div>
                 <p className="platform-description">{platform.description}</p>
-                
+
                 <div className="platform-info">
                   <div className="info-item">
                     <strong>难度级别：</strong>{platform.level}

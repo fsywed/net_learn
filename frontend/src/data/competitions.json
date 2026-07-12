@@ -3,6 +3,7 @@
     {
       "id": 1,
       "name": "DEF CON CTF",
+      "image": "",
       "description": "全球最大的黑客竞赛之一，每年在拉斯维加斯 DEF CON 大会期间举办。",
       "level": "国际顶级",
       "frequency": "年度",
@@ -22,6 +23,7 @@
     {
       "id": 2,
       "name": "HITCON CTF",
+      "image": "",
       "description": "台湾 HITCON 大会举办的国际 CTF 竞赛，以高质量题目著称。",
       "level": "国际知名",
       "frequency": "年度",
@@ -41,6 +43,7 @@
     {
       "id": 3,
       "name": "全国大学生信息安全竞赛",
+      "image": "",
       "description": "教育部主办的全国性信息安全竞赛，国内最高级别的学生赛事。",
       "level": "国家级",
       "frequency": "年度",
@@ -60,6 +63,7 @@
     {
       "id": 4,
       "name": "强网杯",
+      "image": "",
       "description": "国内顶级网络安全竞赛，由中央网信办指导，题目难度高。",
       "level": "国家级",
       "frequency": "年度",
@@ -79,6 +83,7 @@
     {
       "id": 5,
       "name": "XCTF（西安交通大学 CTF）",
+      "image": "",
       "description": "西安交通大学主办的国际 CTF 赛事，题目质量优秀。",
       "level": "国际知名",
       "frequency": "年度",
@@ -98,6 +103,7 @@
     {
       "id": 6,
       "name": "BUUCTF",
+      "image": "",
       "description": "北京邮电大学 CTF 平台，提供大量历史题目练习。",
       "level": "练习平台",
       "frequency": "常年开放",
@@ -117,6 +123,7 @@
     {
       "id": 7,
       "name": "攻防世界（ADWorld）",
+      "image": "",
       "description": " XCTF 配套练习平台，提供丰富的 CTF 题目资源。",
       "level": "练习平台",
       "frequency": "常年开放",
@@ -136,6 +143,7 @@
     {
       "id": 8,
       "name": "CTFtime",
+      "image": "",
       "description": "全球 CTF 赛事聚合平台，汇总所有重要赛事信息。",
       "level": "赛事平台",
       "frequency": "实时更新",
@@ -157,6 +165,7 @@
     {
       "id": 1,
       "name": "CISSP（注册信息系统安全专家）",
+      "image": "",
       "description": "全球最权威的信息安全认证之一，由 (ISC)² 颁发。",
       "level": "高级",
       "issuer": "(ISC)²",
@@ -186,6 +195,7 @@
     {
       "id": 2,
       "name": "CEH（认证道德黑客）",
+      "image": "",
       "description": "EC-Council 颁发的渗透测试认证，注重实战技能。",
       "level": "中级",
       "issuer": "EC-Council",
@@ -224,6 +234,7 @@
     {
       "id": 3,
       "name": "OSCP（进攻性安全认证专家）",
+      "image": "",
       "description": "Offensive Security 颁发的实战渗透测试认证，业界含金量最高。",
       "level": "高级",
       "issuer": "Offensive Security",
@@ -253,6 +264,7 @@
     {
       "id": 4,
       "name": "CompTIA Security+",
+      "image": "",
       "description": "入门级信息安全认证，适合刚入行的安全从业者。",
       "level": "入门",
       "issuer": "CompTIA",
@@ -279,6 +291,7 @@
     {
       "id": 5,
       "name": "CISP（注册信息安全专业人员）",
+      "image": "",
       "description": "中国信息安全测评中心颁发的国家级信息安全认证。",
       "level": "中级",
       "issuer": "中国信息安全测评中心",
@@ -308,6 +321,7 @@
     {
       "id": 6,
       "name": "NISP（国家信息安全水平考试）",
+      "image": "",
       "description": "中国信息安全测评中心颁发的信息安全水平认证，分一级和二级。",
       "level": "入门/中级",
       "issuer": "中国信息安全测评中心",
@@ -336,6 +350,7 @@
     {
       "id": 7,
       "name": "CCNA Security",
+      "image": "",
       "description": "思科颁发的网络安全认证，专注网络设备安全配置。",
       "level": "中级",
       "issuer": "Cisco",
@@ -362,6 +377,7 @@
     {
       "id": 8,
       "name": "AWS Certified Security - Specialty",
+      "image": "",
       "description": "亚马逊云颁发的云安全专业认证，专注 AWS 安全服务。",
       "level": "高级",
       "issuer": "Amazon Web Services",
@@ -393,6 +409,7 @@
     {
       "id": 1,
       "name": "HackTheBox",
+      "image": "",
       "description": "全球最大的渗透测试练习平台，提供真实场景的靶机挑战。",
       "website": "https://www.hackthebox.com/",
       "level": "中级到高级",
@@ -407,6 +424,7 @@
     {
       "id": 2,
       "name": "TryHackMe",
+      "image": "",
       "description": "游戏化的网络安全学习平台，适合初学者入门。",
       "website": "https://tryhackme.com/",
       "level": "入门到中级",
@@ -421,6 +439,7 @@
     {
       "id": 3,
       "name": "PentesterLab",
+      "image": "",
       "description": "专注于 Web 安全实战的练习平台。",
       "website": "https://pentesterlab.com/",
       "level": "中级",
@@ -435,6 +454,7 @@
     {
       "id": 4,
       "name": "VulnHub",
+      "image": "",
       "description": "提供可下载的漏洞虚拟机，本地练习渗透测试。",
       "website": "https://www.vulnhub.com/",
       "level": "varies",
