@@ -977,13 +977,171 @@ h1, h2, h3, h4 {
   .table {
     font-size: 13px;
   }
+}
+
+/* ============================================================
+ * 静态展示型增强样式
+ * ============================================================ */
+
+.layout-footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.layout-footer a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.nav-github {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.nav-github:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 14px;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.target-header {
+  margin-bottom: 24px;
+}
+.target-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0 12px;
+}
+
+.docker-card {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+.docker-card h3 {
+  color: #f1f5f9;
+  margin-bottom: 10px;
+}
+.docker-hint {
+  color: #94a3b8;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.docker-hint a {
+  color: #67e8f9;
+}
+.code-block {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  overflow-x: auto;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.code-block code {
+  color: #a5f3fc;
+  background: transparent;
+  padding: 0;
+}
+.docker-info {
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+.docker-info code {
+  background: #1e293b;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #fde68a;
+  font-size: 12px;
+}
+
+.step-list {
+  padding-left: 20px;
+  line-height: 1.8;
+  color: var(--text);
+}
+.step-list li {
+  margin-bottom: 6px;
+}
+
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge-skill {
+  background: #ede9fe;
+  color: #6d28d9;
+  border: 1px solid #ddd6fe;
+}
+.badge-status-published {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.about-content h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: var(--text);
+  font-size: 18px;
+}
+.about-content h3:first-child {
+  margin-top: 0;
+}
+.about-content ul {
+  padding-left: 22px;
+  line-height: 1.8;
+  color: var(--text);
+}
+.about-content p {
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.disclaimer {
+  padding: 10px 14px;
+  background: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #78350f;
+}
+
+.target-detail .card,
+.course-detail .card,
+.about-content {
+  margin-bottom: 20px;
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
   .table th,
   .table td {
     padding: 8px 10px;
-  }
-  .instance-running,
-  .instance-card .instance-idle {
-    flex-direction: column;
-    align-items: stretch;
   }
 }

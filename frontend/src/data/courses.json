@@ -1,0 +1,63 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "title": "Web 安全入门",
+      "description": "面向新手的 Web 安全入门课程，涵盖常见漏洞概念与实战练习。",
+      "status": "published",
+      "chapters": [
+        {
+          "id": 1,
+          "course_id": 1,
+          "title": "第一章：Web 安全基础概念",
+          "order": 1,
+          "content": "# Web 安全基础概念\n\nWeb 安全是网络安全的重要分支，关注 Web 应用的常见漏洞与防御方法。\n\n## 常见威胁\n\n- **SQL 注入**：攻击者构造恶意输入干扰后端 SQL 语句。\n- **XSS（跨站脚本）**：向页面注入恶意脚本并在其他用户浏览器执行。\n- **CSRF（跨站请求伪造）**：诱导已登录用户在不知情下发起请求。\n\n## 学习目标\n\n1. 理解 HTTP 请求与响应结构。\n2. 掌握常见漏洞的成因与利用方式。\n3. 能够在靶机环境中复现并验证漏洞。\n\n> 提示：完成本章后，请在靶机列表启动「示例：Nginx Flag 查找」进行第一次实战练习。\n"
+        },
+        {
+          "id": 2,
+          "course_id": 1,
+          "title": "第二章：信息搜集与 Flag 查找",
+          "order": 2,
+          "content": "# 信息搜集与 Flag 查找\n\n在 CTF 与渗透测试中，Flag 通常隐藏在页面源码、响应头或服务端口中。\n\n## 查找技巧\n\n1. 查看页面 HTML 源码，留意注释 `<!-- ... -->`。\n2. 检查 HTTP 响应头与 Cookie。\n3. 使用 `curl`、`dirsearch` 等工具枚举隐藏路径。\n\n## 示例\n\n访问靶机首页后，按 `Ctrl+U` 查看源代码，留意页面中是否藏有形如\n`flag{...}` 的字符串。\n"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "网络协议基础",
+      "description": "从 TCP/IP 到 HTTP，理解每一次请求背后的网络协议交互。",
+      "status": "published",
+      "chapters": [
+        {
+          "id": 3,
+          "course_id": 2,
+          "title": "第一章：OSI 与 TCP/IP 模型",
+          "order": 1,
+          "content": "# OSI 与 TCP/IP 模型\n\n理解网络通信的分层模型是学习安全的基础。\n\n## 核心概念\n\n- 应用层（HTTP / DNS / FTP）\n- 传输层（TCP / UDP）\n- 网络层（IP）\n- 链路层（以太网 / Wi-Fi）\n\n## 实战工具\n\n- `wireshark` 抓包分析\n- `tcpdump` 命令行抓包\n- `netstat` 查看连接\n"
+        },
+        {
+          "id": 4,
+          "course_id": 2,
+          "title": "第二章：HTTP 协议详解",
+          "order": 2,
+          "content": "# HTTP 协议详解\n\nHTTP 是 Web 安全的核心协议。\n\n## 请求结构\n\n```\nGET /index.html HTTP/1.1\nHost: example.com\nUser-Agent: Mozilla/5.0\n```\n\n## 常用方法\n\n- GET / POST / PUT / DELETE\n- OPTIONS 预检请求\n- HEAD 仅获取响应头\n"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "渗透测试方法论",
+      "description": "系统化学习渗透测试的阶段划分、工具链与报告撰写。",
+      "status": "published",
+      "chapters": [
+        {
+          "id": 5,
+          "course_id": 3,
+          "title": "第一章：渗透测试五阶段",
+          "order": 1,
+          "content": "# 渗透测试五阶段\n\n1. **情报搜集**：被动信息收集（whois、shodan、google dork）\n2. **扫描探测**：端口扫描、服务识别、漏洞扫描\n3. **漏洞利用**：根据识别出的漏洞尝试获取权限\n4. **权限提升**：从普通用户提升到管理员\n5. **报告撰写**：整理发现、复现步骤、修复建议\n"
+        }
+      ]
+    }
+  ]
+}
