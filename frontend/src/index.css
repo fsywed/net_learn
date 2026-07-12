@@ -1314,3 +1314,291 @@ h1, h2, h3, h4 {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   border: none;
 }
+
+/* ============================================================
+ * 新手入门页面
+ * ============================================================ */
+
+.flow-diagram {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 24px 0 32px;
+  padding: 20px;
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.flow-node {
+  padding: 10px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.flow-arrow {
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.step-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.step-icon {
+  font-size: 24px;
+}
+
+.step-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.step-desc {
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.step-actions {
+  margin: 0 0 12px 20px;
+  padding: 0;
+  color: var(--text-secondary);
+}
+
+.step-actions li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.step-tip {
+  background: #f0f9ff;
+  border-left: 3px solid var(--primary);
+  padding: 10px 14px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.step-link {
+  display: inline-block;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.step-link:hover {
+  text-decoration: underline;
+}
+
+.cta-section {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  margin-top: 24px;
+}
+
+.cta-section h2 {
+  margin-bottom: 8px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+ * 工具箱页面
+ * ============================================================ */
+
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.tool-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.tool-header h3 {
+  margin: 0;
+  font-size: 16px;
+  flex: 1;
+}
+
+.free-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #047857;
+  background: #d1fae5;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.tool-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.tool-section {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.tool-section strong {
+  color: var(--text);
+}
+
+.tool-code {
+  display: block;
+  margin-top: 4px;
+  padding: 6px 10px;
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.tool-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.tool-category {
+  font-size: 12px;
+  color: var(--primary);
+  background: #ecfeff;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.tool-platforms {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.toolbox-tip {
+  margin-top: 32px;
+  padding: 20px;
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.toolbox-tip h3 {
+  margin-bottom: 12px;
+}
+
+.toolbox-tip ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+}
+
+.toolbox-tip li {
+  margin-bottom: 6px;
+}
+
+/* 靶机详情页工具推荐 */
+.tool-suggestions ul {
+  margin: 0 0 12px 20px;
+  padding: 0;
+  color: var(--text-secondary);
+}
+
+.tool-suggestions li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.tool-more {
+  margin: 0;
+  font-size: 13px;
+}
+
+.tool-more a {
+  color: var(--primary);
+  font-weight: 600;
+}

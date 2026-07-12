@@ -28,11 +28,17 @@ export default function Layout() {
           <NavLink to="/" end onClick={closeMenu}>
             首页
           </NavLink>
+          <NavLink to="/getting-started" onClick={closeMenu}>
+            新手入门
+          </NavLink>
           <NavLink to="/courses" onClick={closeMenu}>
             课程
           </NavLink>
           <NavLink to="/targets" onClick={closeMenu}>
             靶场
+          </NavLink>
+          <NavLink to="/toolbox" onClick={closeMenu}>
+            工具箱
           </NavLink>
           <NavLink to="/competitions" onClick={closeMenu}>
             比赛与认证

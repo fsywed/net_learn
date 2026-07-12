@@ -6,6 +6,8 @@ import CourseDetail from './pages/CourseDetail'
 import TargetList from './pages/TargetList'
 import TargetDetail from './pages/TargetDetail'
 import Competitions from './pages/Competitions'
+import GettingStarted from './pages/GettingStarted'
+import Toolbox from './pages/Toolbox'
 import About from './pages/About'
 
 // 应用路由：全部公开访问，无登录态
@@ -19,6 +21,8 @@ function App() {
         <Route path="/targets" element={<TargetList />} />
         <Route path="/targets/:templateId" element={<TargetDetail />} />
         <Route path="/competitions" element={<Competitions />} />
+        <Route path="/getting-started" element={<GettingStarted />} />
+        <Route path="/toolbox" element={<Toolbox />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

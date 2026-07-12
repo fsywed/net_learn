@@ -246,6 +246,71 @@ export default function TargetDetail() {
       )}
 
       <section className="card">
+        <h3>推荐工具</h3>
+        <div className="tool-suggestions">
+          {target.category === 'Web' && (
+            <ul>
+              <li><strong>浏览器 F12</strong>：查看源码、网络请求、Cookie</li>
+              <li><strong>Burp Suite</strong>：拦截和修改 HTTP 请求</li>
+              <li><strong>curl</strong>：快速构造请求</li>
+            </ul>
+          )}
+          {target.category === 'PWN' && (
+            <ul>
+              <li><strong>pwntools</strong>：Python 漏洞利用框架</li>
+              <li><strong>checksec</strong>：检查二进制保护机制</li>
+              <li><strong>GDB + pwndbg</strong>：动态调试</li>
+            </ul>
+          )}
+          {target.category === 'Crypto' && (
+            <ul>
+              <li><strong>Python + gmpy2</strong>：大数运算和破解</li>
+              <li><strong>CyberChef</strong>：在线编码解码</li>
+              <li><strong>hashcat</strong>：密码破解</li>
+            </ul>
+          )}
+          {target.category === 'Reverse' && (
+            <ul>
+              <li><strong>Ghidra</strong>：反编译二进制</li>
+              <li><strong>IDA Pro / Cutter</strong>：高级逆向分析</li>
+              <li><strong>Python</strong>：编写解密脚本</li>
+            </ul>
+          )}
+          {target.category === 'Misc' && (
+            <ul>
+              <li><strong>zsteg</strong>：图片 LSB 扫描</li>
+              <li><strong>binwalk</strong>：文件提取</li>
+              <li><strong>exiftool</strong>：元数据查看</li>
+            </ul>
+          )}
+          {target.category === 'Forensics' && (
+            <ul>
+              <li><strong>Wireshark</strong>：流量分析</li>
+              <li><strong>Volatility</strong>：内存取证</li>
+              <li><strong>tshark</strong>：命令行流量提取</li>
+            </ul>
+          )}
+          {target.category === 'Network' && (
+            <ul>
+              <li><strong>Wireshark</strong>：抓包分析</li>
+              <li><strong>nmap</strong>：端口扫描</li>
+              <li><strong>curl</strong>：构造请求</li>
+            </ul>
+          )}
+          {target.category === '无线安全' && (
+            <ul>
+              <li><strong>aircrack-ng</strong>：WiFi 破解</li>
+              <li><strong>hashcat</strong>：密码破解</li>
+              <li><strong>Wireshark</strong>：流量分析</li>
+            </ul>
+          )}
+          <p className="tool-more">
+            查看完整工具清单 → <Link to="/toolbox">工具箱</Link>
+          </p>
+        </div>
+      </section>
+
+      <section className="card">
         <h3>解题步骤</h3>
         <ol className="step-list">
           {target.solution_steps.map((step, idx) => (
