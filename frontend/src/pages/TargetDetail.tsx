@@ -194,54 +194,66 @@ export default function TargetDetail() {
         )}
       </section>
 
-      {/* 步骤 3：靶机 iframe + Flag 提交 */}
+      {/* 步骤 3：在新窗口打开靶机 + 提交 Flag */}
       {connected && (
         <section className="card target-frame-card">
-          <h3>第 3 步：攻击靶机 & 提交 Flag</h3>
-          {targetUrl && (
+          <h3>第 3 步：用你自己的工具攻击靶机</h3>
+          <div className="open-target-banner">
+            <p className="banner-tip">
+              🔧 靶机已就绪！建议在新标签页打开靶机，用你自己的工具（Burp Suite、curl、sqlmap 等）进行攻击。
+            </p>
             <button
-              className="btn btn-outline btn-sm open-tab-btn"
+              className="btn btn-primary open-target-btn"
               onClick={openInNewTab}
             >
-              在新标签页打开 ↗
+              🚀 在新标签页打开靶机 ↗
             </button>
-          )}
-          <div className="frame-wrapper">
-            <iframe
-              src={targetUrl}
-              title="靶机页面"
-              className="target-iframe"
-              sandbox="allow-scripts allow-forms allow-popups"
-            />
+            <p className="banner-url">
+              靶机地址：<code>{targetUrl}</code>
+            </p>
           </div>
-          <div className="flag-form">
-            <input
-              type="text"
-              className="input"
-              placeholder="粘贴你找到的 flag，格式 flag{...}"
-              value={flagInput}
-              onChange={(e) => setFlagInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') submit()
-              }}
-            />
-            <button
-              className="btn btn-primary"
-              onClick={submit}
-              disabled={!flagInput.trim()}
-            >
-              提交 Flag
-            </button>
+
+          <div className="tool-hint-box">
+            <h4>💡 工具使用提示</h4>
+            <ul>
+              <li><strong>浏览器</strong>：直接在新标签页操作，按 F12 查看源码和网络请求</li>
+              <li><strong>curl</strong>：<code>curl http://localhost:{target.default_port}/</code></li>
+              <li><strong>Burp Suite</strong>：设置代理为 127.0.0.1:8080，拦截浏览器请求</li>
+              <li><strong>sqlmap</strong>：<code>sqlmap -u "http://localhost:{target.default_port}/login" --data="username=a&password=b"</code></li>
+            </ul>
           </div>
-          {submitState.kind === 'ok' && (
-            <div className="alert alert-ok">✓ {submitState.msg}</div>
-          )}
-          {submitState.kind === 'bad' && (
-            <div className="alert alert-warn">✗ {submitState.msg}</div>
-          )}
-          {submitState.kind === 'err' && (
-            <div className="alert alert-error">{submitState.msg}</div>
-          )}
+
+          <div className="flag-submit-section">
+            <h4>🎯 找到 Flag 后提交验证</h4>
+            <div className="flag-form">
+              <input
+                type="text"
+                className="input"
+                placeholder="粘贴你找到的 flag，格式 flag{...}"
+                value={flagInput}
+                onChange={(e) => setFlagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') submit()
+                }}
+              />
+              <button
+                className="btn btn-primary"
+                onClick={submit}
+                disabled={!flagInput.trim()}
+              >
+                提交 Flag
+              </button>
+            </div>
+            {submitState.kind === 'ok' && (
+              <div className="alert alert-ok">✓ {submitState.msg}</div>
+            )}
+            {submitState.kind === 'bad' && (
+              <div className="alert alert-warn">✗ {submitState.msg}</div>
+            )}
+            {submitState.kind === 'err' && (
+              <div className="alert alert-error">{submitState.msg}</div>
+            )}
+          </div>
         </section>
       )}
 
