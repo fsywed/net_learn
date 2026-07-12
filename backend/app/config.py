@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     TARGET_DEFAULT_TTL_SECONDS: int = 1800  # 默认 30 分钟
     TARGET_MAX_PER_IP: int = 2  # 每 IP 同时运行上限
 
+    # 模拟模式：Docker 不可用时用内嵌 HTTP 服务模拟靶机（HF Spaces 等无 Docker 环境）
+    SIMULATION_MODE: str = "auto"  # auto / on / off
+
     # Flag
     FLAG_PREFIX: str = "flag{"
     FLAG_SUFFIX: str = "}"

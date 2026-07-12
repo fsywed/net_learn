@@ -19,18 +19,20 @@ logger = logging.getLogger(__name__)
 async def reap_once() -> int:
     """扫描一次过期实例，停止并标记为 stopped。返回处理数量。"""
     now = datetime.now(timezone.utc)
+    # SQLite 存 naive datetime，比较时用 naive now
+    now_naive = now.replace(tzinfo=None)
     count = 0
     async with session_scope() as session:
         stmt = select(TargetInstance).where(
             TargetInstance.status.in_([InstanceStatus.running.value, InstanceStatus.starting.value]),
-            TargetInstance.expires_at < now,
+            TargetInstance.expires_at < now_naive,
         )
         res = await session.execute(stmt)
         for inst in res.scalars():
             logger.info("reaper 销毁实例 %s (过期于 %s)", inst.container_name, inst.expires_at)
-            await stop_container(inst.container_name)
+            await stop_container(inst.container_name, inst.host_port)
             inst.status = InstanceStatus.stopped.value
-            inst.stopped_at = now
+            inst.stopped_at = now_naive
             limiter.release(inst.client_ip)
             count += 1
         await session.commit()

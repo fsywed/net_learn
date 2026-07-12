@@ -22,7 +22,11 @@ router = APIRouter(prefix="/instances", tags=["instances"])
 def _to_out(inst: TargetInstance) -> InstanceOut:
     """DB 记录转 Pydantic 输出。"""
     now = datetime.now(timezone.utc)
-    remaining = max(0, int((inst.expires_at - now).total_seconds()))
+    # SQLite 返回 naive datetime，需要统一为 aware
+    exp = inst.expires_at
+    if exp.tzinfo is None:
+        exp = exp.replace(tzinfo=timezone.utc)
+    remaining = max(0, int((exp - now).total_seconds()))
     return InstanceOut(
         id=inst.id,
         template_id=inst.template_id,
@@ -109,7 +113,7 @@ async def destroy_instance(
     if not inst or inst.client_ip != client_ip:
         raise HTTPException(status_code=404, detail="实例不存在")
     if inst.status == InstanceStatus.running.value:
-        await stop_container(inst.container_name)
+        await stop_container(inst.container_name, inst.host_port)
         inst.status = InstanceStatus.stopped.value
         await session.commit()
     limiter.release(client_ip)

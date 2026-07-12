@@ -15,19 +15,99 @@
 后端通过 Python docker SDK（unix socket）创建/销毁容器。
 容器端口 30000-40000 随机分配，**不直接对外暴露**，全部走 `/api/proxy/<id>/<token>/<path>` 反向代理。
 
-## 三种部署方案（按推荐顺序）
+## 四种部署方案（按推荐顺序）
 
 | 方案 | 费用 | 难度 | Docker 支持 | 备注 |
 |---|---|---|---|---|
-| **A. Oracle Cloud Always Free** | **完全免费（需信用卡验证）** | 中 | ✅ 完整 | 4 OCPU + 24GB ARM 永久免费，最适合长期跑 |
-| B. Fly.io 付费 1GB machine | ~$5/月 | 低 | ✅ 需挂 docker.sock | 文档齐全、CLI 友好 |
-| C. 自建 Linux 服务器 | 自定 | 低 | ✅ 直接 | 任何 Ubuntu + Docker 即可 |
+| **A. Hugging Face Spaces** | **完全免费（无需信用卡）** | **低** | ❌ 模拟模式 | 零配置，邮箱注册即可，48h 休眠 |
+| **B. Oracle Cloud Always Free** | **完全免费（需信用卡验证）** | 中 | ✅ 完整 | 4 OCPU + 24GB ARM 永久免费，最适合长期跑 |
+| C. Fly.io 付费 1GB machine | ~$5/月 | 低 | ✅ 需挂 docker.sock | 文档齐全、CLI 友好 |
+| D. 自建 Linux 服务器 | 自定 | 低 | ✅ 直接 | 任何 Ubuntu + Docker 即可 |
 
-> **不推荐**：Fly.io free tier（256MB 内存）跑不了 Docker 容器；Render.com free 无 Docker 支持。
+> **方案 A（HF Spaces）** 是最简单的免费方案：不需要信用卡、不需要安装 Docker，邮箱注册即可。
+> 后端以"模拟模式"运行——用内嵌 HTTP 服务模拟靶机页面（Flag 藏在 HTML 注释中），用户体验完整。
+> 如果需要真实 Docker 容器靶机，选方案 B/C/D。
 
 ---
 
-## 方案 A：Oracle Cloud Always Free（推荐）
+## 方案 A：Hugging Face Spaces（最简单，推荐先试）
+
+完全免费，邮箱注册即可，无需信用卡。后端以模拟模式运行。
+
+### 1. 注册 Hugging Face 账号
+- 访问 https://huggingface.co/join
+- 邮箱注册即可（支持 Google / GitHub 登录）
+
+### 2. 创建 Space
+- 访问 https://huggingface.co/new-space
+- Space name: `netlearn-backend`
+- License: MIT
+- SDK: **Docker**
+- Space hardware: **CPU basic (Free)**
+
+### 3. 上传代码
+```bash
+# 克隆你的 HF Space 仓库
+git clone https://huggingface.co/spaces/你的用户名/netlearn-backend
+cd netlearn-backend
+
+# 从项目拷贝后端代码
+cp -r /path/to/net_learn/backend/app .
+cp /path/to/net_learn/backend/requirements.txt .
+cp /path/to/net_learn/backend/Dockerfile.hf ./Dockerfile
+
+# 创建 README.md（HF Spaces 配置文件）
+cat > README.md << 'EOF'
+---
+title: NetLearn Backend
+emoji: 🎯
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
+EOF
+
+# 提交推送
+git add -A
+git commit -m "deploy netlearn backend"
+git push
+```
+
+### 4. 配置环境变量
+在 Space 页面 → Settings → Variables and secrets 中添加：
+- `SIMULATION_MODE` = `auto`
+- `CORS_ORIGINS` = `https://fsywed.github.io`
+- `PUBLIC_BASE_URL` = `https://你的用户名-netlearn-backend.hf.space`
+
+### 5. 验活
+等待构建完成后（约 2-3 分钟）：
+```bash
+curl https://你的用户名-netlearn-backend.hf.space/api/health
+# {"status":"ok","service":"netlearn-backend"}
+
+curl https://你的用户名-netlearn-backend.hf.space/api/targets
+# 返回 4 个靶机模板
+```
+
+### 6. 更新前端
+编辑 `frontend/.env.production`：
+```
+VITE_API_BASE=https://你的用户名-netlearn-backend.hf.space
+```
+重新 build + push 到 GitHub Pages。
+
+### HF Spaces 限制
+- 48 小时不活动会自动休眠，再次访问时冷启动约 30 秒
+- 模拟模式下靶机是内嵌 HTTP 服务（不是真实 Docker 容器）
+- CPU basic 免费 2 vCPU / 16GB 内存（足够跑模拟靶机）
+- 不支持 `--privileged`（无法 Docker-in-Docker）
+
+---
+
+## 方案 B：Oracle Cloud Always Free
 
 免费 ARM 4核 24GB 内存实例，永久免费。
 
@@ -103,7 +183,7 @@ sudo systemctl restart caddy
 
 ---
 
-## 方案 B：Fly.io 付费 1GB machine
+## 方案 C：Fly.io 付费 1GB machine
 
 ### 1. 装 flyctl 并登录
 ```bash
@@ -158,7 +238,7 @@ curl https://netlearn-backend.fly.dev/api/targets
 
 ---
 
-## 方案 C：自建服务器
+## 方案 D：自建服务器
 
 任何装了 Docker 的 Linux 都行，本地开发 / 树莓派 / 旧笔记本均可。
 
