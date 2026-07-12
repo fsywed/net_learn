@@ -34,6 +34,9 @@ export default function Layout() {
           <NavLink to="/targets" onClick={closeMenu}>
             靶场
           </NavLink>
+          <NavLink to="/competitions" onClick={closeMenu}>
+            比赛与认证
+          </NavLink>
           <NavLink to="/about" onClick={closeMenu}>
             关于
           </NavLink>

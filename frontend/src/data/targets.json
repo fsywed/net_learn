@@ -273,6 +273,190 @@
         "防御：使用 bcrypt/scrypt/Argon2 加盐哈希"
       ],
       "docker_run": "docker run -d -p 8092:8092 --name netlearn-target12 netlearn-target12"
+    },
+    {
+      "id": 13,
+      "name": "DNS 欺骗攻击",
+      "description": "DNS 服务配置错误，可通过 DNS 欺骗将用户重定向到钓鱼网站。",
+      "difficulty": "hard",
+      "category": "网络",
+      "default_port": 8093,
+      "skills": ["DNS 安全", "中间人攻击"],
+      "solution_steps": [
+        "启动靶机：python target13_dns.py 8093",
+        "访问 http://localhost:8093",
+        "查看 DNS 查询日志",
+        "发现 DNS 缓存投毒漏洞",
+        "伪造 DNS 响应将目标域名指向攻击者 IP",
+        "获取 Flag 并提交"
+      ],
+      "learn_points": [
+        "DNS 欺骗原理：伪造 DNS 响应",
+        "攻击场景：钓鱼、中间人攻击",
+        "防御：DNSSEC、DNS over HTTPS、验证 DNS 响应"
+      ],
+      "docker_run": "docker run -d -p 8093:8093 --name netlearn-target13 netlearn-target13"
+    },
+    {
+      "id": 14,
+      "name": "ARP 欺骗中间人攻击",
+      "description": "局域网内 ARP 协议无认证，可通过 ARP 欺骗劫持流量。",
+      "difficulty": "hard",
+      "category": "网络",
+      "default_port": 8094,
+      "skills": ["ARP 欺骗", "流量劫持"],
+      "solution_steps": [
+        "启动靶机：python target14_arp.py 8094",
+        "访问 http://localhost:8094",
+        "查看网络拓扑和 ARP 表",
+        "发送伪造 ARP 响应，将网关 MAC 改为攻击者 MAC",
+        "截获目标流量中的 Flag",
+        "提交 Flag 验证"
+      ],
+      "learn_points": [
+        "ARP 欺骗原理：ARP 协议无认证机制",
+        "攻击工具：arpspoof、Bettercap",
+        "防御：静态 ARP 绑定、ARP 防火墙、802.1X"
+      ],
+      "docker_run": "docker run -d -p 8094:8094 --name netlearn-target14 netlearn-target14"
+    },
+    {
+      "id": 15,
+      "name": "TCP 端口扫描检测",
+      "description": "分析网络流量日志，识别端口扫描行为并提取攻击者信息。",
+      "difficulty": "medium",
+      "category": "网络",
+      "default_port": 8095,
+      "skills": ["流量分析", "入侵检测"],
+      "solution_steps": [
+        "启动靶机：python target15_portscan.py 8095",
+        "访问 http://localhost:8095",
+        "查看网络流量日志（pcap 格式）",
+        "使用 Wireshark 或 tcpdump 分析流量",
+        "识别 SYN 扫描、FIN 扫描等异常行为",
+        "提取攻击者 IP 和扫描的端口列表作为 Flag"
+      ],
+      "learn_points": [
+        "端口扫描类型：SYN 扫描、FIN 扫描、Xmas 扫描",
+        "检测特征：短时间内大量 SYN 包、异常标志位组合",
+        "防御：防火墙规则、IDS/IPS、速率限制"
+      ],
+      "docker_run": "docker run -d -p 8095:8095 --name netlearn-target15 netlearn-target15"
+    },
+    {
+      "id": 16,
+      "name": "HTTP 代理 SSRF",
+      "description": "HTTP 代理未限制目标地址，可访问内网服务获取敏感信息。",
+      "difficulty": "hard",
+      "category": "网络",
+      "default_port": 8096,
+      "skills": ["SSRF", "代理安全"],
+      "solution_steps": [
+        "启动靶机：python target16_proxy.py 8096",
+        "访问 http://localhost:8096",
+        "使用代理访问 http://127.0.0.1:8080/admin",
+        "或访问云元数据 http://169.254.169.254/",
+        "获取内网服务中的 Flag",
+        "提交 Flag 验证"
+      ],
+      "learn_points": [
+        "SSRF 通过代理实现：代理转发请求到内网",
+        "攻击目标：内网服务、云元数据、本地文件",
+        "防御：白名单验证、禁止内网 IP、禁用危险协议"
+      ],
+      "docker_run": "docker run -d -p 8096:8096 --name netlearn-target16 netlearn-target16"
+    },
+    {
+      "id": 17,
+      "name": "WiFi 密码破解",
+      "description": "捕获 WPA2 握手包，使用字典破解 WiFi 密码。",
+      "difficulty": "medium",
+      "category": "无线安全",
+      "default_port": 8097,
+      "skills": ["WiFi 安全", "密码破解"],
+      "solution_steps": [
+        "启动靶机：python target17_wifi.py 8097",
+        "访问 http://localhost:8097",
+        "下载提供的 pcap 握手包文件",
+        "使用 aircrack-ng 破解：aircrack-ng -w dict.txt capture.pcap",
+        "或使用 hashcat 加速破解",
+        "获取 WiFi 密码作为 Flag 提交"
+      ],
+      "learn_points": [
+        "WPA2 握手过程：四次握手验证密码",
+        "破解工具：aircrack-ng、hashcat、hcxpcaptool",
+        "防御：强密码、WPA3、802.1X 企业认证"
+      ],
+      "docker_run": "docker run -d -p 8097:8097 --name netlearn-target17 netlearn-target17"
+    },
+    {
+      "id": 18,
+      "name": "防火墙规则绕过",
+      "description": "分析防火墙规则，找到配置错误绕过访问控制。",
+      "difficulty": "hard",
+      "category": "网络",
+      "default_port": 8098,
+      "skills": ["防火墙", "规则绕过"],
+      "solution_steps": [
+        "启动靶机：python target18_firewall.py 8098",
+        "访问 http://localhost:8098",
+        "查看防火墙规则配置",
+        "发现规则顺序错误或通配符使用不当",
+        "构造特殊请求绕过防火墙限制",
+        "访问受保护资源获取 Flag"
+      ],
+      "learn_points": [
+        "防火墙规则匹配顺序：从上到下，先匹配先生效",
+        "常见错误：通配符过宽、规则顺序错误、默认策略不当",
+        "最佳实践：最小权限、默认拒绝、定期审计规则"
+      ],
+      "docker_run": "docker run -d -p 8098:8098 --name netlearn-target18 netlearn-target18"
+    },
+    {
+      "id": 19,
+      "name": "VPN 配置错误",
+      "description": "VPN 服务配置不当，可绕过认证或获取内网访问权限。",
+      "difficulty": "hard",
+      "category": "网络",
+      "default_port": 8099,
+      "skills": ["VPN 安全", "配置审计"],
+      "solution_steps": [
+        "启动靶机：python target19_vpn.py 8099",
+        "访问 http://localhost:8099",
+        "查看 VPN 配置文件（OpenVPN/WireGuard）",
+        "发现弱加密算法或证书验证缺失",
+        "利用配置错误建立 VPN 连接",
+        "访问内网资源获取 Flag"
+      ],
+      "learn_points": [
+        "VPN 常见配置错误：弱加密、无证书验证、默认凭证",
+        "攻击：中间人攻击、凭证窃取、内网穿透",
+        "防御：强加密算法、证书固定、双因素认证"
+      ],
+      "docker_run": "docker run -d -p 8099:8099 --name netlearn-target19 netlearn-target19"
+    },
+    {
+      "id": 20,
+      "name": "网络流量分析",
+      "description": "分析 pcap 流量包，提取隐藏的敏感信息和通信内容。",
+      "difficulty": "medium",
+      "category": "网络",
+      "default_port": 8100,
+      "skills": ["流量分析", "协议分析"],
+      "solution_steps": [
+        "启动靶机：python target20_traffic.py 8100",
+        "访问 http://localhost:8100",
+        "下载提供的 pcap 流量包",
+        "使用 Wireshark 打开流量包",
+        "过滤 HTTP/DNS/TLS 协议，查找异常通信",
+        "提取隐藏的 Flag 并提交"
+      ],
+      "learn_points": [
+        "Wireshark 过滤语法：http、dns、tls、ip.addr",
+        "协议分析：识别异常请求、加密通信、数据泄露",
+        "工具：tshark、tcpdump、NetworkMiner"
+      ],
+      "docker_run": "docker run -d -p 8100:8100 --name netlearn-target20 netlearn-target20"
     }
   ]
 }

@@ -5,6 +5,7 @@ import CourseList from './pages/CourseList'
 import CourseDetail from './pages/CourseDetail'
 import TargetList from './pages/TargetList'
 import TargetDetail from './pages/TargetDetail'
+import Competitions from './pages/Competitions'
 import About from './pages/About'
 
 // 应用路由：全部公开访问，无登录态
@@ -17,6 +18,7 @@ function App() {
         <Route path="/courses/:courseId" element={<CourseDetail />} />
         <Route path="/targets" element={<TargetList />} />
         <Route path="/targets/:templateId" element={<TargetDetail />} />
+        <Route path="/competitions" element={<Competitions />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

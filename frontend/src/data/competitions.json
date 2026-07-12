@@ -1,0 +1,450 @@
+{
+  "ctf_competitions": [
+    {
+      "id": 1,
+      "name": "DEF CON CTF",
+      "description": "全球最大的黑客竞赛之一，每年在拉斯维加斯 DEF CON 大会期间举办。",
+      "level": "国际顶级",
+      "frequency": "年度",
+      "format": "Jeopardy + Attack-Defense",
+      "website": "https://ctf.defcon.org/",
+      "difficulty": "hard",
+      "prize": "高额奖金 + 行业声誉",
+      "team_size": "5-10人",
+      "topics": ["Web安全", "逆向工程", "密码学", "PWN", "取证", "网络攻防"],
+      "registration": "线上预选赛（通常5-6月）",
+      "tips": [
+        "需要深厚的二进制分析和漏洞挖掘能力",
+        "团队协作至关重要",
+        "建议从入门级CTF开始积累经验"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "HITCON CTF",
+      "description": "台湾 HITCON 大会举办的国际 CTF 竞赛，以高质量题目著称。",
+      "level": "国际知名",
+      "frequency": "年度",
+      "format": "Jeopardy",
+      "website": "https://hitcon.org/2026/ctf",
+      "difficulty": "hard",
+      "prize": "奖金 + 大会门票",
+      "team_size": "不限",
+      "topics": ["Web安全", "逆向工程", "密码学", "PWN", "Misc"],
+      "registration": "线上报名（通常9-10月）",
+      "tips": [
+        "题目质量高，适合进阶学习",
+        "赛后有 Writeup 分享",
+        "建议关注官方 Twitter 获取最新信息"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "全国大学生信息安全竞赛",
+      "description": "教育部主办的全国性信息安全竞赛，国内最高级别的学生赛事。",
+      "level": "国家级",
+      "frequency": "年度",
+      "format": "知识赛 + 技能赛",
+      "website": "http://www.ciscn.cn/",
+      "difficulty": "medium",
+      "prize": "证书 + 保研加分",
+      "team_size": "4人",
+      "topics": ["Web安全", "密码学", "逆向工程", "渗透测试", "安全运维"],
+      "registration": "每年3-4月报名，5月初赛，7-8月决赛",
+      "tips": [
+        "在校大学生可参加",
+        "需要学校组织报名",
+        "知识赛涵盖面广，技能赛注重实战"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "强网杯",
+      "description": "国内顶级网络安全竞赛，由中央网信办指导，题目难度高。",
+      "level": "国家级",
+      "frequency": "年度",
+      "format": "线上预选赛 + 线下决赛",
+      "website": "http://www.qiangwangbei.com/",
+      "difficulty": "hard",
+      "prize": "高额奖金 + 行业认可",
+      "team_size": "不限",
+      "topics": ["Web安全", "PWN", "逆向工程", "密码学", "移动安全", "区块链安全"],
+      "registration": "每年4-5月报名，6月线上赛",
+      "tips": [
+        "国内顶尖选手云集",
+        "题目涵盖前沿技术",
+        "建议组队参加，分工协作"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "XCTF（西安交通大学 CTF）",
+      "description": "西安交通大学主办的国际 CTF 赛事，题目质量优秀。",
+      "level": "国际知名",
+      "frequency": "年度",
+      "format": "Jeopardy",
+      "website": "https://xctf.xjtu.edu.cn/",
+      "difficulty": "medium",
+      "prize": "奖金 + 证书",
+      "team_size": "不限",
+      "topics": ["Web安全", "PWN", "逆向工程", "密码学", "Misc"],
+      "registration": "每年10-11月",
+      "tips": [
+        "适合中级选手参加",
+        "题目设计合理",
+        "赛后提供完整 Writeup"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "BUUCTF",
+      "description": "北京邮电大学 CTF 平台，提供大量历史题目练习。",
+      "level": "练习平台",
+      "frequency": "常年开放",
+      "format": "Jeopardy（题库练习）",
+      "website": "https://buuoj.cn/",
+      "difficulty": "easy",
+      "prize": "无（练习平台）",
+      "team_size": "个人",
+      "topics": ["Web安全", "PWN", "逆向工程", "密码学", "Misc"],
+      "registration": "随时注册",
+      "tips": [
+        "入门级练习平台",
+        "题目分类清晰",
+        "适合新手系统学习"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "攻防世界（ADWorld）",
+      "description": " XCTF 配套练习平台，提供丰富的 CTF 题目资源。",
+      "level": "练习平台",
+      "frequency": "常年开放",
+      "format": "Jeopardy（题库练习）",
+      "website": "https://adworld.xctf.org.cn/",
+      "difficulty": "easy",
+      "prize": "无（练习平台）",
+      "team_size": "个人",
+      "topics": ["Web安全", "PWN", "逆向工程", "密码学", "Misc"],
+      "registration": "随时注册",
+      "tips": [
+        "题目质量高",
+        "有详细 Writeup",
+        "适合系统性训练"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "CTFtime",
+      "description": "全球 CTF 赛事聚合平台，汇总所有重要赛事信息。",
+      "level": "赛事平台",
+      "frequency": "实时更新",
+      "format": "聚合平台",
+      "website": "https://ctftime.org/",
+      "difficulty": "varies",
+      "prize": "无（信息平台）",
+      "team_size": "个人/团队",
+      "topics": ["所有 CTF 方向"],
+      "registration": "关注各赛事官网",
+      "tips": [
+        "查看全球 CTF 排名",
+        "了解即将举行的赛事",
+        "查找历史赛事 Writeup"
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "id": 1,
+      "name": "CISSP（注册信息系统安全专家）",
+      "description": "全球最权威的信息安全认证之一，由 (ISC)² 颁发。",
+      "level": "高级",
+      "issuer": "(ISC)²",
+      "website": "https://www.isc2.org/certifications/cissp",
+      "prerequisites": "5年信息安全相关工作经验",
+      "exam_format": "计算机自适应测试（CAT），100-150题，3小时",
+      "cost": "约 $749 USD",
+      "validity": "3年（需持续教育学分续证）",
+      "topics": [
+        "安全与风险管理",
+        "资产安全",
+        "安全架构与工程",
+        "通信与网络安全",
+        "身份与访问管理",
+        "安全评估与测试",
+        "安全运营",
+        "软件开发安全"
+      ],
+      "preparation": [
+        "官方学习指南（OSG）",
+        "CISSP 官方练习测试",
+        "Destinations 认证指南",
+        "Mike Chapple 的 CISSP 学习指南"
+      ],
+      "career_path": "安全经理、安全架构师、CISO"
+    },
+    {
+      "id": 2,
+      "name": "CEH（认证道德黑客）",
+      "description": "EC-Council 颁发的渗透测试认证，注重实战技能。",
+      "level": "中级",
+      "issuer": "EC-Council",
+      "website": "https://www.eccouncil.org/programs/certified-ethical-hacker-ceh/",
+      "prerequisites": "2年信息安全工作经验或参加官方培训",
+      "exam_format": "多选题，125题，4小时",
+      "cost": "约 $1,199 USD（含培训）",
+      "validity": "3年（需持续教育学分续证）",
+      "topics": [
+        "信息搜集",
+        "扫描网络",
+        "枚举",
+        "漏洞分析",
+        "系统黑客",
+        "恶意软件威胁",
+        "嗅探",
+        "社会工程",
+        "拒绝服务",
+        "会话劫持",
+        "Web 服务器攻击",
+        "SQL 注入",
+        "无线网络",
+        "移动平台",
+        "物联网",
+        "云安全",
+        "密码学"
+      ],
+      "preparation": [
+        "EC-Council 官方培训课程",
+        "CEH 官方学习指南",
+        "实验环境练习",
+        "模拟题练习"
+      ],
+      "career_path": "渗透测试工程师、安全顾问、红队成员"
+    },
+    {
+      "id": 3,
+      "name": "OSCP（进攻性安全认证专家）",
+      "description": "Offensive Security 颁发的实战渗透测试认证，业界含金量最高。",
+      "level": "高级",
+      "issuer": "Offensive Security",
+      "website": "https://www.offensive-security.com/pwk-oscp/",
+      "prerequisites": "PEN-200 课程学习（无强制前置要求）",
+      "exam_format": "24小时实战渗透测试 + 24小时报告撰写",
+      "cost": "约 $1,499 USD（含课程和考试）",
+      "validity": "永久（无需续证）",
+      "topics": [
+        "信息搜集",
+        "漏洞扫描",
+        "漏洞利用",
+        "权限提升",
+        "横向移动",
+        "Active Directory 攻击",
+        "Web 应用攻击",
+        "缓冲区溢出基础"
+      ],
+      "preparation": [
+        "PEN-200 官方课程和实验环境",
+        "Kali Linux 实战练习",
+        "Metasploit 框架熟练使用",
+        "大量靶机练习（如 HackTheBox、TryHackMe）"
+      ],
+      "career_path": "渗透测试工程师、红队专家、安全研究员"
+    },
+    {
+      "id": 4,
+      "name": "CompTIA Security+",
+      "description": "入门级信息安全认证，适合刚入行的安全从业者。",
+      "level": "入门",
+      "issuer": "CompTIA",
+      "website": "https://www.comptia.org/certifications/security",
+      "prerequisites": "无强制要求，建议有 Network+ 或同等经验",
+      "exam_format": "多选题 + 性能题，最多90题，90分钟",
+      "cost": "约 $392 USD",
+      "validity": "3年（需持续教育学分续证）",
+      "topics": [
+        "攻击、威胁和漏洞",
+        "架构与设计",
+        "实施",
+        "运营和事件响应",
+        "治理、风险和合规"
+      ],
+      "preparation": [
+        "CompTIA 官方认证指南",
+        "Jason Dion 的 Security+ 课程（Udemy）",
+        "Professor Messer 免费视频",
+        "模拟题练习"
+      ],
+      "career_path": "安全分析师、安全工程师、IT 安全专员"
+    },
+    {
+      "id": 5,
+      "name": "CISP（注册信息安全专业人员）",
+      "description": "中国信息安全测评中心颁发的国家级信息安全认证。",
+      "level": "中级",
+      "issuer": "中国信息安全测评中心",
+      "website": "http://www.itsec.gov.cn/",
+      "prerequisites": "大专以上 + 2-4年信息安全工作经验",
+      "exam_format": "单选题，100题，2小时",
+      "cost": "约 ¥14,800 RMB（含培训）",
+      "validity": "3年（需持续教育学分续证）",
+      "topics": [
+        "信息安全保障",
+        "网络安全体系",
+        "密码技术",
+        "身份认证与访问控制",
+        "信息安全审计",
+        "信息安全风险管理",
+        "信息安全法规与标准",
+        "信息安全技术"
+      ],
+      "preparation": [
+        "官方授权培训机构培训",
+        "CISP 官方教材",
+        "模拟题练习",
+        "实验环境操作"
+      ],
+      "career_path": "信息安全经理、安全顾问、合规专员"
+    },
+    {
+      "id": 6,
+      "name": "NISP（国家信息安全水平考试）",
+      "description": "中国信息安全测评中心颁发的信息安全水平认证，分一级和二级。",
+      "level": "入门/中级",
+      "issuer": "中国信息安全测评中心",
+      "website": "http://www.nisp.org.cn/",
+      "prerequisites": "NISP 一级：无要求；NISP 二级：NISP 一级证书",
+      "exam_format": "在线考试，选择题 + 判断题",
+      "cost": "NISP 一级：¥480 RMB；NISP 二级：¥1,980 RMB",
+      "validity": "NISP 一级：永久；NISP 二级：3年",
+      "topics": [
+        "信息安全基础",
+        "网络安全",
+        "数据安全",
+        "应用安全",
+        "系统安全",
+        "安全管理",
+        "法律法规"
+      ],
+      "preparation": [
+        "官方在线学习平台",
+        "NISP 官方教材",
+        "在线课程",
+        "模拟题练习"
+      ],
+      "career_path": "信息安全从业人员、在校学生（为 CISP 做准备）"
+    },
+    {
+      "id": 7,
+      "name": "CCNA Security",
+      "description": "思科颁发的网络安全认证，专注网络设备安全配置。",
+      "level": "中级",
+      "issuer": "Cisco",
+      "website": "https://learningnetwork.cisco.com/s/ccna-security",
+      "prerequisites": "建议有 CCNA 基础",
+      "exam_format": "多选题 + 模拟实验，90-110题，120分钟",
+      "cost": "约 $330 USD",
+      "validity": "3年（需重新认证或高级认证续证）",
+      "topics": [
+        "安全概念",
+        "安全基础设施",
+        "安全连接",
+        "安全服务",
+        "安全监控"
+      ],
+      "preparation": [
+        "思科官方学习指南",
+        "Cisco Networking Academy 课程",
+        "Packet Tracer 实验",
+        "GNS3 模拟实验"
+      ],
+      "career_path": "网络安全工程师、网络管理员、安全运维工程师"
+    },
+    {
+      "id": 8,
+      "name": "AWS Certified Security - Specialty",
+      "description": "亚马逊云颁发的云安全专业认证，专注 AWS 安全服务。",
+      "level": "高级",
+      "issuer": "Amazon Web Services",
+      "website": "https://aws.amazon.com/certification/certified-security-specialty/",
+      "prerequisites": "建议有 AWS 解决方案架构师或 SysOps 管理员认证",
+      "exam_format": "多选题，65题，170分钟",
+      "cost": "$300 USD",
+      "validity": "3年（需重新认证续证）",
+      "topics": [
+        "特殊数据保护",
+        "加密机制",
+        "密钥管理",
+        "身份与访问管理",
+        "基础设施保护",
+        "事件响应",
+        "日志监控",
+        "安全审计"
+      ],
+      "preparation": [
+        "AWS 官方培训课程",
+        "AWS 安全白皮书",
+        "实验环境操作",
+        "官方样题练习"
+      ],
+      "career_path": "云安全工程师、云安全架构师、DevSecOps 工程师"
+    }
+  ],
+  "training_platforms": [
+    {
+      "id": 1,
+      "name": "HackTheBox",
+      "description": "全球最大的渗透测试练习平台，提供真实场景的靶机挑战。",
+      "website": "https://www.hackthebox.com/",
+      "level": "中级到高级",
+      "pricing": "免费（有限）/ $14/月（VIP）",
+      "features": [
+        "真实场景靶机",
+        "CTF 挑战",
+        "职业路径学习",
+        "排行榜竞争"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "TryHackMe",
+      "description": "游戏化的网络安全学习平台，适合初学者入门。",
+      "website": "https://tryhackme.com/",
+      "level": "入门到中级",
+      "pricing": "免费（有限）/ $10/月（订阅）",
+      "features": [
+        "引导式学习路径",
+        "互动实验环境",
+        "CTF 房间",
+        "社区讨论"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "PentesterLab",
+      "description": "专注于 Web 安全实战的练习平台。",
+      "website": "https://pentesterlab.com/",
+      "level": "中级",
+      "pricing": "免费（基础）/ €19.99/月（Pro）",
+      "features": [
+        "Web 漏洞练习",
+        "CVE 复现",
+        "代码审计",
+        "实战场景"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "VulnHub",
+      "description": "提供可下载的漏洞虚拟机，本地练习渗透测试。",
+      "website": "https://www.vulnhub.com/",
+      "level": "varies",
+      "pricing": "免费",
+      "features": [
+        "可下载靶机",
+        "本地练习",
+        "社区贡献",
+        "Writeup 分享"
+      ]
+    }
+  ]
+}
