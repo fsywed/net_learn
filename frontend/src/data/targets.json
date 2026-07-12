@@ -517,6 +517,799 @@
       "points": 20,
       "estimated_time": "30分钟",
       "solved_count": 590
+    },
+    {
+      "id": 21,
+      "name": "SSTI 模板注入",
+      "description": "Flask Jinja2 模板未转义用户输入，注入 {{7*7}} 即可 RCE 读取 Flag。",
+      "difficulty": "medium",
+      "category": "Web",
+      "default_port": 8101,
+      "skills": ["SSTI", "RCE", "Flask"],
+      "solution_steps": [
+        "启动靶机：python target21_ssti.py 8101",
+        "访问 http://localhost:8101",
+        "在输入框测试 {{7*7}}，返回 49 说明存在 SSTI",
+        "构造 Payload 读取文件：{{config.__class__.__init__.__globals__['os'].popen('cat /flag.txt').read()}}",
+        "查看返回结果中的 Flag",
+        "提交 Flag 验证"
+      ],
+      "learn_points": [
+        "SSTI 原理：模板引擎将用户输入作为模板执行",
+        "Jinja2 沙箱逃逸链：__class__→__init__→__globals__",
+        "防御：使用 render_template 而非 render_template_string"
+      ],
+      "docker_run": "docker run -d -p 8101:8101 --name netlearn-target21 netlearn-target21",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 620
+    },
+    {
+      "id": 22,
+      "name": "JWT 伪造攻击",
+      "description": "JWT 使用 none 算法漏洞，可伪造管理员 Token 获取 Flag。",
+      "difficulty": "medium",
+      "category": "Web",
+      "default_port": 8102,
+      "skills": ["JWT", "认证绕过"],
+      "solution_steps": [
+        "启动靶机：python target22_jwt.py 8102",
+        "访问 http://localhost:8102",
+        "抓包获取普通用户的 JWT Token",
+        "解码 JWT，将 header 的 alg 改为 none，payload 的 role 改为 admin",
+        "重新签名（空签名）发送请求",
+        "获取管理员 Flag"
+      ],
+      "learn_points": [
+        "JWT 结构：header.payload.signature",
+        "none 算法漏洞：服务端未禁用 none 算法",
+        "防御：强制指定算法白名单，禁止 none"
+      ],
+      "docker_run": "docker run -d -p 8102:8102 --name netlearn-target22 netlearn-target22",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 450
+    },
+    {
+      "id": 23,
+      "name": "反序列化漏洞",
+      "description": "Python pickle 反序列化用户数据，构造恶意 pickle 对象执行命令。",
+      "difficulty": "hard",
+      "category": "Web",
+      "default_port": 8103,
+      "skills": ["反序列化", "Pickle", "RCE"],
+      "solution_steps": [
+        "启动靶机：python target23_deserialize.py 8103",
+        "访问 http://localhost:8103",
+        "发现 Cookie 中有 base64 编码的 pickle 数据",
+        "构造恶意 pickle：class Exploit; __reduce__ 返回 os.system('cat /flag.txt')",
+        "base64 编码后替换 Cookie",
+        "刷新页面获取 Flag"
+      ],
+      "learn_points": [
+        "反序列化漏洞：不可信数据传入 pickle.loads",
+        "__reduce__ 方法控制反序列化行为",
+        "防御：禁用 pickle，使用 JSON；签名验证数据完整性"
+      ],
+      "docker_run": "docker run -d -p 8103:8103 --name netlearn-target23 netlearn-target23",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 280
+    },
+    {
+      "id": 24,
+      "name": "条件竞争漏洞",
+      "description": "优惠券领取接口存在 TOCTOU 竞争，并发请求可重复领取。",
+      "difficulty": "hard",
+      "category": "Web",
+      "default_port": 8104,
+      "skills": ["条件竞争", "并发攻击"],
+      "solution_steps": [
+        "启动靶机：python target24_race.py 8104",
+        "访问 http://localhost:8104",
+        "发现领取优惠券接口每次只能领 1 张",
+        "使用 Burp Intruder 或 Python 并发发送 50 个请求",
+        "检查账户余额，发现领取了多张优惠券",
+        "用积分兑换 Flag"
+      ],
+      "learn_points": [
+        "条件竞争原理：检查与使用之间存在时间窗口",
+        "TOCTOU：Time of Check to Time of Use",
+        "防御：数据库事务、原子操作、互斥锁"
+      ],
+      "docker_run": "docker run -d -p 8104:8104 --name netlearn-target24 netlearn-target24",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 180
+    },
+    {
+      "id": 25,
+      "name": "PHP 类型混淆",
+      "description": "PHP 弱类型比较漏洞，利用 0e 开头哈希绕过管理员验证。",
+      "difficulty": "easy",
+      "category": "Web",
+      "default_port": 8105,
+      "skills": ["PHP", "弱类型", "类型混淆"],
+      "solution_steps": [
+        "启动靶机：python target25_php_weak.py 8105",
+        "访问 http://localhost:8105",
+        "查看源码发现使用 == 比较密码哈希",
+        "寻找 0e 开头的 MD5 值（如 240610708 → 0e462097431906509019562988736854）",
+        "输入该值作为密码，== 判断两个 0e 字符串相等",
+        "登录成功获取 Flag"
+      ],
+      "learn_points": [
+        "PHP 弱类型：== 比较时 0e 开头字符串被视为科学计数法",
+        "0e 系列哈希：240610708、QNKCDZO 等",
+        "防御：使用 === 严格比较，或使用 hash_equals"
+      ],
+      "docker_run": "docker run -d -p 8105:8105 --name netlearn-target25 netlearn-target25",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1100
+    },
+    {
+      "id": 26,
+      "name": "CSP 绕过",
+      "description": "Content-Security-Policy 配置不当，利用 CDN JSONP 绕过执行 XSS。",
+      "difficulty": "hard",
+      "category": "Web",
+      "default_port": 8106,
+      "skills": ["CSP", "XSS", "JSONP"],
+      "solution_steps": [
+        "启动靶机：python target26_csp.py 8106",
+        "访问 http://localhost:8106",
+        "查看响应头 CSP：script-src 只允许 trusted-cdn.com",
+        "发现 trusted-cdn.com 提供 JSONP 回调",
+        "构造 Payload 利用 JSONP 回调执行任意 JS",
+        "窃取管理员 Cookie 中的 Flag"
+      ],
+      "learn_points": [
+        "CSP 绕过技巧：CDN JSONP、unsafe-eval、nonce 泄露",
+        "JSONP 回调可执行任意函数名",
+        "防御：严格 script-src 白名单，禁用 unsafe-inline"
+      ],
+      "docker_run": "docker run -d -p 8106:8106 --name netlearn-target26 netlearn-target26",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 150
+    },
+    {
+      "id": 27,
+      "name": "原型链污染",
+      "description": "Node.js 应用 Object.merge 未过滤 __proto__，污染原型链触发 RCE。",
+      "difficulty": "hard",
+      "category": "Web",
+      "default_port": 8107,
+      "skills": ["原型链污染", "Node.js", "RCE"],
+      "solution_steps": [
+        "启动靶机：python target27_proto.py 8107",
+        "访问 http://localhost:8107",
+        "发现个人信息更新接口使用 Object.merge",
+        "发送 JSON：{\"__proto__\":{\"isAdmin\":true}}",
+        "污染原型链，所有对象继承 isAdmin:true",
+        "访问管理员接口获取 Flag"
+      ],
+      "learn_points": [
+        "原型链污染原理：__proto__ 属性影响所有对象",
+        "危险 API：Object.merge、lodash.set、extend",
+        "防御：过滤 __proto__、constructor 键；使用 Object.create(null)"
+      ],
+      "docker_run": "docker run -d -p 8107:8107 --name netlearn-target27 netlearn-target27",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 130
+    },
+    {
+      "id": 28,
+      "name": "HTTP 请求走私",
+      "description": "前后端服务器对 Transfer-Encoding 解析不一致，可走私请求。",
+      "difficulty": "hard",
+      "category": "Web",
+      "default_port": 8108,
+      "skills": ["请求走私", "HTTP 协议"],
+      "solution_steps": [
+        "启动靶机：python target28_smuggle.py 8108",
+        "访问 http://localhost:8108",
+        "发现前端用 Content-Length，后端用 Transfer-Encoding",
+        "构造 CL-TE 走私请求：Content-Length: 4 + Transfer-Encoding: chunked",
+        "走私的请求访问 /admin 接口",
+        "获取管理员 Flag"
+      ],
+      "learn_points": [
+        "请求走私原理：前后端对请求边界解析不一致",
+        "CL-TE、TE-CL、TE-TE 三种攻击方式",
+        "防御：统一前后端服务器配置，禁用 Transfer-Encoding"
+      ],
+      "docker_run": "docker run -d -p 8108:8108 --name netlearn-target28 netlearn-target28",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 90
+    },
+    {
+      "id": 29,
+      "name": "栈溢出基础",
+      "description": "经典 PWN 入门题，覆盖返回地址跳转到 get_shell 函数。",
+      "difficulty": "medium",
+      "category": "PWN",
+      "default_port": 8109,
+      "skills": ["栈溢出", "ROP", "二进制利用"],
+      "solution_steps": [
+        "启动靶机：python target29_stack_overflow.py 8109",
+        "访问 http://localhost:8109 下载二进制文件",
+        "用 checksec 检查保护：NX enabled，无 Canary",
+        "用 cyclic 求偏移：cyclic 100 → 段错 → cyclic -l 0x6161616a → 偏移 44",
+        "用 objdump 找到 get_shell 函数地址：0x4011a6",
+        "构造 Payload：44 字节填充 + p64(0x4011a6)，发送获取 Flag"
+      ],
+      "learn_points": [
+        "栈溢出原理：输入超过缓冲区大小覆盖返回地址",
+        "cyclic 工具求偏移",
+        "ret2win：跳转到程序内已有的 win 函数",
+        "防御：Canary、ASLR、NX"
+      ],
+      "docker_run": "docker run -d -p 8109:8109 --name netlearn-target29 netlearn-target29",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 420
+    },
+    {
+      "id": 30,
+      "name": "格式化字符串漏洞",
+      "description": "printf 直接输出用户输入，利用 %n 任意写修改变量值。",
+      "difficulty": "hard",
+      "category": "PWN",
+      "default_port": 8110,
+      "skills": ["格式化字符串", "任意写"],
+      "solution_steps": [
+        "启动靶机：python target30_format_string.py 8110",
+        "访问 http://localhost:8110 下载二进制",
+        "发现 printf(input) 直接输出输入",
+        "用 %p 泄露栈地址，确定偏移",
+        "用 %n 修改某个标志变量为非零",
+        "程序输出 Flag"
+      ],
+      "learn_points": [
+        "格式化字符串漏洞：printf 缺少格式参数",
+        "%p 泄露栈、%n 任意写、%s 读取字符串",
+        "防御：使用 printf(\"%s\", input) 而非 printf(input)"
+      ],
+      "docker_run": "docker run -d -p 8110:8110 --name netlearn-target30 netlearn-target30",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 160
+    },
+    {
+      "id": 31,
+      "name": "UAF 释放后重用",
+      "description": "堆块释放后指针未置空，重新分配覆盖函数指针劫持控制流。",
+      "difficulty": "hard",
+      "category": "PWN",
+      "default_port": 8111,
+      "skills": ["UAF", "堆利用", "控制流劫持"],
+      "solution_steps": [
+        "启动靶机：python target31_uaf.py 8111",
+        "访问 http://localhost:8111 下载二进制",
+        "分析菜单：add/delete/show/edit 功能",
+        "delete 后指针未置空（UAF）",
+        "add 新对象覆盖被释放的堆块，伪造函数指针",
+        "调用 show 触发劫持，执行 system('/bin/sh') 获取 Flag"
+      ],
+      "learn_points": [
+        "UAF 原理：释放后未置空指针，可继续访问",
+        "堆块重用：相同大小堆块被重新分配",
+        "vtable 劫持：覆盖虚函数表指针",
+        "防御：释放后立即置空指针"
+      ],
+      "docker_run": "docker run -d -p 8111:8111 --name netlearn-target31 netlearn-target31",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 110
+    },
+    {
+      "id": 32,
+      "name": "RSA 小公钥指数攻击",
+      "description": "RSA 使用 e=3 小指数加密短消息，直接开立方根还原明文。",
+      "difficulty": "medium",
+      "category": "Crypto",
+      "default_port": 8112,
+      "skills": ["RSA", "小指数攻击", "数论"],
+      "solution_steps": [
+        "启动靶机：python target32_rsa_small_e.py 8112",
+        "访问 http://localhost:8112",
+        "获取 n、e=3、c（密文）",
+        "判断 m^3 < n，直接对 c 开立方根",
+        "使用 gmpy2.iroot(c, 3) 求明文",
+        "long_to_bytes(m) 转换为 Flag"
+      ],
+      "learn_points": [
+        "RSA 小指数攻击：e 太小且明文短时 m^e < n",
+        "Coppersmith 部分明文恢复攻击",
+        "防御：使用 e=65537，明文 padding（OAEP）"
+      ],
+      "docker_run": "docker run -d -p 8112:8112 --name netlearn-target32 netlearn-target32",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 380
+    },
+    {
+      "id": 33,
+      "name": "RSA 共模攻击",
+      "description": "同一明文用相同 n、不同 e1/e2 加密，利用扩展欧几里得恢复明文。",
+      "difficulty": "medium",
+      "category": "Crypto",
+      "default_port": 8113,
+      "skills": ["RSA", "共模攻击", "数论"],
+      "solution_steps": [
+        "启动靶机：python target33_rsa_common.py 8113",
+        "访问 http://localhost:8113",
+        "获取 n、e1、c1、e2、c2",
+        "验证 gcd(e1, e2) = 1",
+        "用扩展欧几里得求 s1*e1 + s2*e2 = 1",
+        "计算 m = c1^s1 * c2^s2 mod n，转为 Flag"
+      ],
+      "learn_points": [
+        "共模攻击原理：相同明文相同模数不同指数",
+        "扩展欧几里得算法求贝祖系数",
+        "防御：每个用户使用不同 n，或随机化明文"
+      ],
+      "docker_run": "docker run -d -p 8113:8113 --name netlearn-target33 netlearn-target33",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 290
+    },
+    {
+      "id": 34,
+      "name": "AES ECB 模式攻击",
+      "description": "AES-ECB 模式相同明文块产生相同密文，可推断数据结构。",
+      "difficulty": "medium",
+      "category": "Crypto",
+      "default_port": 8114,
+      "skills": ["AES", "ECB", "分组密码"],
+      "solution_steps": [
+        "启动靶机：python target34_aes_ecb.py 8114",
+        "访问 http://localhost:8114",
+        "发现加密接口：输入 plaintext 返回 ciphertext",
+        "ECB 模式下相同 16 字节块加密结果相同",
+        "逐步输入字节，观察密文块变化推断 Flag",
+        "字节逐个爆破还原完整 Flag"
+      ],
+      "learn_points": [
+        "ECB 模式缺陷：相同明文块→相同密文块，不隐藏模式",
+        "字节翻转攻击、选择明文攻击",
+        "防御：使用 CBC/GCM 模式 + 随机 IV"
+      ],
+      "docker_run": "docker run -d -p 8114:8114 --name netlearn-target34 netlearn-target34",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 240
+    },
+    {
+      "id": 35,
+      "name": "古典密码：维吉尼亚",
+      "description": "维吉尼亚密码使用短密钥，通过 Kasiski 测试和频率分析破解。",
+      "difficulty": "easy",
+      "category": "Crypto",
+      "default_port": 8115,
+      "skills": ["古典密码", "频率分析"],
+      "solution_steps": [
+        "启动靶机：python target35_vigenere.py 8115",
+        "访问 http://localhost:8115",
+        "获取密文，使用 Kasiski 测试确定密钥长度（如 5）",
+        "按密钥长度分组，每组做凯撒密码频率分析",
+        "还原密钥，解密得到 Flag"
+      ],
+      "learn_points": [
+        "维吉尼亚密码：多表替换密码",
+        "Kasiski 测试：相同密文段间距的公约数推测密钥长度",
+        "防御：现代加密使用 AES/RSA，古典密码仅用于学习"
+      ],
+      "docker_run": "docker run -d -p 8115:8115 --name netlearn-target35 netlearn-target35",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1350
+    },
+    {
+      "id": 36,
+      "name": "哈希长度扩展攻击",
+      "description": "secret+message 的 MD5 签名可被长度扩展攻击伪造新消息签名。",
+      "difficulty": "hard",
+      "category": "Crypto",
+      "default_port": 8116,
+      "skills": ["哈希", "长度扩展", "MD5"],
+      "solution_steps": [
+        "启动靶机：python target36_hash_length.py 8116",
+        "访问 http://localhost:8116",
+        "获取已知 signature 和 message",
+        "用 hashpump 工具：hashpump -s signature -d message -k 16 -a '&admin=true'",
+        "获取新 signature 和新 message",
+        "提交获取管理员 Flag"
+      ],
+      "learn_points": [
+        "哈希长度扩展攻击原理：MD5/SHA1 的 Merkle-Damgård 结构",
+        "可利用已知 hash(message) 计算 hash(message||padding||extra)",
+        "防御：使用 HMAC 而非直接 hash(secret+message)"
+      ],
+      "docker_run": "docker run -d -p 8116:8116 --name netlearn-target36 netlearn-target36",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 140
+    },
+    {
+      "id": 37,
+      "name": "XOR 逆向基础",
+      "description": "逆向分析 XOR 加密程序，还原密钥解密 Flag。",
+      "difficulty": "easy",
+      "category": "Reverse",
+      "default_port": 8117,
+      "skills": ["逆向", "XOR", "Ghidra"],
+      "solution_steps": [
+        "启动靶机：python target37_xor_reverse.py 8117",
+        "访问 http://localhost:8117 下载二进制",
+        "用 strings 查看可疑字符串",
+        "用 Ghidra 反编译，发现 XOR 加密循环",
+        "提取硬编码密文和单字节密钥",
+        "Python 脚本 XOR 解密获取 Flag"
+      ],
+      "learn_points": [
+        "XOR 加密：ciphertext = plaintext ^ key",
+        "Ghidra 反编译查看 C 伪代码",
+        "strings 命令提取字符串",
+        "单字节 XOR 可暴力破解 256 种可能"
+      ],
+      "docker_run": "docker run -d -p 8117:8117 --name netlearn-target37 netlearn-target37",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1280
+    },
+    {
+      "id": 38,
+      "name": "反调试对抗",
+      "description": "程序使用 ptrace 检测调试器，需绕过反调试才能分析逻辑。",
+      "difficulty": "hard",
+      "category": "Reverse",
+      "default_port": 8118,
+      "skills": ["反调试", "逆向", "GDB"],
+      "solution_steps": [
+        "启动靶机：python target38_anti_debug.py 8118",
+        "访问 http://localhost:8118 下载二进制",
+        "运行程序发现提示 'Debugger detected'",
+        "用 ltrace 发现调用 ptrace(PTRACE_TRACEME)",
+        "用 LD_PRELOAD hook ptrace 返回 0",
+        "绕过后分析逻辑，输入正确密码获取 Flag"
+      ],
+      "learn_points": [
+        "反调试技术：ptrace 检测、时间检测、/proc/status 检测",
+        "LD_PRELOAD hook 绕过",
+        "GDB patch 修改跳转指令",
+        "防御：代码混淆、完整性校验"
+      ],
+      "docker_run": "docker run -d -p 8118:8118 --name netlearn-target38 netlearn-target38",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 170
+    },
+    {
+      "id": 39,
+      "name": "算法逆向",
+      "description": "自定义加密算法，需完整逆向算法逻辑并编写解密程序。",
+      "difficulty": "hard",
+      "category": "Reverse",
+      "default_port": 8119,
+      "skills": ["算法逆向", "反编译", "Python"],
+      "solution_steps": [
+        "启动靶机：python target39_algo_reverse.py 8119",
+        "访问 http://localhost:8119 下载二进制",
+        "用 Ghidra 反编译，识别加密函数",
+        "分析算法：位移、异或、查表的组合",
+        "用 Python 实现逆向解密算法",
+        "运行解密脚本获取 Flag"
+      ],
+      "learn_points": [
+        "自定义算法逆向步骤：反编译→识别逻辑→逆运算",
+        "常见操作：循环位移、S-Box 查表、轮函数",
+        "工具：Ghidra、IDA Pro、Cutter"
+      ],
+      "docker_run": "docker run -d -p 8119:8119 --name netlearn-target39 netlearn-target39",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 130
+    },
+    {
+      "id": 40,
+      "name": "UPX 脱壳",
+      "description": "二进制被 UPX 加壳，脱壳后分析获取 Flag。",
+      "difficulty": "medium",
+      "category": "Reverse",
+      "default_port": 8120,
+      "skills": ["脱壳", "UPX", "逆向"],
+      "solution_steps": [
+        "启动靶机：python target40_upx.py 8120",
+        "访问 http://localhost:8120 下载二进制",
+        "用 file 和 strings 发现是 UPX 加壳",
+        "执行 upx -d binary 脱壳",
+        "用 strings 或 Ghidra 分析脱壳后的二进制",
+        "找到硬编码 Flag"
+      ],
+      "learn_points": [
+        "UPX 壳：开源可执行文件压缩工具",
+        "upx -d 一键脱壳",
+        "其他壳：ASPack、Themida、VMP（需手动脱壳）",
+        "工具：DIE（Detect It Easy）识别壳类型"
+      ],
+      "docker_run": "docker run -d -p 8120:8120 --name netlearn-target40 netlearn-target40",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 560
+    },
+    {
+      "id": 41,
+      "name": "图片 LSB 隐写",
+      "description": "Flag 隐藏在 PNG 图片的最低有效位中，用 zsteg 提取。",
+      "difficulty": "easy",
+      "category": "Misc",
+      "default_port": 8121,
+      "skills": ["隐写术", "LSB", "图片分析"],
+      "solution_steps": [
+        "启动靶机：python target41_lsb.py 8121",
+        "访问 http://localhost:8121 下载图片",
+        "用 zsteg -a flag.png 扫描 LSB 隐写",
+        "或用 Stegsolve 查看各通道位平面",
+        "发现 LSB 中编码的 Flag",
+        "提交 Flag 验证"
+      ],
+      "learn_points": [
+        "LSB 隐写：修改像素最低位不影响视觉",
+        "zsteg 自动扫描 PNG/BMP LSB",
+        "Stegsolve 手动分析通道",
+        "防御：图片签名校验、频域分析"
+      ],
+      "docker_run": "docker run -d -p 8121:8121 --name netlearn-target41 netlearn-target41",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1420
+    },
+    {
+      "id": 42,
+      "name": "文件分离提取",
+      "description": "一个文件中嵌入了多个隐藏文件，用 binwalk 提取。",
+      "difficulty": "easy",
+      "category": "Misc",
+      "default_port": 8122,
+      "skills": ["隐写术", "binwalk", "文件分析"],
+      "solution_steps": [
+        "启动靶机：python target42_binwalk.py 8122",
+        "访问 http://localhost:8122 下载文件",
+        "用 file 命令识别文件类型",
+        "用 binwalk -e file 提取嵌入文件",
+        "在提取的目录中找到 flag.txt",
+        "提交 Flag"
+      ],
+      "learn_points": [
+        "binwalk 识别文件中的嵌入数据（魔数扫描）",
+        "常见隐藏方式：图片尾追加 ZIP、PNG 嵌入 PDF",
+        "foremost 作为 binwalk 替代工具"
+      ],
+      "docker_run": "docker run -d -p 8122:8122 --name netlearn-target42 netlearn-target42",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1380
+    },
+    {
+      "id": 43,
+      "name": "ZIP 伪加密",
+      "description": "ZIP 文件被伪加密，修改标志位即可解压。",
+      "difficulty": "easy",
+      "category": "Misc",
+      "default_port": 8123,
+      "skills": ["隐写术", "ZIP", "伪加密"],
+      "solution_steps": [
+        "启动靶机：python target43_zip_fake.py 8123",
+        "访问 http://localhost:8123 下载 ZIP",
+        "解压提示需要密码",
+        "用 010 Editor 打开 ZIP，查看本地文件头",
+        "将加密标志位 0x09 改为 0x00",
+        "解压获取 Flag"
+      ],
+      "learn_points": [
+        "ZIP 伪加密：修改标志位伪造加密状态",
+        "ZIP 结构：本地文件头 + 文件数据 + 中央目录",
+        "工具：010 Editor、WinHex",
+        "真加密需爆破（ARCHPR、hashcat）"
+      ],
+      "docker_run": "docker run -d -p 8123:8123 --name netlearn-target43 netlearn-target43",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1250
+    },
+    {
+      "id": 44,
+      "name": "EXIF 信息提取",
+      "description": "Flag 隐藏在图片的 EXIF 元数据中。",
+      "difficulty": "easy",
+      "category": "Misc",
+      "default_port": 8124,
+      "skills": ["隐写术", "EXIF", "元数据"],
+      "solution_steps": [
+        "启动靶机：python target44_exif.py 8124",
+        "访问 http://localhost:8124 下载图片",
+        "用 exiftool flag.jpg 查看所有 EXIF 信息",
+        "在 Comment 或 UserComment 字段发现 Base64",
+        "Base64 解码获取 Flag",
+        "提交 Flag"
+      ],
+      "learn_points": [
+        "EXIF：可交换图像文件信息，含相机型号、GPS、注释",
+        "exiftool 提取/修改 EXIF",
+        "隐私风险：照片可能泄露位置信息",
+        "防御：上传前用 exiftool -all= 清除"
+      ],
+      "docker_run": "docker run -d -p 8124:8124 --name netlearn-target44 netlearn-target44",
+      "points": 10,
+      "estimated_time": "15分钟",
+      "solved_count": 1500
+    },
+    {
+      "id": 45,
+      "name": "音频隐写",
+      "description": "Flag 隐藏在音频频谱图中，用 Audacity 查看。",
+      "difficulty": "medium",
+      "category": "Misc",
+      "default_port": 8125,
+      "skills": ["隐写术", "音频", "频谱分析"],
+      "solution_steps": [
+        "启动靶机：python target45_audio.py 8125",
+        "访问 http://localhost:8125 下载 WAV 文件",
+        "用 Audacity 打开音频",
+        "切换到频谱图视图（Spectrogram）",
+        "在频谱图中看到 Flag 文字",
+        "提交 Flag"
+      ],
+      "learn_points": [
+        "音频隐写：频谱图隐藏文字/图像",
+        "Audacity 频谱分析",
+        "其他音频隐写：SSTV、摩尔斯电码、DTMF",
+        "工具：Sonic Visualiser、SoX"
+      ],
+      "docker_run": "docker run -d -p 8125:8125 --name netlearn-target45 netlearn-target45",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 680
+    },
+    {
+      "id": 46,
+      "name": "PCAP 流量分析",
+      "description": "分析 pcap 流量包，提取 HTTP 传输的敏感文件。",
+      "difficulty": "medium",
+      "category": "Forensics",
+      "default_port": 8126,
+      "skills": ["流量分析", "Wireshark", "取证"],
+      "solution_steps": [
+        "启动靶机：python target46_pcap.py 8126",
+        "访问 http://localhost:8126 下载 pcap 文件",
+        "用 Wireshark 打开，过滤 http",
+        "发现 POST 请求上传了文件",
+        "File → Export Objects → HTTP 导出文件",
+        "打开导出的文件获取 Flag"
+      ],
+      "learn_points": [
+        "Wireshark 过滤：http、tcp.port==80、http.request.method==POST",
+        "导出 HTTP 对象：File → Export Objects → HTTP",
+        "追踪 TCP 流：Follow → TCP Stream",
+        "工具：tshark、tcpdump、NetworkMiner"
+      ],
+      "docker_run": "docker run -d -p 8126:8126 --name netlearn-target46 netlearn-target46",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 720
+    },
+    {
+      "id": 47,
+      "name": "USB 键盘流量恢复",
+      "description": "从 USB 流量中还原键盘输入，获取输入的密码。",
+      "difficulty": "hard",
+      "category": "Forensics",
+      "default_port": 8127,
+      "skills": ["流量分析", "USB", "取证"],
+      "solution_steps": [
+        "启动靶机：python target47_usb.py 8127",
+        "访问 http://localhost:8127 下载 pcap",
+        "用 tshark 提取 USB HID 数据：tshark -r usb.pcap -T fields -e usb.capdata",
+        "分析 USB HID 键盘协议，每 8 字节代表一次按键",
+        "根据 HID 键码表还原按键序列",
+        "输入还原的密码获取 Flag"
+      ],
+      "learn_points": [
+        "USB HID 协议：键盘数据每 8 字节",
+        "HID Usage ID 到键盘映射",
+        "tshark 提取 USB 数据",
+        "应用：键盘记录器取证、鼠标轨迹还原"
+      ],
+      "docker_run": "docker run -d -p 8127:8127 --name netlearn-target47 netlearn-target47",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 210
+    },
+    {
+      "id": 48,
+      "name": "内存取证",
+      "description": "分析内存镜像，用 Volatility 提取恶意进程和 Flag。",
+      "difficulty": "hard",
+      "category": "Forensics",
+      "default_port": 8128,
+      "skills": ["内存取证", "Volatility", "取证"],
+      "solution_steps": [
+        "启动靶机：python target48_memory.py 8128",
+        "访问 http://localhost:8128 下载内存镜像",
+        "用 volatility 识别系统：volatility -f mem.raw imageinfo",
+        "列出进程：vol.py -f mem.raw --profile=Win7SP1x64 pslist",
+        "发现可疑进程，dump 其内存",
+        "在 dump 文件中搜索 Flag"
+      ],
+      "learn_points": [
+        "Volatility 内存取证框架",
+        "常用插件：pslist、netscan、filescan、dumpfiles",
+        "内存中可恢复：进程、网络连接、文件、注册表",
+        "应用：恶意软件分析、入侵调查"
+      ],
+      "docker_run": "docker run -d -p 8128:8128 --name netlearn-target48 netlearn-target48",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 160
+    },
+    {
+      "id": 49,
+      "name": "日志分析",
+      "description": "分析 Web 服务器访问日志，识别攻击行为提取 Flag。",
+      "difficulty": "medium",
+      "category": "Forensics",
+      "default_port": 8129,
+      "skills": ["日志分析", "取证", "攻击识别"],
+      "solution_steps": [
+        "启动靶机：python target49_log.py 8129",
+        "访问 http://localhost:8129 下载日志文件",
+        "用 grep 过滤异常请求：grep -E 'union|select|script' access.log",
+        "发现 SQL 注入攻击记录",
+        "提取注入的 Payload 中的 Flag",
+        "提交 Flag"
+      ],
+      "learn_points": [
+        "Apache/Nginx 日志格式分析",
+        "常见攻击特征：SQL 注入、XSS、目录遍历",
+        "工具：grep、awk、ELK Stack",
+        "日志取证：确认攻击时间、来源、手法"
+      ],
+      "docker_run": "docker run -d -p 8129:8129 --name netlearn-target49 netlearn-target49",
+      "points": 20,
+      "estimated_time": "30分钟",
+      "solved_count": 540
+    },
+    {
+      "id": 50,
+      "name": "Windows 注册表取证",
+      "description": "分析 Windows 注册表，从 SAM 和运行记录中提取 Flag。",
+      "difficulty": "hard",
+      "category": "Forensics",
+      "default_port": 8130,
+      "skills": ["注册表", "Windows", "取证"],
+      "solution_steps": [
+        "启动靶机：python target50_registry.py 8130",
+        "访问 http://localhost:8130 下载注册表 hive 文件",
+        "用 regripper 或 Windows 注册表编辑器分析",
+        "从 SAM 提取用户哈希",
+        "从 BAM/DAM 查看程序运行记录",
+        "在 Run 键或最近文档中发现 Flag"
+      ],
+      "learn_points": [
+        "注册表 hive 文件：SAM、SYSTEM、SOFTWARE、NTUSER.DAT",
+        "关键位置：Run 键（自启动）、BAM（程序运行）、Shellbags",
+        "工具：RegRipper、Registry Explorer、SE forensics",
+        "应用：用户活动取证、持久化后门检测"
+      ],
+      "docker_run": "docker run -d -p 8130:8130 --name netlearn-target50 netlearn-target50",
+      "points": 30,
+      "estimated_time": "60分钟",
+      "solved_count": 180
     }
   ]
 }
