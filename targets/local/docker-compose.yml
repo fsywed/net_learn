@@ -9,6 +9,14 @@
 #      - 靶机2 (SSH 弱口令):        http://localhost:8082
 #      - 靶机3 (SQL 注入):          http://localhost:8083
 #      - 靶机4 (XSS 反射型):        http://localhost:8084
+#      - 靶机5 (命令注入):          http://localhost:8085
+#      - 靶机6 (本地文件包含):      http://localhost:8086
+#      - 靶机7 (CSRF):              http://localhost:8087
+#      - 靶机8 (XXE):               http://localhost:8088
+#      - 靶机9 (SSRF):              http://localhost:8089
+#      - 靶机10 (文件上传):         http://localhost:8090
+#      - 靶机11 (越权访问):         http://localhost:8091
+#      - 靶机12 (弱加密):           http://localhost:8092
 #   5. 把地址输入到网站即可开始挑战
 #   6. 停止: docker-compose down
 
@@ -43,4 +51,68 @@ services:
       dockerfile: Dockerfile.target4
     ports:
       - "8084:8084"
+    restart: unless-stopped
+
+  target5-cmdi:
+    build:
+      context: .
+      dockerfile: Dockerfile.target5
+    ports:
+      - "8085:8085"
+    restart: unless-stopped
+
+  target6-lfi:
+    build:
+      context: .
+      dockerfile: Dockerfile.target6
+    ports:
+      - "8086:8086"
+    restart: unless-stopped
+
+  target7-csrf:
+    build:
+      context: .
+      dockerfile: Dockerfile.target7
+    ports:
+      - "8087:8087"
+    restart: unless-stopped
+
+  target8-xxe:
+    build:
+      context: .
+      dockerfile: Dockerfile.target8
+    ports:
+      - "8088:8088"
+    restart: unless-stopped
+
+  target9-ssrf:
+    build:
+      context: .
+      dockerfile: Dockerfile.target9
+    ports:
+      - "8089:8089"
+    restart: unless-stopped
+
+  target10-upload:
+    build:
+      context: .
+      dockerfile: Dockerfile.target10
+    ports:
+      - "8090:8090"
+    restart: unless-stopped
+
+  target11-idor:
+    build:
+      context: .
+      dockerfile: Dockerfile.target11
+    ports:
+      - "8091:8091"
+    restart: unless-stopped
+
+  target12-crypto:
+    build:
+      context: .
+      dockerfile: Dockerfile.target12
+    ports:
+      - "8092:8092"
     restart: unless-stopped

