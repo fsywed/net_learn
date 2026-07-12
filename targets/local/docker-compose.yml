@@ -17,6 +17,44 @@
 #      - 靶机10 (文件上传):         http://localhost:8090
 #      - 靶机11 (越权访问):         http://localhost:8091
 #      - 靶机12 (弱加密):           http://localhost:8092
+#      - 靶机13 (DNS 欺骗):         http://localhost:8093
+#      - 靶机14 (ARP 欺骗):         http://localhost:8094
+#      - 靶机15 (端口扫描):         http://localhost:8095
+#      - 靶机16 (代理 SSRF):        http://localhost:8096
+#      - 靶机17 (WiFi 破解):        http://localhost:8097
+#      - 靶机18 (防火墙绕过):       http://localhost:8098
+#      - 靶机19 (VPN 配置):         http://localhost:8099
+#      - 靶机20 (流量分析):         http://localhost:8100
+#      - 靶机21 (SSTI 模板注入):    http://localhost:8101
+#      - 靶机22 (JWT 伪造):         http://localhost:8102
+#      - 靶机23 (反序列化):         http://localhost:8103
+#      - 靶机24 (条件竞争):         http://localhost:8104
+#      - 靶机25 (PHP 弱类型):       http://localhost:8105
+#      - 靶机26 (CSP 绕过):         http://localhost:8106
+#      - 靶机27 (原型链污染):       http://localhost:8107
+#      - 靶机28 (请求走私):         http://localhost:8108
+#      - 靶机29 (栈溢出):           http://localhost:8109
+#      - 靶机30 (格式化字符串):     http://localhost:8110
+#      - 靶机31 (UAF):              http://localhost:8111
+#      - 靶机32 (RSA 小指数):       http://localhost:8112
+#      - 靶机33 (RSA 共模):         http://localhost:8113
+#      - 靶机34 (AES ECB):          http://localhost:8114
+#      - 靶机35 (维吉尼亚):         http://localhost:8115
+#      - 靶机36 (哈希长度扩展):     http://localhost:8116
+#      - 靶机37 (XOR 逆向):         http://localhost:8117
+#      - 靶机38 (反调试):           http://localhost:8118
+#      - 靶机39 (算法逆向):         http://localhost:8119
+#      - 靶机40 (UPX 脱壳):         http://localhost:8120
+#      - 靶机41 (LSB 隐写):         http://localhost:8121
+#      - 靶机42 (文件分离):         http://localhost:8122
+#      - 靶机43 (ZIP 伪加密):       http://localhost:8123
+#      - 靶机44 (EXIF 提取):        http://localhost:8124
+#      - 靶机45 (音频隐写):         http://localhost:8125
+#      - 靶机46 (PCAP 分析):        http://localhost:8126
+#      - 靶机47 (USB 键盘):         http://localhost:8127
+#      - 靶机48 (内存取证):         http://localhost:8128
+#      - 靶机49 (日志分析):         http://localhost:8129
+#      - 靶机50 (注册表取证):       http://localhost:8130
 #   5. 把地址输入到网站即可开始挑战
 #   6. 停止: docker-compose down
 
@@ -115,4 +153,308 @@ services:
       dockerfile: Dockerfile.target12
     ports:
       - "8092:8092"
+    restart: unless-stopped
+
+  target13-dns:
+    build:
+      context: .
+      dockerfile: Dockerfile.target13
+    ports:
+      - "8093:8093"
+    restart: unless-stopped
+
+  target14-arp:
+    build:
+      context: .
+      dockerfile: Dockerfile.target14
+    ports:
+      - "8094:8094"
+    restart: unless-stopped
+
+  target15-portscan:
+    build:
+      context: .
+      dockerfile: Dockerfile.target15
+    ports:
+      - "8095:8095"
+    restart: unless-stopped
+
+  target16-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.target16
+    ports:
+      - "8096:8096"
+    restart: unless-stopped
+
+  target17-wifi:
+    build:
+      context: .
+      dockerfile: Dockerfile.target17
+    ports:
+      - "8097:8097"
+    restart: unless-stopped
+
+  target18-firewall:
+    build:
+      context: .
+      dockerfile: Dockerfile.target18
+    ports:
+      - "8098:8098"
+    restart: unless-stopped
+
+  target19-vpn:
+    build:
+      context: .
+      dockerfile: Dockerfile.target19
+    ports:
+      - "8099:8099"
+    restart: unless-stopped
+
+  target20-traffic:
+    build:
+      context: .
+      dockerfile: Dockerfile.target20
+    ports:
+      - "8100:8100"
+    restart: unless-stopped
+
+  target21-ssti:
+    build:
+      context: .
+      dockerfile: Dockerfile.target21
+    ports:
+      - "8101:8101"
+    restart: unless-stopped
+
+  target22-jwt:
+    build:
+      context: .
+      dockerfile: Dockerfile.target22
+    ports:
+      - "8102:8102"
+    restart: unless-stopped
+
+  target23-deserialize:
+    build:
+      context: .
+      dockerfile: Dockerfile.target23
+    ports:
+      - "8103:8103"
+    restart: unless-stopped
+
+  target24-race:
+    build:
+      context: .
+      dockerfile: Dockerfile.target24
+    ports:
+      - "8104:8104"
+    restart: unless-stopped
+
+  target25-php-weak:
+    build:
+      context: .
+      dockerfile: Dockerfile.target25
+    ports:
+      - "8105:8105"
+    restart: unless-stopped
+
+  target26-csp:
+    build:
+      context: .
+      dockerfile: Dockerfile.target26
+    ports:
+      - "8106:8106"
+    restart: unless-stopped
+
+  target27-proto:
+    build:
+      context: .
+      dockerfile: Dockerfile.target27
+    ports:
+      - "8107:8107"
+    restart: unless-stopped
+
+  target28-smuggle:
+    build:
+      context: .
+      dockerfile: Dockerfile.target28
+    ports:
+      - "8108:8108"
+    restart: unless-stopped
+
+  target29-stack-overflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.target29
+    ports:
+      - "8109:8109"
+    restart: unless-stopped
+
+  target30-format-string:
+    build:
+      context: .
+      dockerfile: Dockerfile.target30
+    ports:
+      - "8110:8110"
+    restart: unless-stopped
+
+  target31-uaf:
+    build:
+      context: .
+      dockerfile: Dockerfile.target31
+    ports:
+      - "8111:8111"
+    restart: unless-stopped
+
+  target32-rsa-small-e:
+    build:
+      context: .
+      dockerfile: Dockerfile.target32
+    ports:
+      - "8112:8112"
+    restart: unless-stopped
+
+  target33-rsa-common:
+    build:
+      context: .
+      dockerfile: Dockerfile.target33
+    ports:
+      - "8113:8113"
+    restart: unless-stopped
+
+  target34-aes-ecb:
+    build:
+      context: .
+      dockerfile: Dockerfile.target34
+    ports:
+      - "8114:8114"
+    restart: unless-stopped
+
+  target35-vigenere:
+    build:
+      context: .
+      dockerfile: Dockerfile.target35
+    ports:
+      - "8115:8115"
+    restart: unless-stopped
+
+  target36-hash-length:
+    build:
+      context: .
+      dockerfile: Dockerfile.target36
+    ports:
+      - "8116:8116"
+    restart: unless-stopped
+
+  target37-xor-reverse:
+    build:
+      context: .
+      dockerfile: Dockerfile.target37
+    ports:
+      - "8117:8117"
+    restart: unless-stopped
+
+  target38-anti-debug:
+    build:
+      context: .
+      dockerfile: Dockerfile.target38
+    ports:
+      - "8118:8118"
+    restart: unless-stopped
+
+  target39-algo-reverse:
+    build:
+      context: .
+      dockerfile: Dockerfile.target39
+    ports:
+      - "8119:8119"
+    restart: unless-stopped
+
+  target40-upx:
+    build:
+      context: .
+      dockerfile: Dockerfile.target40
+    ports:
+      - "8120:8120"
+    restart: unless-stopped
+
+  target41-lsb:
+    build:
+      context: .
+      dockerfile: Dockerfile.target41
+    ports:
+      - "8121:8121"
+    restart: unless-stopped
+
+  target42-binwalk:
+    build:
+      context: .
+      dockerfile: Dockerfile.target42
+    ports:
+      - "8122:8122"
+    restart: unless-stopped
+
+  target43-zip-fake:
+    build:
+      context: .
+      dockerfile: Dockerfile.target43
+    ports:
+      - "8123:8123"
+    restart: unless-stopped
+
+  target44-exif:
+    build:
+      context: .
+      dockerfile: Dockerfile.target44
+    ports:
+      - "8124:8124"
+    restart: unless-stopped
+
+  target45-audio:
+    build:
+      context: .
+      dockerfile: Dockerfile.target45
+    ports:
+      - "8125:8125"
+    restart: unless-stopped
+
+  target46-pcap:
+    build:
+      context: .
+      dockerfile: Dockerfile.target46
+    ports:
+      - "8126:8126"
+    restart: unless-stopped
+
+  target47-usb:
+    build:
+      context: .
+      dockerfile: Dockerfile.target47
+    ports:
+      - "8127:8127"
+    restart: unless-stopped
+
+  target48-memory:
+    build:
+      context: .
+      dockerfile: Dockerfile.target48
+    ports:
+      - "8128:8128"
+    restart: unless-stopped
+
+  target49-log:
+    build:
+      context: .
+      dockerfile: Dockerfile.target49
+    ports:
+      - "8129:8129"
+    restart: unless-stopped
+
+  target50-registry:
+    build:
+      context: .
+      dockerfile: Dockerfile.target50
+    ports:
+      - "8130:8130"
     restart: unless-stopped
