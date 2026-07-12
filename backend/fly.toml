@@ -1,0 +1,73 @@
+# Fly.io 配置 — 动态靶机后端
+#
+# 重要：Fly.io 免费档 256MB 内存无法在 Machine 内启动 Docker 容器
+# 推荐最低配置 shared-cpu-1x:1gb（不是 always-free，按小时计费约 $0.0007/h ≈ $5/月）
+# 三种部署路径：
+#   A. Fly.io 付费 1GB machine + 挂 docker.sock（推荐）
+#   B. Oracle Cloud Always Free ARM 4核 24GB 完全免费 + 自管 Docker
+#   C. 本地/自建服务器（任意 Linux + Docker）
+
+app = "netlearn-backend"
+primary_region = "sin"   # 新加坡；可改 nrt(东京)/hkg(香港)/sjc(硅谷)
+kill_signal = "SIGINT"
+kill_timeout = "5s"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  # 基础
+  PORT = "8000"
+  APP_NAME = "netlearn-backend"
+
+  # Docker 调度：通过宿主 docker.sock 通信
+  # 此处假设已用 `fly machine update --volume ...` 挂上 /var/run/docker.sock
+  DOCKER_HOST = "unix:///var/run/docker.sock"
+
+  # 容器端口范围
+  TARGET_PORT_RANGE_START = "30000"
+  TARGET_PORT_RANGE_END = "40000"
+  TARGET_DEFAULT_TTL_SECONDS = "1800"
+  TARGET_MAX_PER_IP = "2"
+
+  # Flag 格式
+  FLAG_PREFIX = "flag{"
+  FLAG_SUFFIX = "}"
+
+  # 数据库：免费档用 SQLite 存 /data（fly volume 挂载）；要换 Postgres 改 DATABASE_URL
+  DATABASE_URL = "sqlite+aiosqlite:////data/netlearn.db"
+
+  # CORS：允许 GitHub Pages + 本地开发
+  CORS_ORIGINS = '["https://fsywed.github.io","http://localhost:5173","http://localhost:8080"]'
+
+  # 部署后改为你实际的 Fly URL
+  PUBLIC_BASE_URL = "https://netlearn-backend.fly.dev"
+
+# 数据持久化（SQLite 库文件）
+[mounts]
+  source = "netlearn_data"
+  destination = "/data"
+
+# HTTP 服务
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+    method = "get"
+    path = "/api/health"
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 50
+    soft_limit = 25
+
+# 启动后用 `fly machine update ... --volume` 把宿主 docker.sock 挂进容器
+# 见 DEPLOY.md

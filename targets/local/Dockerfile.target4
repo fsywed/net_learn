@@ -1,0 +1,9 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY base.py target4_xss.py ./
+
+EXPOSE 8084
+
+CMD ["python", "target4_xss.py", "8084"]

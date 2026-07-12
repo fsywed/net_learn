@@ -1,0 +1,94 @@
+{
+  "targets": [
+    {
+      "id": 1,
+      "name": "Nginx Flag 隐藏",
+      "description": "入门级 Web 靶机。启动后访问首页，通过查看页面源码（HTML 注释）找到 Flag。",
+      "difficulty": "easy",
+      "category": "Web",
+      "default_port": 8081,
+      "skills": ["信息搜集", "源码审计"],
+      "solution_steps": [
+        "下载并启动靶机容器（见上方命令）",
+        "把容器显示的地址（如 http://localhost:8081）输入到地址框",
+        "点击「连接靶机」在页面内查看靶机",
+        "按 Ctrl+U 或右键「查看页面源代码」",
+        "在 HTML 注释 <!-- flag{...} --> 中找到 Flag",
+        "把 Flag 粘贴到提交框，点击「提交 Flag」"
+      ],
+      "learn_points": [
+        "理解 HTML 注释可以包含敏感信息",
+        "养成「打开页面先看源码」的习惯",
+        "了解浏览器开发者工具的 Elements 面板"
+      ],
+      "docker_run": "docker run -d -p 8081:8081 --name netlearn-target1 netlearn-target1"
+    },
+    {
+      "id": 2,
+      "name": "SSH 弱口令爆破",
+      "description": "模拟 SSH 登录页面，使用常见弱口令字典爆破登录获取 Flag。",
+      "difficulty": "easy",
+      "category": "服务",
+      "default_port": 8082,
+      "skills": ["爆破", "SSH"],
+      "solution_steps": [
+        "下载并启动靶机容器",
+        "把地址输入到地址框，点击「连接靶机」",
+        "尝试常见弱口令：admin/admin123、root/toor、test/123456",
+        "登录成功后页面会显示 Flag",
+        "把 Flag 粘贴到提交框提交"
+      ],
+      "learn_points": [
+        "SSH 常见弱口令：root/root、admin/123456",
+        "爆破工具：hydra、medusa",
+        "防御：禁用密码登录（仅密钥）、fail2ban、改默认端口"
+      ],
+      "docker_run": "docker run -d -p 8082:8082 --name netlearn-target2 netlearn-target2"
+    },
+    {
+      "id": 3,
+      "name": "SQL 注入：登录绕过",
+      "description": "经典 SQL 注入靶机：登录接口未参数化，构造万能密码即可绕过。",
+      "difficulty": "medium",
+      "category": "Web",
+      "default_port": 8083,
+      "skills": ["SQL 注入", "Burp Suite"],
+      "solution_steps": [
+        "下载并启动靶机容器",
+        "把地址输入到地址框，点击「连接靶机」",
+        "用户名输入 admin' -- （注意空格），密码任意",
+        "或用万能密码：' OR '1'='1' --",
+        "登录成功后页面显示 Flag",
+        "把 Flag 粘贴到提交框提交"
+      ],
+      "learn_points": [
+        "理解 SQL 注入成因：字符串拼接未参数化",
+        "掌握基础注入语法：' OR 1=1 -- 、UNION SELECT",
+        "修复方案：使用参数化查询（PreparedStatement）"
+      ],
+      "docker_run": "docker run -d -p 8083:8083 --name netlearn-target3 netlearn-target3"
+    },
+    {
+      "id": 4,
+      "name": "XSS 反射型漏洞",
+      "description": "搜索框未过滤用户输入直接回显，导致反射型 XSS。通过注入 JS 获取 Cookie 中的 Flag。",
+      "difficulty": "easy",
+      "category": "Web",
+      "default_port": 8084,
+      "skills": ["XSS", "前端安全"],
+      "solution_steps": [
+        "下载并启动靶机容器",
+        "把地址输入到地址框，点击「连接靶机」",
+        "在搜索框输入 <script>alert(document.cookie)</script>",
+        "弹窗中会显示 flag=flag{...}",
+        "把 Flag 粘贴到提交框提交"
+      ],
+      "learn_points": [
+        "XSS 三要素：用户输入、未过滤输出、浏览器执行 JS",
+        "反射型 / 存储型 / DOM 型 XSS 的区别",
+        "防御手段：HTML 转义、CSP、HttpOnly Cookie"
+      ],
+      "docker_run": "docker run -d -p 8084:8084 --name netlearn-target4 netlearn-target4"
+    }
+  ]
+}

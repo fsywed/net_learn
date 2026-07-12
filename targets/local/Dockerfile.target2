@@ -1,0 +1,9 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY base.py target2_ssh.py ./
+
+EXPOSE 8082
+
+CMD ["python", "target2_ssh.py", "8082"]
