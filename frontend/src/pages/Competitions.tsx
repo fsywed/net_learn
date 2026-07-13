@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import competitionsData from '../data/competitions.json'
+import EventCalendar from '../components/EventCalendar'
 
-type TabType = 'ctf' | 'certifications' | 'platforms'
+type TabType = 'calendar' | 'ctf' | 'certifications' | 'platforms'
 type LogoType = 'ctf' | 'cert' | 'platform'
 
 /**
@@ -33,7 +34,7 @@ function Logo({ image, name, type }: { image: string; name: string; type: LogoTy
 }
 
 export default function Competitions() {
-  const [activeTab, setActiveTab] = useState<TabType>('ctf')
+  const [activeTab, setActiveTab] = useState<TabType>('calendar')
 
   const { ctf_competitions, certifications, training_platforms } = competitionsData
 
@@ -45,6 +46,12 @@ export default function Competitions() {
       </p>
 
       <div className="tabs">
+        <button
+          className={`tab ${activeTab === 'calendar' ? 'active' : ''}`}
+          onClick={() => setActiveTab('calendar')}
+        >
+          比赛日历
+        </button>
         <button
           className={`tab ${activeTab === 'ctf' ? 'active' : ''}`}
           onClick={() => setActiveTab('ctf')}
@@ -64,6 +71,19 @@ export default function Competitions() {
           训练平台
         </button>
       </div>
+
+      {activeTab === 'calendar' && (
+        <div className="tab-content">
+          <div className="section-intro">
+            <h2>赛事日历</h2>
+            <p>
+              查看近期 CTF 比赛和认证考试的时间安排。点击日历中带圆点的日期，查看当天赛事详情。
+              提前规划，不错过任何一场重要比赛。
+            </p>
+          </div>
+          <EventCalendar />
+        </div>
+      )}
 
       {activeTab === 'ctf' && (
         <div className="tab-content">
