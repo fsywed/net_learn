@@ -1,19 +1,7 @@
 // 后端 API 客户端（动态靶机）
-//
-// baseURL 来自 VITE_API_BASE（构建时通过 .env.production 注入）
-//   - GitHub Pages 生产环境：'https://netlearn-backend.fly.dev'
-//   - 本地开发：留空，Vite dev server 会把 /api/* 代理到 http://localhost:8001
-//
-// 同时维护 backendOnline 状态，Layout 组件订阅它以显示警告横幅。
-import axios, { type AxiosError } from 'axios'
-
+// 用原生 fetch 替代 axios，减小 bundle 体积
 const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? ''
-
-export const api = axios.create({
-  baseURL: `${API_BASE}/api`,
-  timeout: 120_000, // 首次拉镜像可能慢
-  withCredentials: false,
-})
+const BASE_URL = `${API_BASE}/api`
 
 // ---- 后端可用性状态 ----
 let backendOnline = true
@@ -36,10 +24,31 @@ function setOnline(v: boolean) {
   listeners.forEach((cb) => cb(v))
 }
 
-// 启动时主动 ping 一次，避免 Layout 永远不知道后端挂了
+// 封装 fetch，自动处理 JSON 和错误
+async function request<T>(path: string, options?: RequestInit, timeout = 120000): Promise<T> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeout)
+  try {
+    const res = await fetch(`${BASE_URL}${path}`, {
+      ...options,
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json', ...(options?.headers || {}) },
+    })
+    setOnline(true)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return res.status === 204 ? (undefined as T) : await res.json()
+  } catch (err) {
+    if (err instanceof TypeError) setOnline(false) // 网络错误
+    throw err
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+// 启动时主动 ping 一次
 export async function probeBackend(): Promise<boolean> {
   try {
-    await api.get('/health', { timeout: 5000 })
+    await request('/health', {}, 5000)
     setOnline(true)
     return true
   } catch {
@@ -47,18 +56,6 @@ export async function probeBackend(): Promise<boolean> {
     return false
   }
 }
-
-api.interceptors.response.use(
-  (r) => {
-    setOnline(true)
-    return r
-  },
-  (err: AxiosError) => {
-    // 网络层错误或 5xx 视为不可用；4xx 视为逻辑错误但服务还在
-    if (!err.response || err.response.status >= 500) setOnline(false)
-    return Promise.reject(err)
-  }
-)
 
 // ---- 类型定义 ----
 export interface Instance {
@@ -75,28 +72,26 @@ export interface Instance {
 
 // ---- API ----
 export async function spawnInstance(templateId: number): Promise<Instance> {
-  const { data } = await api.post<Instance>('/instances/spawn', {
-    template_id: templateId,
+  return request<Instance>('/instances/spawn', {
+    method: 'POST',
+    body: JSON.stringify({ template_id: templateId }),
   })
-  return data
 }
 
 export async function listInstances(): Promise<Instance[]> {
-  const { data } = await api.get<Instance[]>('/instances')
-  return data
+  return request<Instance[]>('/instances')
 }
 
 export async function destroyInstance(id: number): Promise<void> {
-  await api.delete(`/instances/${id}`)
+  await request<void>(`/instances/${id}`, { method: 'DELETE' })
 }
 
 export async function submitFlag(
   instanceId: number,
   flag: string
 ): Promise<{ correct: boolean; message: string }> {
-  const { data } = await api.post<{ correct: boolean; message: string }>(
-    '/submissions',
-    { instance_id: instanceId, flag }
-  )
-  return data
+  return request<{ correct: boolean; message: string }>('/submissions', {
+    method: 'POST',
+    body: JSON.stringify({ instance_id: instanceId, flag }),
+  })
 }
