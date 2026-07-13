@@ -349,5 +349,349 @@
         "skills": ["日志分析", "SSH安全"]
       }
     ]
+  },
+  {
+    "id": 7,
+    "title": "网络安全认证考试题单",
+    "description": "涵盖 CISSP、Security+、CEH、OSCP 等主流安全认证的核心考点，帮助你系统备考。",
+    "tags": ["认证考试", "CISSP", "Security+"],
+    "difficulty": "medium",
+    "problems": [
+      {
+        "id": 701,
+        "title": "OSI 七层模型对应关系",
+        "type": "网络基础",
+        "difficulty": "easy",
+        "description": "在 OSI 七层模型中，路由器工作在第几层？防火墙通常工作在第几层？SSL/TLS 工作在第几层？",
+        "hint": "路由器是网络层（第3层），防火墙可以是网络层或传输层，SSL/TLS 是传输层（第4层）协议。",
+        "answer": "flag{osi_router_l3_firewall_l3l4_ssl_l4}",
+        "target_id": null,
+        "skills": ["OSI模型", "网络基础"]
+      },
+      {
+        "id": 702,
+        "title": "CIA 三元组",
+        "type": "安全基础",
+        "difficulty": "easy",
+        "description": "信息安全的 CIA 三元组指的是什么？请分别解释 Confidentiality、Integrity、Availability 的含义，并各举一个威胁例子。",
+        "hint": "C=机密性（未授权泄露）、I=完整性（未授权篡改）、A=可用性（拒绝服务）。",
+        "answer": "flag{cia_confidentiality_integrity_availability}",
+        "target_id": null,
+        "skills": ["安全基础", "CIA三元组"]
+      },
+      {
+        "id": 703,
+        "title": "对称加密 vs 非对称加密",
+        "type": "密码学",
+        "difficulty": "medium",
+        "description": "对比对称加密（AES）和非对称加密（RSA）的特点：密钥数量、加密速度、适用场景。HTTPS 握手过程中分别用到了哪种加密？",
+        "hint": "对称加密速度快但密钥分发困难；非对称加密用于密钥交换和数字签名。HTTPS 先用非对称加密交换对称密钥，再用对称加密传输数据。",
+        "answer": "flag{symmetric_fast_asymmetric_keyexchange}",
+        "target_id": null,
+        "skills": ["密码学", "加密算法"]
+      },
+      {
+        "id": 704,
+        "title": "访问控制模型对比",
+        "type": "访问控制",
+        "difficulty": "medium",
+        "description": "对比 MAC（强制访问控制）、DAC（自主访问控制）、RBAC（基于角色的访问控制）三种模型的区别。Linux 文件权限属于哪种？SELinux 属于哪种？",
+        "hint": "DAC：资源所有者决定权限；MAC：系统强制策略；RBAC：按角色分配权限。Linux 默认是 DAC，SELinux 是 MAC。",
+        "answer": "flag{mac_dac_rbac_linux_dac_selinux_mac}",
+        "target_id": null,
+        "skills": ["访问控制", "认证授权"]
+      },
+      {
+        "id": 705,
+        "title": "渗透测试阶段",
+        "type": "渗透测试",
+        "difficulty": "medium",
+        "description": "PTES（渗透测试执行标准）将渗透测试分为哪几个主要阶段？请按顺序列出并简要说明每个阶段的目标。",
+        "hint": "前期交互 -> 情报收集 -> 威胁建模 -> 漏洞分析 -> 渗透攻击 -> 后渗透 -> 报告。",
+        "answer": "flag{ptes_pre_intel_threat_vuln_exploit_post_report}",
+        "target_id": null,
+        "skills": ["渗透测试", "方法论"]
+      },
+      {
+        "id": 706,
+        "title": "OWASP Top 10 2021",
+        "type": "Web安全",
+        "difficulty": "medium",
+        "description": "OWASP Top 10 2021 排名第一和第二的漏洞分别是什么？描述 A01:2021-Broken Access Control 的一种典型攻击场景。",
+        "hint": "第一是 Broken Access Control，第二是 Cryptographic Failures。越权访问：普通用户通过修改 URL 参数访问管理员页面。",
+        "answer": "flag{owasp2021_a01_accesscontrol_a02_crypto}",
+        "target_id": null,
+        "skills": ["OWASP", "Web安全"]
+      },
+      {
+        "id": 707,
+        "title": "日志审计与合规",
+        "type": "合规审计",
+        "difficulty": "hard",
+        "description": "某系统需要满足等保 2.0 三级要求，安全审计功能需要满足哪些具体要求？至少列出 5 条。",
+        "hint": "等保 2.0 三级要求：审计范围覆盖所有用户、审计事件类型包括系统运行状态和网络行为、审计记录不可删除修改、审计记录留存不少于 6 个月、定期审计分析。",
+        "answer": "flag{grade3_audit_scope_event_integrity_6months_analysis}",
+        "target_id": null,
+        "skills": ["等保", "合规审计"]
+      },
+      {
+        "id": 708,
+        "title": "零信任架构核心原则",
+        "type": "安全架构",
+        "difficulty": "hard",
+        "description": "零信任（Zero Trust）安全模型的核心原则是什么？与传统的边界安全模型（城堡护城河）有什么区别？",
+        "hint": "核心原则：永不信任，始终验证（Never Trust, Always Verify）。假设网络已被攻破，不区分内外网，所有访问都需要认证授权。",
+        "answer": "flag{zero_trust_never_trust_always_verify}",
+        "target_id": null,
+        "skills": ["安全架构", "零信任"]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "云安全与容器安全题单",
+    "description": "覆盖 AWS/Azure/GCP 云安全、Docker/Kubernetes 安全配置、云原生安全最佳实践。",
+    "tags": ["云安全", "容器安全", "K8s"],
+    "difficulty": "hard",
+    "problems": [
+      {
+        "id": 801,
+        "title": "S3 存储桶公开访问",
+        "type": "云配置错误",
+        "difficulty": "easy",
+        "description": "AWS S3 存储桶的哪些配置错误会导致数据泄露？列举 3 种常见的 S3 安全配置错误。",
+        "hint": "1) ACL 设置为 PublicRead；2) Bucket Policy 允许 * 主体访问；3) 关闭 Block Public Access 设置。",
+        "answer": "flag{s3_public_acl_policy_blockaccess}",
+        "target_id": null,
+        "skills": ["AWS", "云配置"]
+      },
+      {
+        "id": 802,
+        "title": "IAM 最小权限原则",
+        "type": "IAM",
+        "difficulty": "medium",
+        "description": "某开发者在 IAM Policy 中使用了 Action: '*' 和 Resource: '*'，这违反了什么安全原则？正确的做法是什么？",
+        "hint": "违反了最小权限原则（Least Privilege）。应该明确指定需要的 Action 和具体的 Resource ARN。",
+        "answer": "flag{iam_least_privilege_explicit_action_resource}",
+        "target_id": null,
+        "skills": ["IAM", "权限管理"]
+      },
+      {
+        "id": 803,
+        "title": "Docker 容器逃逸",
+        "type": "容器安全",
+        "difficulty": "medium",
+        "description": "Docker 容器逃逸的常见方式有哪些？列举 3 种并说明如何防御。",
+        "hint": "1) 特权模式（--privileged）；2) 挂载 Docker Socket；3) 内核漏洞（如 Dirty Cow）。防御：不用特权模式、不挂载敏感路径、及时更新内核。",
+        "answer": "flag{docker_escape_privileged_socket_kernel}",
+        "target_id": null,
+        "skills": ["Docker", "容器逃逸"]
+      },
+      {
+        "id": 804,
+        "title": "Kubernetes RBAC 配置",
+        "type": "K8s安全",
+        "difficulty": "medium",
+        "description": "K8s 中 ServiceAccount 绑定了 ClusterRole 且拥有 '*' 权限，攻击者获取该 Token 后能做什么？如何限制？",
+        "hint": "可以执行集群内任意操作，包括创建 Pod、读取 Secret、删除资源。应创建最小权限 Role，限定 namespace 和资源类型。",
+        "answer": "flag{k8s_rbac_least_privilege_namespace_scope}",
+        "target_id": null,
+        "skills": ["Kubernetes", "RBAC"]
+      },
+      {
+        "id": 805,
+        "title": "镜像安全扫描",
+        "type": "DevSecOps",
+        "difficulty": "medium",
+        "description": "为什么在部署 Docker 镜像前需要进行安全扫描？列举 2 个常用的镜像扫描工具。",
+        "hint": "镜像可能包含已知 CVE 漏洞、恶意软件、敏感凭证泄露。工具：Trivy、Clair、Snyk、Grype。",
+        "answer": "flag{image_scan_trivy_clair_cve_malware}",
+        "target_id": null,
+        "skills": ["镜像安全", "DevSecOps"]
+      },
+      {
+        "id": 806,
+        "title": "云原生 Supply Chain 安全",
+        "type": "供应链安全",
+        "difficulty": "hard",
+        "description": "SolarWinds 事件暴露了软件供应链攻击的危害。在云原生环境中，从代码到部署的供应链各环节有哪些安全措施？",
+        "hint": "1) 代码签名和验证；2) 依赖项安全扫描（SCA）；3) 构建环境隔离和可信；4) 镜像签名（Cosign/Notary）；5) 部署前准入控制（OPA/Kyverno）。",
+        "answer": "flag{supply_chain_sign_sca_cosign_admission}",
+        "target_id": null,
+        "skills": ["供应链安全", "云原生"]
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "红队渗透与APT攻击题单",
+    "description": "模拟真实 APT 攻击链，涵盖初始访问、权限维持、横向移动、数据渗出等高级渗透技术。",
+    "tags": ["红队", "APT", "高级渗透"],
+    "difficulty": "hard",
+    "problems": [
+      {
+        "id": 901,
+        "title": "钓鱼邮件社工",
+        "type": "社工",
+        "difficulty": "easy",
+        "description": "攻击者伪造 HR 部门发送钓鱼邮件，诱导员工点击链接。列举 3 个识别钓鱼邮件的方法，以及企业层面的 2 种防御措施。",
+        "hint": "识别：检查发件人地址、悬停查看链接真实 URL、注意紧急语气。防御：SPF/DKIM/DMARC 邮件认证、安全意识培训。",
+        "answer": "flag{phishing_sender_url_training_spf_dkim}",
+        "target_id": null,
+        "skills": ["社工", "钓鱼"]
+      },
+      {
+        "id": 902,
+        "title": "Windows 权限维持",
+        "type": "权限维持",
+        "difficulty": "medium",
+        "description": "攻击者获取 Windows 管理员权限后，列举 3 种常见的权限维持技术，以及如何检测。",
+        "hint": "1) 注册表 Run 键（HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run）；2) 计划任务；3) WMI 事件订阅。检测：Autoruns、WMI Explorer、日志审计。",
+        "answer": "flag{persistence_registry_run_task_wmi}",
+        "target_id": null,
+        "skills": ["权限维持", "Windows"]
+      },
+      {
+        "id": 903,
+        "title": "横向移动：Pass-the-Hash",
+        "type": "横向移动",
+        "difficulty": "medium",
+        "description": "什么是 Pass-the-Hash 攻击？攻击者为什么不需要破解 NTLM Hash 就能横向移动？防御措施有哪些？",
+        "hint": "Windows 使用 NTLM Hash 直接进行身份验证，不需要明文密码。防御：启用 LSA 保护、Credential Guard、限制管理员权限、使用 Kerberos。",
+        "answer": "flag{pth_ntlm_lsa_protection_credguard}",
+        "target_id": null,
+        "skills": ["横向移动", "PtH"]
+      },
+      {
+        "id": 904,
+        "title": "域渗透：Kerberoasting",
+        "type": "AD攻击",
+        "difficulty": "hard",
+        "description": "Kerberoasting 攻击的原理是什么？攻击者如何利用 SPN 获取可离线破解的票据？防御措施有哪些？",
+        "hint": "任何域用户都可以请求 SPN 的 TGS 票据，该票据用服务账户密码加密。防御：使用强密码（25+字符）、定期更换、启用 AES 加密、监控异常票据请求。",
+        "answer": "flag{kerberoasting_spn_tgs_offline_crack}",
+        "target_id": null,
+        "skills": ["AD安全", "Kerberos"]
+      },
+      {
+        "id": 905,
+        "title": "C2 通信隐蔽技术",
+        "type": "C2",
+        "difficulty": "hard",
+        "description": "APT 组织如何隐蔽 C2 通信以绕过防火墙和 IDS？列举 3 种技术并说明检测思路。",
+        "hint": "1) DNS 隧道；2) HTTPS 加密通信；3) 域前置（Domain Fronting）。检测：DNS 异常查询分析、TLS 证书异常、流量行为分析。",
+        "answer": "flag{c2_dns_tunnel_https_domain_fronting}",
+        "target_id": null,
+        "skills": ["C2", "流量隐蔽"]
+      },
+      {
+        "id": 906,
+        "title": "内存免杀技术",
+        "type": "免杀",
+        "difficulty": "hard",
+        "description": "为什么传统的基于文件的杀毒软件难以检测内存中的恶意代码？列举 2 种将 Shellcode 注入内存的技术。",
+        "hint": "内存中无文件落地，AV 无法扫描文件。技术：Process Hollowing（进程镂空）、Process Doppelgänging、DLL 注入、反射式 DLL 注入。",
+        "answer": "flag{fileless_process_hollowing_dll_inject}",
+        "target_id": null,
+        "skills": ["免杀", "内存注入"]
+      },
+      {
+        "id": 907,
+        "title": "数据渗出技术",
+        "type": "数据外泄",
+        "difficulty": "hard",
+        "description": "攻击者从内部网络窃取数据时，有哪些隐蔽的数据渗出方式？企业应如何检测和防御？",
+        "hint": "方式：DNS 外泄、HTTPS 上传、隐蔽信道（ICMP）、云服务（OneDrive/ Dropbox）。防御：DLP 系统、出口流量监控、外联白名单、数据分类分级。",
+        "answer": "flag{exfil_dns_https_icmp_dlp_monitor}",
+        "target_id": null,
+        "skills": ["数据外泄", "DLP"]
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "应急响应与数字取证题单",
+    "description": "覆盖事件响应流程、日志分析、内存取证、磁盘取证等企业级安全运营技能。",
+    "tags": ["应急响应", "取证", "SOC"],
+    "difficulty": "hard",
+    "problems": [
+      {
+        "id": 1001,
+        "title": "事件响应六阶段",
+        "type": "应急响应",
+        "difficulty": "easy",
+        "description": "NIST SP 800-61 定义的网络安全事件响应生命周期包括哪六个阶段？请按顺序列出。",
+        "hint": "准备 -> 检测与分析 -> 遏制 -> 根除 -> 恢复 -> 事后复盘（Lessons Learned）。",
+        "answer": "flag{ncsir_prepare_detect_contain_eradicate_recover_lessons}",
+        "target_id": null,
+        "skills": ["应急响应", "NIST"]
+      },
+      {
+        "id": 1002,
+        "title": "Windows 事件日志分析",
+        "type": "日志分析",
+        "difficulty": "medium",
+        "description": "在 Windows 安全日志中，事件 ID 4624、4625、4648、4672 分别代表什么？攻击者横向移动时会留下哪个事件 ID？",
+        "hint": "4624=登录成功，4625=登录失败，4648=显式凭证登录，4672=特权使用。横向移动常见 4624（Type 3 网络登录）和 4648。",
+        "answer": "flag{eventid_4624_4625_4648_4672}",
+        "target_id": null,
+        "skills": ["Windows日志", "事件分析"]
+      },
+      {
+        "id": 1003,
+        "title": "内存取证找恶意进程",
+        "type": "内存取证",
+        "difficulty": "medium",
+        "description": "使用 Volatility 分析 Windows 内存镜像，找出可疑进程。列举 3 个 Volatility 常用命令及其作用。",
+        "hint": "pslist / psscan：列出进程；malfind：查找注入代码；netscan：查看网络连接；cmdscan：查看命令行历史。",
+        "answer": "flag{volatility_pslist_malfind_netscan_cmdscan}",
+        "target_id": null,
+        "skills": ["Volatility", "内存取证"]
+      },
+      {
+        "id": 1004,
+        "title": "WebShell 检测",
+        "type": "入侵检测",
+        "difficulty": "medium",
+        "description": "服务器被上传 WebShell 后，如何从日志和文件层面检测？列举 3 种检测方法。",
+        "hint": "1) 分析 access.log 中异常 POST 请求（如大量 POST 到不常见 PHP 文件）；2) 检查文件修改时间；3) 用 D 盾/河马等 WebShell 查杀工具扫描。",
+        "answer": "flag{webshell_log_post_filetime_scanner}",
+        "target_id": null,
+        "skills": ["WebShell", "入侵检测"]
+      },
+      {
+        "id": 1005,
+        "title": "勒索软件应急响应",
+        "type": "应急响应",
+        "difficulty": "hard",
+        "description": "公司内网爆发勒索软件，作为应急响应人员，前 30 分钟应该执行哪些关键操作？至少列出 5 步。",
+        "hint": "1) 隔离受感染主机（拔网线/阻断通信）；2) 确认勒索软件家族；3) 保留证据（内存、磁盘镜像）；4) 通知相关团队；5) 评估影响范围；6) 检查备份可用性。",
+        "answer": "flag{ransomware_isolate_identify_preserve_notify_assess_backup}",
+        "target_id": null,
+        "skills": ["勒索软件", "应急响应"]
+      },
+      {
+        "id": 1006,
+        "title": "ATT&CK 矩阵分析",
+        "type": "威胁情报",
+        "difficulty": "hard",
+        "description": "MITRE ATT&CK 框架中，Initial Access、Persistence、Exfiltration 三个阶段各包含哪些技术？列举每个阶段 2 个技术。",
+        "hint": "Initial Access：钓鱼、漏洞利用；Persistence：Run Key、WMI 事件；Exfiltration：Web 服务、C2 通道。",
+        "answer": "flag{attck_phishing_runkey_exfil_web}",
+        "target_id": null,
+        "skills": ["ATT&CK", "威胁情报"]
+      },
+      {
+        "id": 1007,
+        "title": "磁盘取证：删除文件恢复",
+        "type": "磁盘取证",
+        "difficulty": "hard",
+        "description": "攻击者删除了日志文件，为什么还能恢复？解释文件系统删除文件的原理，以及 2 种恢复方法。",
+        "hint": "删除文件通常只是标记 inode 和数据块为可用，数据本身还在磁盘上。方法：文件雕刻（File Carving）、从文件系统日志（journal）恢复。",
+        "answer": "flag{deleted_file_inode_carving_journal}",
+        "target_id": null,
+        "skills": ["磁盘取证", "文件恢复"]
+      }
+    ]
   }
 ]
