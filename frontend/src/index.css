@@ -1017,12 +1017,58 @@ h1, h2 {
 
 .wmde-markdown {
   font-family: inherit !important;
-  color: var(--text);
+  color: #b8c2d8;
+  line-height: 1.8;
 }
 .wmde-markdown h1,
 .wmde-markdown h2,
 .wmde-markdown h3 {
-  color: #fff;
+  color: #d0d8e8;
+  text-shadow: none;
+}
+.wmde-markdown h1 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.wmde-markdown p {
+  color: #b8c2d8;
+}
+.wmde-markdown li {
+  color: #b8c2d8;
+}
+.wmde-markdown strong {
+  color: #d0d8e8;
+}
+.wmde-markdown blockquote {
+  border-left: 3px solid var(--neon-cyan);
+  background: rgba(0,240,255,0.04);
+  padding: 10px 16px;
+  margin: 12px 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.wmde-markdown blockquote p {
+  color: #a0aac0;
+  margin: 0;
+}
+.wmde-markdown a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  opacity: 0.85;
+}
+.wmde-markdown a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+.wmde-markdown ul,
+.wmde-markdown ol {
+  padding-left: 24px;
+}
+.wmde-markdown li::marker {
+  color: var(--neon-cyan);
+  opacity: 0.6;
+}
+.wmde-markdown .anchor {
+  display: none;
 }
 .wmde-markdown pre {
   background: rgba(5,5,15,0.8);
