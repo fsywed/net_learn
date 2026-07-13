@@ -1012,18 +1012,18 @@ h1, h2 {
 }
 .chapter-content h2 {
   margin-top: 0;
-  color: #fff;
+  color: #000;
 }
 
 .wmde-markdown {
   font-family: inherit !important;
-  color: #d8dee8;
+  color: #000;
   line-height: 1.8;
 }
 .wmde-markdown h1,
 .wmde-markdown h2,
 .wmde-markdown h3 {
-  color: #e8edf5;
+  color: #000;
   text-shadow: none;
 }
 .wmde-markdown h1 {
@@ -1031,13 +1031,13 @@ h1, h2 {
   padding-bottom: 8px;
 }
 .wmde-markdown p {
-  color: #d8dee8;
+  color: #000;
 }
 .wmde-markdown li {
-  color: #d8dee8;
+  color: #000;
 }
 .wmde-markdown strong {
-  color: #e8edf5;
+  color: #000;
 }
 .wmde-markdown blockquote {
   border-left: 3px solid var(--neon-cyan);
@@ -1047,16 +1047,14 @@ h1, h2 {
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 .wmde-markdown blockquote p {
-  color: #c8d0dc;
+  color: #000;
   margin: 0;
 }
 .wmde-markdown a {
-  color: var(--neon-cyan);
-  text-decoration: none;
-  opacity: 0.85;
+  color: #000;
+  text-decoration: underline;
 }
 .wmde-markdown a:hover {
-  opacity: 1;
   text-decoration: underline;
 }
 .wmde-markdown ul,
@@ -1064,8 +1062,7 @@ h1, h2 {
   padding-left: 24px;
 }
 .wmde-markdown li::marker {
-  color: var(--neon-cyan);
-  opacity: 0.6;
+  color: #000;
 }
 .wmde-markdown .anchor {
   display: none;
