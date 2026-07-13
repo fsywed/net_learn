@@ -1,0 +1,353 @@
+[
+  {
+    "id": 1,
+    "title": "Web 安全入门题单",
+    "description": "适合零基础的安全爱好者，从最简单的查看源码到经典的 SQL 注入、XSS。每道题都有提示和答案。",
+    "tags": ["Web安全", "入门"],
+    "difficulty": "easy",
+    "problems": [
+      {
+        "id": 101,
+        "title": "HTML 注释里的秘密",
+        "type": "信息泄露",
+        "difficulty": "easy",
+        "description": "访问靶机页面，按 F12 打开开发者工具，在 Elements 面板中寻找 HTML 注释。Flag 就藏在注释中。",
+        "hint": "注释格式是 <!-- ... -->，按 Ctrl+U 也可以直接看源码。",
+        "answer": "flag{hidden_in_html_comment}",
+        "target_id": 1,
+        "skills": ["信息搜集", "查看源码"]
+      },
+      {
+        "id": 102,
+        "title": "响应头里的线索",
+        "type": "信息泄露",
+        "difficulty": "easy",
+        "description": "用 curl 访问靶机首页，观察 HTTP 响应头。Server 字段中可能包含敏感信息，或者自定义的 X-Flag 头部。",
+        "hint": "curl -I 可以只看响应头。注意寻找以 X- 开头的自定义头部。",
+        "answer": "flag{header_leak_x_flag}",
+        "target_id": 1,
+        "skills": ["curl", "HTTP头分析"]
+      },
+      {
+        "id": 103,
+        "title": "默认路径探测",
+        "type": "目录遍历",
+        "difficulty": "easy",
+        "description": "尝试访问 /robots.txt、/.git/、/backup.zip 等常见敏感路径，看看靶机是否有意外的文件暴露。",
+        "hint": "robots.txt 经常暴露管理员路径，一些压缩包可能包含源码。",
+        "answer": "flag{robots_exposed_admin}",
+        "target_id": 1,
+        "skills": ["目录扫描", "敏感文件"]
+      },
+      {
+        "id": 104,
+        "title": "万能密码登录",
+        "type": "SQL注入",
+        "difficulty": "medium",
+        "description": "靶机有一个登录页面，后端用字符串拼接的方式构造 SQL 查询。尝试在用户名输入特殊字符，绕过密码验证。",
+        "hint": "试试 admin' -- 或者 ' OR '1'='1。注意单引号的作用是闭合 SQL 语句中的字符串。",
+        "answer": "flag{sqli_bypass_login}",
+        "target_id": 3,
+        "skills": ["SQL注入", "认证绕过"]
+      },
+      {
+        "id": 105,
+        "title": "XSS 弹窗挑战",
+        "type": "XSS",
+        "difficulty": "medium",
+        "description": "靶机的搜索框会直接回显用户输入的内容，没有任何过滤。注入一段 JavaScript 代码，让页面弹出 alert。",
+        "hint": "输入 <script>alert('xss')</script>，或者尝试用 <img src=x onerror=alert(1)> 绕过过滤。",
+        "answer": "flag{xss_reflected_alert}",
+        "target_id": 4,
+        "skills": ["XSS", "前端注入"]
+      },
+      {
+        "id": 106,
+        "title": "命令拼接读取 Flag",
+        "type": "命令注入",
+        "difficulty": "medium",
+        "description": "靶机提供了一个 ping 工具，用户输入 IP 地址后服务器执行 ping 命令。尝试拼接额外的系统命令来读取 /flag.txt。",
+        "hint": "Linux 中可以用 ; 或 | 连接多条命令。例如：127.0.0.1; cat /flag.txt",
+        "answer": "flag{cmd_injection_cat_flag}",
+        "target_id": 5,
+        "skills": ["命令注入", "OS命令执行"]
+      },
+      {
+        "id": 107,
+        "title": "路径穿越读取 passwd",
+        "type": "文件包含",
+        "difficulty": "medium",
+        "description": "靶机通过 URL 参数加载页面文件，如 ?page=about.html。尝试用 ../ 穿越目录，读取服务器的 /etc/passwd 文件。",
+        "hint": "../../etc/passwd 可以从当前目录回到根目录。如果过滤了 ../，试试 ....//....//。",
+        "answer": "flag{lfi_etc_passwd_read}",
+        "target_id": 6,
+        "skills": ["路径穿越", "LFI"]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "密码学基础题单",
+    "description": "从经典 Caesar 密码到现代哈希碰撞，循序渐进理解密码学原理。",
+    "tags": ["密码学", "Crypto"],
+    "difficulty": "medium",
+    "problems": [
+      {
+        "id": 201,
+        "title": "Caesar 密码破解",
+        "type": "古典密码",
+        "difficulty": "easy",
+        "description": "一段被 Caesar 移位加密过的文本：sgd vnqkc hr sgd gzud。Caesar 密码把每个字母向前或向后移动固定位数，尝试枚举 1-25 的所有可能。",
+        "hint": "尝试在线工具 https://cryptii.com/pipes/caesar-cipher，或者写个 Python 脚本暴力枚举。",
+        "answer": "flag{caesar_shift_1}",
+        "target_id": null,
+        "skills": ["古典密码", "枚举"]
+      },
+      {
+        "id": 202,
+        "title": "Base64 解码",
+        "type": "编码转换",
+        "difficulty": "easy",
+        "description": "以下字符串是 Base64 编码：ZmxhZ3tiYXNlNjRfZGVjb2RlX29rfQ==。用工具或命令行解码它。",
+        "hint": "Linux 命令：echo 'ZmxhZ3tiYXNlNjRfZGVjb2RlX29rfQ==' | base64 -d",
+        "answer": "flag{base64_decode_ok}",
+        "target_id": null,
+        "skills": ["Base64", "编码"]
+      },
+      {
+        "id": 203,
+        "title": "十六进制转 ASCII",
+        "type": "编码转换",
+        "difficulty": "easy",
+        "description": "66 6c 61 67 7b 68 65 78 5f 74 6f 5f 61 73 63 69 69 7d 是一串十六进制数，每两个十六进制数代表一个 ASCII 字符。",
+        "hint": "Python: bytes.fromhex('666c...').decode() 或者用 CyberChef 的 From Hex。",
+        "answer": "flag{hex_to_ascii}",
+        "target_id": null,
+        "skills": ["Hex", "编码"]
+      },
+      {
+        "id": 204,
+        "title": "MD5 碰撞",
+        "type": "哈希",
+        "difficulty": "medium",
+        "description": "靶机有一个文件校验接口，接受一个文件的 MD5。如果你能让两个不同内容的文件产生相同的 MD5，就能绕过校验。这是著名的 MD5 碰撞攻击。",
+        "hint": "搜索 'MD5 collision example'，找一个已知的碰撞对（如 evil.pdf / good.pdf），提交即可。",
+        "answer": "flag{md5_collision_found}",
+        "target_id": null,
+        "skills": ["哈希碰撞", "MD5"]
+      },
+      {
+        "id": 205,
+        "title": "JWT 密钥破解",
+        "type": "JWT",
+        "difficulty": "hard",
+        "description": "靶机使用 JWT 进行认证，签名密钥是一个很短的弱口令。用字典攻击找出密钥，然后伪造一个 admin 用户的 JWT Token。",
+        "hint": "用 jwt_tool 或 hashcat 进行 JWT 密钥爆破。常用弱口令字典 /usr/share/wordlists/rockyou.txt。",
+        "answer": "flag{jwt_weak_secret_cracked}",
+        "target_id": null,
+        "skills": ["JWT", "字典攻击", "认证绕过"]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "网络协议分析题单",
+    "description": "通过抓包、协议分析找出网络流量中隐藏的信息。需要 Wireshark 或 tshark。",
+    "tags": ["网络", "协议分析"],
+    "difficulty": "medium",
+    "problems": [
+      {
+        "id": 301,
+        "title": "HTTP 明文传输",
+        "type": "流量分析",
+        "difficulty": "easy",
+        "description": "在 pcap 文件中，HTTP 登录请求是以明文传输的。用 Wireshark 过滤 http.request.method == POST，找到登录请求，从中提取用户名和密码。",
+        "hint": "Wireshark 过滤：http.request.method == POST && http contains login。查看 Packet Details 中的 HTML Form 字段。",
+        "answer": "flag{http_plaintext_password}",
+        "target_id": null,
+        "skills": ["Wireshark", "HTTP分析"]
+      },
+      {
+        "id": 302,
+        "title": "DNS 隧道中的数据",
+        "type": "DNS",
+        "difficulty": "medium",
+        "description": "攻击者通过 DNS 查询将数据编码到子域名中。在 pcap 中找出异常的 DNS 查询，提取子域名并 Base64 解码。",
+        "hint": "过滤 dns 协议，查找大量同一域名的子域名查询。子域名可能是一串 Base64 编码。",
+        "answer": "flag{dns_tunnel_exfiltration}",
+        "target_id": null,
+        "skills": ["DNS隧道", "数据外泄"]
+      },
+      {
+        "id": 303,
+        "title": "TCP 三次握手分析",
+        "type": "TCP/IP",
+        "difficulty": "easy",
+        "description": "找到 pcap 中一次完整的 TCP 三次握手（SYN -> SYN-ACK -> ACK），记录下目标端口号。端口号拼接起来就是 Flag。",
+        "hint": "Wireshark 中右键一个 SYN 包 -> Follow -> TCP Stream，可以看到完整的三次握手。",
+        "answer": "flag{tcp_handshake_443}",
+        "target_id": null,
+        "skills": ["TCP/IP", "三次握手"]
+      },
+      {
+        "id": 304,
+        "title": "ARP 欺骗检测",
+        "type": "ARP",
+        "difficulty": "medium",
+        "description": "pcap 中记录了 ARP 欺骗攻击。找出哪个 MAC 地址同时声称拥有多个 IP 地址，这就是攻击者的 MAC。",
+        "hint": "用 arp.opcode == 2 过滤 ARP 响应包，观察 sender MAC 是否对应了多个不同的 sender IP。",
+        "answer": "flag{arp_spoof_detected}",
+        "target_id": null,
+        "skills": ["ARP欺骗", "中间人攻击"]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "逆向工程入门题单",
+    "description": "从字符串分析到反编译，逐步掌握逆向工程的基础技能。",
+    "tags": ["逆向", "Reverse"],
+    "difficulty": "hard",
+    "problems": [
+      {
+        "id": 401,
+        "title": "字符串中的 Flag",
+        "type": "字符串分析",
+        "difficulty": "easy",
+        "description": "给定的二进制文件中硬编码了 Flag 字符串。用 strings 命令直接提取可打印字符串。",
+        "hint": "Linux 命令：strings target.bin | grep flag",
+        "answer": "flag{strings_found_me}",
+        "target_id": null,
+        "skills": ["strings", "静态分析"]
+      },
+      {
+        "id": 402,
+        "title": "简单 XOR 加密",
+        "type": "逆向分析",
+        "difficulty": "medium",
+        "description": "程序读取用户输入，用一个固定密钥进行 XOR 加密后与硬编码的密文比较。用 Ghidra 找到密钥和密文，解密得到 Flag。",
+        "hint": "在 Ghidra 中搜索 XOR 指令，通常密钥会出现在附近。也可以用 strace/ltrace 跟踪程序执行。",
+        "answer": "flag{xor_key_0x42}",
+        "target_id": null,
+        "skills": ["XOR", "Ghidra", "反编译"]
+      },
+      {
+        "id": 403,
+        "title": "绕过密码校验",
+        "type": "Patch",
+        "difficulty": "medium",
+        "description": "程序要求输入正确的密码才输出 Flag。用 Ghidra 分析校验逻辑，找到跳转到成功分支的条件，用十六进制编辑器把条件跳转改成无条件跳转。",
+        "hint": "找到 jz/jnz 指令，把它改成 jmp。或者用 radare2 的 wa 命令直接 patch。",
+        "answer": "flag{patched_jump_success}",
+        "target_id": null,
+        "skills": ["Patch", "汇编", "radare2"]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "CTF Misc 综合题单",
+    "description": "杂项题目，包含隐写、编码、文件分析、内存取证等。",
+    "tags": ["Misc", "综合"],
+    "difficulty": "medium",
+    "problems": [
+      {
+        "id": 501,
+        "title": "图片 LSB 隐写",
+        "type": "隐写",
+        "difficulty": "easy",
+        "description": "一张 PNG 图片中隐藏了信息。使用 zsteg 或 steghide 工具检查图片的 LSB（最低有效位）通道。",
+        "hint": "zsteg -a flag.png 会检查所有通道。或者 stegsolve 工具也可以逐通道查看。",
+        "answer": "flag{lsb_stego_hidden}",
+        "target_id": null,
+        "skills": ["LSB", "隐写", "zsteg"]
+      },
+      {
+        "id": 502,
+        "title": "压缩包密码破解",
+        "type": "密码破解",
+        "difficulty": "easy",
+        "description": "一个加密的 ZIP 文件，密码是一个 4 位数字。用 fcrackzip 或 John the Ripper 进行暴力破解。",
+        "hint": "fcrackzip -b -c1 -l4 -u flag.zip 可以暴力破解 4 位数字密码。",
+        "answer": "flag{zip_4digit_brute}",
+        "target_id": null,
+        "skills": ["ZIP破解", "暴力破解"]
+      },
+      {
+        "id": 503,
+        "title": "内存取证找密码",
+        "type": "内存取证",
+        "difficulty": "medium",
+        "description": "一个 Windows 内存转储文件（.dmp/.raw）。用 Volatility 分析进程列表，找到记事本进程并提取其中输入的 Flag。",
+        "hint": "volatility -f mem.raw --profile=Win7SP1x64 pslist 查看进程，然后 strings 提取记事本内存内容。",
+        "answer": "flag{volatility_notepad_flag}",
+        "target_id": null,
+        "skills": ["Volatility", "内存取证"]
+      },
+      {
+        "id": 504,
+        "title": "二维码修复",
+        "type": "文件修复",
+        "difficulty": "medium",
+        "description": "一个损坏的 QR Code 图片，缺少定位角。用图像编辑工具补全定位角，然后扫描二维码获取 Flag。",
+        "hint": "QR Code 的左上角、右上角、左下角必须有黑色的定位图案（回字形）。用 GIMP 或 Photoshop 画上去。",
+        "answer": "flag{qr_code_repaired}",
+        "target_id": null,
+        "skills": ["二维码", "图像修复"]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Linux 安全操作题单",
+    "description": "在 Linux 环境下进行安全相关的命令行操作练习。",
+    "tags": ["Linux", "系统安全"],
+    "difficulty": "medium",
+    "problems": [
+      {
+        "id": 601,
+        "title": "SUID 提权",
+        "type": "权限提升",
+        "difficulty": "easy",
+        "description": "在 Linux 系统中查找设置了 SUID 位的可执行文件。SUID 允许程序以文件所有者的权限运行，可能被用于提权。",
+        "hint": "find / -perm -4000 -type f 2>/dev/null 可以查找所有 SUID 文件。注意 /usr/bin/passwd 是合法的，找非预期的。",
+        "answer": "flag{suid_privilege_escalation}",
+        "target_id": null,
+        "skills": ["SUID", "权限提升"]
+      },
+      {
+        "id": 602,
+        "title": "定时任务提权",
+        "type": "权限提升",
+        "difficulty": "medium",
+        "description": "查看 /etc/crontab 和用户定时任务，找到一个以 root 身份运行且可被普通用户修改的脚本。修改脚本内容获取 root shell。",
+        "hint": "cat /etc/crontab 查看系统定时任务。注意路径是否是可写的。",
+        "answer": "flag{cron_privilege_escalation}",
+        "target_id": null,
+        "skills": ["Cron", "权限提升"]
+      },
+      {
+        "id": 603,
+        "title": "环境变量劫持",
+        "type": "权限提升",
+        "difficulty": "medium",
+        "description": "一个以 root 运行的脚本调用了系统命令但没有使用绝对路径。劫持 PATH 环境变量，让脚本执行你伪造的命令。",
+        "hint": "在可写目录创建同名的恶意命令，然后把该目录加到 PATH 最前面。",
+        "answer": "flag{path_hijacking_root}",
+        "target_id": null,
+        "skills": ["PATH劫持", "环境变量"]
+      },
+      {
+        "id": 604,
+        "title": "日志分析找入侵者",
+        "type": "日志分析",
+        "difficulty": "medium",
+        "description": "分析 /var/log/auth.log，找出尝试暴力破解 SSH 的 IP 地址，以及成功登录的时间。",
+        "hint": "grep 'Failed password' /var/log/auth.log | awk '{print $11}' | sort | uniq -c | sort -rn 统计失败来源。",
+        "answer": "flag{log_analysis_intruder_found}",
+        "target_id": null,
+        "skills": ["日志分析", "SSH安全"]
+      }
+    ]
+  }
+]

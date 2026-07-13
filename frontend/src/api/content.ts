@@ -1,6 +1,7 @@
 // 静态内容数据加载：构建时通过 Vite 内联进 JS bundle，永不依赖网络
 import coursesData from '../data/courses.json'
 import targetsData from '../data/targets.json'
+import problemsetsRaw from '../data/problemsets.json'
 
 // 课程与章节
 export interface Chapter {
@@ -36,9 +37,31 @@ export interface TargetTemplate {
   solved_count: number
 }
 
+// 题单与题目
+export interface Problem {
+  id: number
+  title: string
+  type: string
+  difficulty: string
+  description: string
+  hint: string
+  answer: string
+  target_id: number | null
+  skills: string[]
+}
+export interface ProblemSet {
+  id: number
+  title: string
+  description: string
+  tags: string[]
+  difficulty: string
+  problems: Problem[]
+}
+
 // 直接同步读取构建期内联的 JSON
 export const courses: Course[] = coursesData.courses
 export const targets: TargetTemplate[] = targetsData.targets
+export const problemsets: ProblemSet[] = problemsetsRaw as ProblemSet[]
 
 // 工具函数
 export function difficultyClass(d: string): string {

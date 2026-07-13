@@ -37,6 +37,9 @@ export default function Layout() {
           <NavLink to="/targets" onClick={closeMenu}>
             靶场
           </NavLink>
+          <NavLink to="/problemsets" onClick={closeMenu}>
+            题单
+          </NavLink>
           <NavLink to="/toolbox" onClick={closeMenu}>
             工具箱
           </NavLink>

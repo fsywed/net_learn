@@ -1667,3 +1667,311 @@ h1, h2, h3, h4 {
   color: var(--primary);
   font-weight: 600;
 }
+
+/* ============================================================
+ * 题单列表
+ * ============================================================ */
+
+.problemset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.problemset-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.problemset-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.problemset-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.problemset-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.problemset-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.problemset-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.problemset-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+ * 题单详情
+ * ============================================================ */
+
+.problemset-detail-header {
+  margin-bottom: 20px;
+}
+
+.problemset-progress {
+  margin-top: 16px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.progress-track {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #4b5563;
+  text-align: center;
+}
+
+.problem-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.problem-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.problem-card.done {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.problem-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: #f9fafb;
+  border-bottom: 1px solid var(--border);
+}
+
+.problem-card.done .problem-card-header {
+  background: #ecfdf5;
+}
+
+.problem-num {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.problem-card.done .problem-num {
+  background: #10b981;
+}
+
+.problem-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.problem-info h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.problem-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.check-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background: white;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.check-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.check-btn.checked {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+
+.problem-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.problem-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.problem-desc pre {
+  background: #f3f4f6;
+  padding: 10px 14px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 13px;
+}
+
+.problem-desc code {
+  background: #f3f4f6;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.problem-target-link {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.problem-target-link .target-link {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.problem-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* 提示与答案 */
+.problem-hint,
+.problem-answer {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.problem-hint {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+}
+
+.problem-answer {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.problem-hint summary,
+.problem-answer summary {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  user-select: none;
+  list-style: none;
+}
+
+.problem-hint summary {
+  color: #92400e;
+}
+
+.problem-answer summary {
+  color: #991b1b;
+}
+
+.problem-hint summary::-webkit-details-marker,
+.problem-answer summary::-webkit-details-marker {
+  display: none;
+}
+
+.hint-content,
+.answer-content {
+  padding: 10px 14px 14px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.hint-content {
+  color: #78350f;
+  border-top: 1px dashed #fcd34d;
+}
+
+.hint-content pre,
+.hint-content code {
+  background: #fef3c7;
+}
+
+.answer-content {
+  color: #7f1d1d;
+  border-top: 1px dashed #fecaca;
+}
+
+.answer-content code {
+  display: inline-block;
+  background: #fee2e2;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}

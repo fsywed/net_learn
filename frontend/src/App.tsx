@@ -9,6 +9,8 @@ import Competitions from './pages/Competitions'
 import GettingStarted from './pages/GettingStarted'
 import Toolbox from './pages/Toolbox'
 import About from './pages/About'
+import ProblemSetList from './pages/ProblemSetList'
+import ProblemSetDetail from './pages/ProblemSetDetail'
 
 // 应用路由：全部公开访问，无登录态
 function App() {
@@ -23,6 +25,8 @@ function App() {
         <Route path="/competitions" element={<Competitions />} />
         <Route path="/getting-started" element={<GettingStarted />} />
         <Route path="/toolbox" element={<Toolbox />} />
+        <Route path="/problemsets" element={<ProblemSetList />} />
+        <Route path="/problemsets/:setId" element={<ProblemSetDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
