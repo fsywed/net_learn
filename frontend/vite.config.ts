@@ -23,7 +23,7 @@ export default defineConfig({
         // 分离第三方库，避免单个 chunk 过大
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'markdown': ['@uiw/react-markdown-preview'],
+          'markdown': ['marked', 'dompurify'],
         },
       },
     },

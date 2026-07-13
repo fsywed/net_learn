@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Markdown from '@uiw/react-markdown-preview'
+import Markdown from '../components/Markdown'
 import {
   problemsets,
   targets,

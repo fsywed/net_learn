@@ -2851,43 +2851,6 @@ a:hover {
   color: var(--neon-magenta);
 }
 
-/* 赛博装饰图片背景 - 用于卡片和页面头部 */
-.cyber-img-terminal {
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cyberpunk%20hacker%20terminal%20green%20matrix%20code%20dark%20background%20digital%20rain&image_size=landscape_16_9');
-  background-size: cover;
-  background-position: center;
-}
-
-.cyber-img-shield {
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cyberpunk%20security%20shield%20neon%20blue%20digital%20lock%20dark%20futuristic&image_size=square');
-  background-size: cover;
-  background-position: center;
-}
-
-.cyber-img-network {
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cyberpunk%20network%20nodes%20glowing%20connections%20neon%20purple%20data%20flow%20dark&image_size=landscape_16_9');
-  background-size: cover;
-  background-position: center;
-}
-
-.cyber-img-lock {
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cyberpunk%20digital%20padlock%20neon%20magenta%20glowing%20encryption%20dark%20background&image_size=square');
-  background-size: cover;
-  background-position: center;
-}
-
-.cyber-img-code {
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cyberpunk%20source%20code%20editor%20neon%20syntax%20highlighting%20dark%20terminal%20programming&image_size=landscape_16_9');
-  background-size: cover;
-  background-position: center;
-}
-
-.cyber-img-target {
-  background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cyberpunk%20target%20crosshair%20neon%20red%20digital%20scope%20hacking%20challenge%20dark&image_size=square');
-  background-size: cover;
-  background-position: center;
-}
-
 /* 通用赛博页面头部装饰 */
 .cyber-page-header {
   position: relative;

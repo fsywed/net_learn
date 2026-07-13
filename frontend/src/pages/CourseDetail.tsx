@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import Markdown from '@uiw/react-markdown-preview'
+import Markdown from '../components/Markdown'
 import { courses, type Course, type Chapter } from '../api/content'
 
 // 课程详情：左侧章节列表，右侧 Markdown 渲染章节内容
