@@ -693,5 +693,380 @@
         "skills": ["磁盘取证", "文件恢复"]
       }
     ]
+  },
+  {
+    "id": 11,
+    "title": "移动安全与 App 逆向题单",
+    "description": "覆盖 Android/iOS 应用安全：APK 反编译、组件暴露、Frida Hook、越狱检测、SSL Pinning 绕过等移动端常见攻防场景。",
+    "tags": ["移动安全", "Android", "iOS", "逆向"],
+    "difficulty": "hard",
+    "problems": [
+      {
+        "id": 1101,
+        "title": "APK 反编译与源码查看",
+        "type": "Android逆向",
+        "difficulty": "medium",
+        "description": "给定一个 APK 文件，使用 jadx 或 apktool 反编译并查看 Java 源码。在反编译后的代码中寻找硬编码的 Flag 字符串。",
+        "hint": "jadx-gui 可直接打开 APK 查看 Java 代码；apktool d 可解包资源。注意搜索字符串常量，如 'flag{' 或 'secret'。",
+        "answer": "flag{apk_decompiled_jadx_strings}",
+        "target_id": null,
+        "skills": ["APK逆向", "jadx", "apktool"]
+      },
+      {
+        "id": 1102,
+        "title": "AndroidManifest 组件暴露",
+        "type": "Android安全",
+        "difficulty": "medium",
+        "description": "某 App 的 AndroidManifest.xml 中，一个 Activity 声明了 android:exported=\"true\" 却没有权限保护。这种漏洞叫什么？如何利用？",
+        "hint": "称为组件暴露漏洞。可通过 adb shell am start -n 包名/类名 直接启动该 Activity，绕过登录界面或访问受限功能。",
+        "answer": "flag{exported_component_am_start}",
+        "target_id": null,
+        "skills": ["AndroidManifest", "组件安全"]
+      },
+      {
+        "id": 1103,
+        "title": "Frida 动态 Hook 方法",
+        "type": "动态分析",
+        "difficulty": "hard",
+        "description": "使用 Frida Hook 一个 Android App 中的 isVip() 方法，让其始终返回 true。写出关键 JavaScript 代码片段。",
+        "hint": "Java.perform 内用 Java.use 获取类，implementation 替换方法。返回 true 即可绕过会员校验。",
+        "answer": "flag{frida_isvip_implementation_true}",
+        "target_id": null,
+        "skills": ["Frida", "动态Hook", "绕过校验"]
+      },
+      {
+        "id": 1104,
+        "title": "SSL Pinning 绕过",
+        "type": "流量分析",
+        "difficulty": "hard",
+        "description": "某 App 实现了证书绑定（SSL Pinning），导致 Burp Suite 无法抓包。列举 2 种绕过方法。",
+        "hint": "1) Frida 脚本（如 objection 或 SSL-Pinning-Bypass）在运行时禁用校验；2) 反编译后修改代码，重新打包签名。Xposed 也可用 JustTrustMe 模块。",
+        "answer": "flag{sslpinning_frida_repackage}",
+        "target_id": null,
+        "skills": ["SSL Pinning", "抓包", "Frida"]
+      },
+      {
+        "id": 1105,
+        "title": "iOS 越狱检测绕过",
+        "type": "iOS安全",
+        "difficulty": "hard",
+        "description": "某 iOS App 在启动时检测设备是否越狱，越狱则退出。列举 3 种常见检测点及对应绕过思路。",
+        "hint": "检测点：1) /Applications/Cydia.app 是否存在；2) 能否执行 ssh/scp；3) 环境变量 DYLD_INSERT_LIBRARIES。绕过：用 Liberty 或 A-Bypass 等 tweak，或 Frida Hook 检测函数返回 false。",
+        "answer": "flag{ios_jailbreak_cydia_dyld_hook}",
+        "target_id": null,
+        "skills": ["iOS越狱", "反调试", "Tweak"]
+      },
+      {
+        "id": 1106,
+        "title": "WebView 远程代码执行",
+        "type": "Android漏洞",
+        "difficulty": "medium",
+        "description": "Android 4.2 之前，WebView.addJavascriptInterface 存在严重漏洞。解释其原理并说明如何利用。",
+        "hint": "通过 JSInterface 注入的 Java 对象，其所有公共方法都能被 JS 调用，包括通过反射访问 Runtime.exec 执行任意命令。利用：构造恶意网页，JS 中调用 interface.getClass().forName('java.lang.Runtime').getMethod('exec',...).invoke(...)。",
+        "answer": "flag{webview_jsinterface_reflection_rce}",
+        "target_id": null,
+        "skills": ["WebView", "RCE", "反射"]
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "IoT 与硬件安全题单",
+    "description": "物联网与嵌入式设备安全：固件提取与分析、UART/JTAG 调试接口、路由器漏洞、智能设备攻击面与硬件级防护。",
+    "tags": ["IoT", "硬件安全", "固件", "路由器"],
+    "difficulty": "hard",
+    "problems": [
+      {
+        "id": 1201,
+        "title": "固件提取与分析",
+        "type": "固件分析",
+        "difficulty": "medium",
+        "description": "从路由器下载到固件 .bin 文件后，使用什么工具提取其中的文件系统？提取后如何定位 Web 管理界面的硬编码密码？",
+        "hint": "binwalk -e 可解包固件提取 SquashFS/JFFS2。然后用 strings 或 grep 在 /etc/passwd、/etc/shadow 或 Web 根目录（如 /www）搜索硬编码凭据。",
+        "answer": "flag{binwalk_extract_strings_password}",
+        "target_id": null,
+        "skills": ["binwalk", "固件提取", "硬编码"]
+      },
+      {
+        "id": 1202,
+        "title": "UART 调试接口获取 Shell",
+        "type": "硬件调试",
+        "difficulty": "hard",
+        "description": "设备 PCB 上发现 4 个未标注的排针，疑似 UART 接口。如何识别 TX/RX/GND 并获取 root shell？",
+        "hint": "用万用表测电压：GND 对地 0V，VCC 3.3V 或 5V，TX 启动时有数据波动（电压略低），RX 平稳 3.3V。接 USB-TTL 转换器（TX→RX, RX→TX, GND→GND），用 screen / minicom 以 115200 8N1 连接，启动时按回车进入 uboot 或 shell。",
+        "answer": "flag{uart_tx_rx_gnd_115200_shell}",
+        "target_id": null,
+        "skills": ["UART", "串口调试", "硬件接口"]
+      },
+      {
+        "id": 1203,
+        "title": "路由器命令注入",
+        "type": "命令注入",
+        "difficulty": "medium",
+        "description": "某路由器 ping 功能直接将用户输入拼接到 system() 调用。写出注入命令查看 /etc/passwd 的 payload。",
+        "hint": "ping 功能常在诊断页面。payload：127.0.0.1; cat /etc/passwd 或 127.0.0.1 | cat /etc/passwd。注意 URL 编码分号 %3B。",
+        "answer": "flag{router_ping_system_injection}",
+        "target_id": null,
+        "skills": ["命令注入", "路由器漏洞"]
+      },
+      {
+        "id": 1204,
+        "title": "JTAG 调试接口利用",
+        "type": "硬件调试",
+        "difficulty": "hard",
+        "description": "JTAG 接口可用于调试和读取芯片内部 Flash。列举 JTAG 的 4 个核心信号（TCK/TMS/TDI/TDO）作用，并说明如何用 JTAG dumped flash。",
+        "hint": "TCK 时钟，TMS 模式选择，TDI 数据输入，TDO 数据输出。用 OpenOCD 配合 JTAG adapter 连接，通过指令读写芯片内部 Flash 寄存器，dump 固件。",
+        "answer": "flag{jtag_tck_tms_tdi_tdo_openocd}",
+        "target_id": null,
+        "skills": ["JTAG", "OpenOCD", "Flash读取"]
+      },
+      {
+        "id": 1205,
+        "title": "智能摄像头默认凭据",
+        "type": "弱口令",
+        "difficulty": "easy",
+        "description": "某品牌 IoT 摄像头出厂默认账号 admin/admin，且 Web 后台未强制修改。这种攻击面叫什么？如何批量发现？",
+        "hint": "属于默认凭据漏洞。可通过 Shodan 或 ZoomEye 搜索特定 banner/HTTP title，批量扫描该型号设备的 80 端口，尝试默认账号登录。",
+        "answer": "flag{iot_default_credential_shodan}",
+        "target_id": null,
+        "skills": ["默认凭据", "Shodan", "IoT资产测绘"]
+      },
+      {
+        "id": 1206,
+        "title": "Mirai 蠕虫感染原理",
+        "type": "恶意软件",
+        "difficulty": "medium",
+        "description": "Mirai 蠕虫如何传播？它主要利用什么漏洞？如何防护 IoT 设备避免感染？",
+        "hint": "Mirai 通过扫描 23/2323 等 Telnet 端口，用默认弱口令字典爆破登录后下载执行恶意二进制。防护：修改默认密码、关闭 Telnet 改 SSH、禁用不必要端口、固件及时升级。",
+        "answer": "flag{mirai_telnet_brute_default_pwd}",
+        "target_id": null,
+        "skills": ["Mirai", "蠕虫", "Telnet爆破"]
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "区块链与智能合约安全题单",
+    "description": "Web3 安全攻防：Solidity 漏洞、重入攻击、整型溢出、访问控制缺陷、闪电贷攻击与合约审计要点。",
+    "tags": ["区块链", "智能合约", "Web3", "Solidity"],
+    "difficulty": "hard",
+    "problems": [
+      {
+        "id": 1301,
+        "title": "重入攻击原理",
+        "type": "智能合约漏洞",
+        "difficulty": "hard",
+        "description": "以太坊经典攻击：The DAO 重入漏洞。解释其原理，并写出防护代码（使用 checks-effects-interactions 模式或 ReentrancyGuard）。",
+        "hint": "漏洞在于外部调用 fallback 又回调原函数，余额未及时更新。防护：先扣余额（effect）再转账（interaction），或用 OpenZeppelin 的 nonReentrant 修饰器。关键代码：balances[msg.sender] = 0 在 transfer 前。",
+        "answer": "flag{reentrancy_checks_effects_interactions}",
+        "target_id": null,
+        "skills": ["重入攻击", "Solidity", "TheDAO"]
+      },
+      {
+        "id": 1302,
+        "title": "整型溢出漏洞",
+        "type": "智能合约漏洞",
+        "difficulty": "medium",
+        "description": "Solidity 0.8 之前，uint256 运算可能溢出。给出一个 token 转账中利用溢出凭空增加余额的示例。",
+        "hint": "uint256 最大值 2^256-1。若 balance + value 溢出回到 0，再扣减则变成极大值。例如合约先用 SafeMath 但 transfer 时未用，攻击者传极大 value 触发溢出。Solidity 0.8+ 默认检查溢出，需用 unchecked 才会回退旧行为。",
+        "answer": "flag{uint256_overflow_safemath}",
+        "target_id": null,
+        "skills": ["整型溢出", "Solidity", "SafeMath"]
+      },
+      {
+        "id": 1303,
+        "title": "访问控制缺陷",
+        "type": "智能合约漏洞",
+        "difficulty": "medium",
+        "description": "某合约的 mint 函数忘记加 onlyOwner 修饰，导致任何人都能铸造代币。这种漏洞叫什么？如何检测？",
+        "hint": "称为访问控制缺失（Access Control）。用 Slither 或 Mythril 静态扫描可发现未授权的敏感函数。审计时检查所有改变状态的函数是否有权限校验（require(msg.sender == owner)）。",
+        "answer": "flag{access_control_slither_onlyowner}",
+        "target_id": null,
+        "skills": ["访问控制", "Slither", "权限校验"]
+      },
+      {
+        "id": 1304,
+        "title": "闪电贷攻击",
+        "type": "DeFi攻击",
+        "difficulty": "hard",
+        "description": "攻击者用 Aave 闪电贷借出巨额资金，操纵 DEX 价格预言机套利。解释闪电贷为何能放大攻击，并说明防护思路。",
+        "hint": "闪电贷允许同一交易内借款并还款，无需抵押。攻击者借巨款操纵流动性池价格，影响依赖该池的预言机，套利后还款。防护：使用去中心化预言机（Chainlink）、时间加权平均价格（TWAP）、多源价格聚合。",
+        "answer": "flag{flashloan_oracle_twap_chainlink}",
+        "target_id": null,
+        "skills": ["闪电贷", "预言机", "DeFi"]
+      },
+      {
+        "id": 1305,
+        "title": "合约审计工具",
+        "type": "合约审计",
+        "difficulty": "medium",
+        "description": "列举 3 个主流智能合约静态审计工具，并说明各自特点。",
+        "hint": "1) Slither：基于 Python 的静态分析，速度快，检测常见漏洞模式；2) Mythril：基于符号执行，能发现深层逻辑漏洞但较慢；3) Securify：基于形式化验证，对合规性检查强。",
+        "answer": "flag{audit_slither_mythril_securify}",
+        "target_id": null,
+        "skills": ["合约审计", "Slither", "Mythril"]
+      },
+      {
+        "id": 1306,
+        "title": "私钥泄露检测",
+        "type": "密钥管理",
+        "difficulty": "medium",
+        "description": "开发者误将私钥提交到 GitHub。如何检测代码库中的私钥泄露？泄露后应如何处置？",
+        "hint": "用 TruffleHog 或 git-secrets 扫描历史提交中的高熵字符串和已知私钥格式（0x 开头 64 位 hex）。处置：立即转移资产到新地址、撤销合约授权、轮换密钥、清理 git 历史（git filter-branch / BFG）。",
+        "answer": "flag{privatekey_trufflehog_rotate_bfg}",
+        "target_id": null,
+        "skills": ["私钥泄露", "TruffleHog", "密钥轮换"]
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "邮件安全与钓鱼防范题单",
+    "description": "邮件协议安全：SPF/DKIM/DMARC 配置、BEC 商业邮件欺诈、钓鱼识别、邮件头分析与社工防护。",
+    "tags": ["邮件安全", "钓鱼", "BEC", "SPF"],
+    "difficulty": "medium",
+    "problems": [
+      {
+        "id": 1401,
+        "title": "SPF 记录配置",
+        "type": "邮件协议",
+        "difficulty": "easy",
+        "description": "某公司域名 example.com 经常被冒充发件人。如何配置 SPF 记录防止伪造？解释 SPF 各机制含义。",
+        "hint": "在 DNS 添加 TXT 记录：v=spf1 include:_spf.google.com ip4:1.2.3.4 -all。-all 表示硬拒绝，~all 为软失败。include 引用第三方发信服务器，ip4 指定本域发信 IP。",
+        "answer": "flag{spf_include_all_hardfail}",
+        "target_id": null,
+        "skills": ["SPF", "DNS", "邮件认证"]
+      },
+      {
+        "id": 1402,
+        "title": "DKIM 签名验证",
+        "type": "邮件协议",
+        "difficulty": "medium",
+        "description": "DKIM 如何工作？邮件头中的 DKIM-Signature 包含哪些关键字段？如何验证一封邮件的 DKIM 签名？",
+        "hint": "DKIM 用发件域私钥对邮件正文和部分头签名，收件方用 DNS 中的公钥验证。关键字段：d=发件域，s=选择器，b=签名值，bh=正文哈希。验证：从 DNS 取 selector._domainkey.domain 的 TXT 公钥，用 openssl 或邮件客户端验证签名。",
+        "answer": "flag{dkim_d_s_b_publickey_dns}",
+        "target_id": null,
+        "skills": ["DKIM", "数字签名", "邮件认证"]
+      },
+      {
+        "id": 1403,
+        "title": "DMARC 策略配置",
+        "type": "邮件协议",
+        "difficulty": "medium",
+        "description": "DMARC 结合 SPF 和 DKIM，提供更全面的邮件认证。写出一条 DMARC 记录，说明 p=none/quarantine/reject 的区别。",
+        "hint": "TXT 记录：_dmarc.example.com → v=DMARC1; p=reject; rua=mailto:dmarc@example.com。p=none 仅监控不上报；quarantine 隔离到垃圾邮件；reject 直接拒收。建议先 none 观察，逐步收紧到 reject。",
+        "answer": "flag{dmarc_p_quarantine_reject_rua}",
+        "target_id": null,
+        "skills": ["DMARC", "邮件策略", "反钓鱼"]
+      },
+      {
+        "id": 1404,
+        "title": "BEC 商业邮件欺诈识别",
+        "type": "社工攻击",
+        "difficulty": "medium",
+        "description": "攻击者伪装 CEO 要求财务紧急转账到陌生账户，这是 BEC 攻击。列举 3 个识别特征和防护措施。",
+        "hint": "特征：1) 发件域相似但拼写有误（ce0@example.com）；2) 制造紧迫感、要求保密；3) 收件人地址与日常通信不同。防护：转账前电话核实、二次审批、员工培训、严格审批流程。",
+        "answer": "flag{bec_lookalike_domain_urgent_verify}",
+        "target_id": null,
+        "skills": ["BEC", "社工", "邮件欺诈"]
+      },
+      {
+        "id": 1405,
+        "title": "钓鱼邮件头分析",
+        "type": "邮件取证",
+        "difficulty": "medium",
+        "description": "收到一封可疑邮件，如何通过邮件头判断真伪？列举至少 3 个需要检查的头字段。",
+        "hint": "检查：1) Received 链：追溯发送路径，看 IP 是否与发件域匹配；2) Return-Path 是否与 From 一致；3) Authentication-Results：spf=pass, dkim=pass, dmarc=pass；4) Message-ID 格式是否合理。用 mxtoolbox 或 Google Admin Toolbox 分析。",
+        "answer": "flag{email_received_returnpath_authresults}",
+        "target_id": null,
+        "skills": ["邮件头分析", "取证", "反钓鱼"]
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "title": "安全运维与 DevSecOps 题单",
+    "description": "现代安全运维实践：CI/CD 流水线安全、密钥与凭据管理、日志监控 SIEM、SAST/DAST/IAST 工具集成与供应链安全。",
+    "tags": ["DevSecOps", "CI/CD", "SIEM", "SAST"],
+    "difficulty": "medium",
+    "problems": [
+      {
+        "id": 1501,
+        "title": "CI/CD 凭据泄露防护",
+        "type": "CI/CD安全",
+        "difficulty": "medium",
+        "description": "GitHub Actions 工作流中如何安全使用密钥？为什么不能直接写在 yml 或代码中？",
+        "hint": "应使用 GitHub Secrets 存储密钥，工作流中通过 ${{ secrets.NAME }} 引用。直接硬编码会进入 git 历史和日志，被爬虫和攻击者获取。还需限制 secret 的访问权限范围，定期轮换。",
+        "answer": "flag{github_actions_secrets_not_hardcode}",
+        "target_id": null,
+        "skills": ["CI/CD", "密钥管理", "GitHub Actions"]
+      },
+      {
+        "id": 1502,
+        "title": "SAST 静态代码扫描",
+        "type": "代码审计",
+        "difficulty": "medium",
+        "description": "列举 3 个主流 SAST 工具及其支持语言。SAST 在 CI/CD 中应在哪个阶段集成？",
+        "hint": "工具：SonarQube（多语言）、Semgrep（多语言、规则灵活）、CodeQL（GitHub、语义分析）。应在代码提交阶段（pre-commit hook）和 PR 合并阶段（CI 流水线）集成，越早发现成本越低。",
+        "answer": "flag{sast_sonarqube_semgrep_codeql_pr}",
+        "target_id": null,
+        "skills": ["SAST", "SonarQube", "Semgrep"]
+      },
+      {
+        "id": 1503,
+        "title": "DAST 动态扫描集成",
+        "type": "动态测试",
+        "difficulty": "medium",
+        "description": "DAST 与 SAST 的区别？如何在 CI/CD 中集成 DAST？列举 2 个开源 DAST 工具。",
+        "hint": "SAST 扫源码，DAST 扫运行中的应用（黑盒）。CI 中部署应用到测试环境后，触发 OWASP ZAP 或 Nuclei 扫描，结果上报到缺陷系统，关键漏洞阻断发布。ZAP 有自动化扫描模式，Nuclei 用模板驱动。",
+        "answer": "flag{dast_zap_nuclei_runtime_scan}",
+        "target_id": null,
+        "skills": ["DAST", "OWASP ZAP", "Nuclei"]
+      },
+      {
+        "id": 1504,
+        "title": "SIEM 日志聚合与告警",
+        "type": "日志监控",
+        "difficulty": "medium",
+        "description": "SIEM 系统的核心功能是什么？列举 2 个开源 SIEM 方案。如何设计一条检测暴力破解登录的告警规则？",
+        "hint": "SIEM 聚合多源日志（主机/网络/应用），实时关联分析并告警。开源方案：Wazuh、Elastic Security（原 ELK）。暴力破解规则：1 分钟内同一源 IP 登录失败 ≥5 次，可设阈值告警，关联认证日志和防火墙日志。",
+        "answer": "flag{siem_wazuh_elastic_bruteforce_threshold}",
+        "target_id": null,
+        "skills": ["SIEM", "Wazuh", "告警规则"]
+      },
+      {
+        "id": 1505,
+        "title": "SBOM 与供应链安全",
+        "type": "供应链安全",
+        "difficulty": "hard",
+        "description": "什么是 SBOM？为何对供应链安全重要？列举 2 个生成 SBOM 的工具。",
+        "hint": "SBOM（Software Bill of Materials）是软件成分清单，列明所有依赖及版本。用于追踪漏洞（如 Log4Shell）影响范围，满足合规要求。工具：Syft（生成 SBOM）、Grype（扫描漏洞）、CycloneDX、SPDX 标准。",
+        "answer": "flag{sbom_syft_grype_cyclonedx}",
+        "target_id": null,
+        "skills": ["SBOM", "供应链", "Syft"]
+      },
+      {
+        "id": 1506,
+        "title": "密钥轮换与 Vault",
+        "type": "密钥管理",
+        "difficulty": "hard",
+        "description": "HashiCorp Vault 如何解决密钥管理难题？解释动态密钥和租约机制。为何比静态密钥文件更安全？",
+        "hint": "Vault 集中存储密钥，按需发放动态短时密钥（如数据库账号，TTL 1 小时），到期自动回收。租约机制确保密钥不会永久泄露。比静态文件安全：避免硬编码、权限细粒度、审计日志、自动轮换、密钥用后即焚。",
+        "answer": "flag{vault_dynamic_lease_rotation_audit}",
+        "target_id": null,
+        "skills": ["Vault", "动态密钥", "密钥管理"]
+      },
+      {
+        "id": 1507,
+        "title": "容器镜像扫描",
+        "type": "容器安全",
+        "difficulty": "medium",
+        "description": "在 CI/CD 中如何对容器镜像做安全扫描？列举 2 个工具和 3 类常见发现。",
+        "hint": "工具：Trivy（快速、CVE 库全）、Clair（Harbor 内置）。常见发现：1) 基础镜像含已知 CVE 漏洞；2) 配置不当（以 root 运行、暴露敏感端口）；3) 包含密钥或 .env 文件。应在 build 后 push 前扫描，高危漏洞阻断流水线。",
+        "answer": "flag{trivy_clair_cve_config_secrets}",
+        "target_id": null,
+        "skills": ["镜像扫描", "Trivy", "CVE"]
+      }
+    ]
   }
 ]

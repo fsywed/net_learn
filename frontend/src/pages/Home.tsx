@@ -94,7 +94,7 @@ export default function Home() {
             <h3 className="card-title">题单训练</h3>
             <p className="card-desc">专题题目合集，按难度递进，支持进度追踪和提示查看，高效提升实战能力。</p>
             <div className="card-meta">
-              <span className="badge">6 个题单</span>
+              <span className="badge">15 个题单</span>
               <span className="badge badge-hard">挑战</span>
             </div>
           </Link>
